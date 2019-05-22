@@ -1,8 +1,29 @@
+'''
+this script requires python-osc mnodule!
+install it with 
+$ sudo pip3 install python-osc
+'''
+
 import time
+from pythonosc import osc_message_builder
+from pythonosc import udp_client
+
+'''
+-- CONFIGURATION --
+'''
+
+IP = '127.0.0.1'
+PORT = 25000
+MARKER = '/happy'
+VERBOSE_EMISSION = False
 
 CSV_PATH = "../openface/happy_1_77.csv"
 FIELD_SEPARATOR = ','
 IDLE_TIME = 0.01 # idle time of main loop, equivalent to fps
+
+'''
+-- GLOBALS --
+'''
 
 raw_file = open( CSV_PATH )
 fields = []
@@ -83,6 +104,8 @@ def parse_csv():
 
 def main_loop():
 	
+	client = udp_client.SimpleUDPClient( IP, PORT )
+	
 	if frame_count > 0:
 
 		duration = frames[len(frames)-1]['timestamp'] - frames[0]['timestamp']
@@ -102,15 +125,22 @@ def main_loop():
 			elapsed_time += 1
 
 			if frames[current_index]['timestamp'] <= elapsed_time:
-				print( elapsed_time, ' -> ', frames[current_index]['num'] )
+				if VERBOSE_EMISSION:
+					print( elapsed_time, ' -> ', frames[current_index]['num'] )
+				client.send_message( MARKER, frames[current_index]['data'] )
 				current_index += 1
 
 			if current_index >= frame_count:
-				print( "the last frame reached!" )
+				if VERBOSE_EMISSION:
+					print( "the last frame reached!" )
 				elapsed_time -= frames[current_index-1]['timestamp']
 				current_index = 0
 
 			time.sleep( IDLE_TIME )
+
+'''
+-- PROCESS --
+'''
 
 parse_csv()
 
