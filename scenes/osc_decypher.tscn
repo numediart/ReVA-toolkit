@@ -1,0 +1,107 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://scripts/osc_decypher.gd" type="Script" id=1]
+[ext_resource path="res://models/debug_sphere.tres" type="SphereMesh" id=2]
+
+[sub_resource type="SpatialMaterial" id=12]
+
+flags_unshaded = true
+
+[sub_resource type="SpatialMaterial" id=2]
+
+flags_unshaded = true
+albedo_color = Color( 0.490196, 1, 0, 1 )
+
+[sub_resource type="CubeMesh" id=3]
+
+material = SubResource( 2 )
+size = Vector3( 0.003, 0.08, 0.003 )
+
+[sub_resource type="SpatialMaterial" id=4]
+
+flags_unshaded = true
+albedo_color = Color( 0, 1, 1, 1 )
+
+[sub_resource type="CubeMesh" id=5]
+
+material = SubResource( 4 )
+size = Vector3( 0.003, 0.003, 0.08 )
+
+[sub_resource type="SpatialMaterial" id=6]
+
+flags_unshaded = true
+albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="CubeMesh" id=7]
+
+material = SubResource( 6 )
+size = Vector3( 0.3, 0.003, 0.003 )
+
+[sub_resource type="SpatialMaterial" id=8]
+
+flags_unshaded = true
+albedo_color = Color( 0, 1, 0, 1 )
+
+[sub_resource type="CubeMesh" id=9]
+
+material = SubResource( 8 )
+size = Vector3( 0.003, 0.3, 0.003 )
+
+[sub_resource type="SpatialMaterial" id=10]
+
+flags_unshaded = true
+albedo_color = Color( 0, 0, 1, 1 )
+
+[sub_resource type="CubeMesh" id=11]
+
+material = SubResource( 10 )
+size = Vector3( 0.003, 0.003, 0.3 )
+
+[node name="root" type="Spatial"]
+
+[node name="osc_decypher" type="OSCreceiver" parent="."]
+port = 25000
+autostart = false
+emit_signal = false
+script = ExtResource( 1 )
+scale_factor = 0.01
+point_size = 0.02
+correction = Transform( 1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, -400 )
+
+[node name="point" type="MeshInstance" parent="."]
+transform = Transform( 0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+material_override = SubResource( 12 )
+mesh = ExtResource( 2 )
+material/0 = null
+
+[node name="yaxis" type="MeshInstance" parent="point"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0 )
+mesh = SubResource( 3 )
+material/0 = null
+
+[node name="zaxis" type="MeshInstance" parent="point"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.04 )
+mesh = SubResource( 5 )
+material/0 = null
+
+[node name="axis" type="Spatial" parent="."]
+editor/display_folded = true
+visible = false
+
+[node name="x" type="MeshInstance" parent="axis"]
+transform = Transform( 0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0 )
+mesh = SubResource( 7 )
+material/0 = null
+
+[node name="y" type="MeshInstance" parent="axis"]
+transform = Transform( 0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0 )
+mesh = SubResource( 9 )
+material/0 = null
+
+[node name="z" type="MeshInstance" parent="axis"]
+transform = Transform( 0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.15 )
+mesh = SubResource( 11 )
+material/0 = null
+
+[node name="center" type="Spatial" parent="."]
+
