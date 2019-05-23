@@ -5,6 +5,7 @@ $ sudo pip3 install python-osc
 '''
 
 import time
+import argparse
 from pythonosc import osc_message_builder
 from pythonosc import udp_client
 
@@ -14,12 +15,16 @@ from pythonosc import udp_client
 
 IP = '127.0.0.1'
 PORT = 25000
-MARKER = '/happy'
+MARKER = '/openface'
+AUTOSTART = True
+
+VERBOSE_FIELD = False
 VERBOSE_EMISSION = False
 
-CSV_PATH = "../openface/happy_1_77.csv"
+CSV_PATH = "../openface/laugh_1_300.csv"
 FIELD_SEPARATOR = ','
 IDLE_TIME = 0.01 # idle time of main loop, equivalent to fps
+SPEED = 1
 
 '''
 -- GLOBALS --
@@ -37,6 +42,14 @@ def decompress_fields( l ):
 	for w in words:
 		w = w.strip()
 		fields.append( w )
+	
+	if VERBOSE_FIELD:
+		for i in range( 0, len(fields) ):
+			s = "field[" + str(i) + "]"
+			if i > 3:
+				s += " (data[" + str(i-4) + "])"
+			s += " : " + fields[i]
+			print( s )
 
 def decompress_frame( l ):
 	
@@ -104,6 +117,9 @@ def parse_csv():
 
 def main_loop():
 	
+	if not AUTOSTART:
+		return
+	
 	client = udp_client.SimpleUDPClient( IP, PORT )
 	
 	if frame_count > 0:
@@ -122,7 +138,7 @@ def main_loop():
 			delta_time = now - last_time
 			last_time = now
 
-			elapsed_time += 1
+			elapsed_time += delta_time * SPEED
 
 			if frames[current_index]['timestamp'] <= elapsed_time:
 				if VERBOSE_EMISSION:
