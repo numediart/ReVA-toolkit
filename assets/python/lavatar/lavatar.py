@@ -7,6 +7,11 @@ from .transformations import *
 from pythonosc import osc_message_builder
 from pythonosc import udp_client
 
+'''
+## IMPORT ##
+text input manipulation part
+'''
+
 def get_matrix( data ):
 	return numpy.matrix( data )
 
@@ -195,7 +200,30 @@ def parse_text_frame( words, indices, matrix = None ):
 	
 	return frame
 
-def generate_aabb( frame, center = None ):
+'''
+## EXPORT ##t
+'''
+
+def save_animation_json( anim, path, compress = True ):
+	
+	out = open( path, 'w' )
+	if ( compress ):
+		cc = json.dumps( anim, sort_keys=True, indent=0, separators=(',', ':'))
+		cc = cc.replace( '\n','' )
+		cc = cc.replace( '\r','' )
+	else:
+		cc = json.dumps( anim, sort_keys=True, indent=4, separators=(',', ':'))
+	out.write( cc )
+	out.close()
+
+'''
+## ANIMATION ##
+'''
+
+def generate_aabb( frame = None, center = None ):
+	
+	if frame == None:
+		return { 'center':[0,0,0], 'min':[0,0,0], 'max':[0,0,0], 'size':[0,0,0] }
 	
 	if not frame['valid']:
 		return
@@ -227,7 +255,20 @@ def generate_aabb( frame, center = None ):
 		aabb_size.append( aabb_max[j]-aabb_min[j] )
 
 	return { 'center':barycenter, 'min':aabb_min, 'max':aabb_max, 'size':aabb_size }
+
+def generate_sound_ref():
+	return { 'path': None, 'codec': None }
+
+def accumulate_aabb( src, dst ):
 	
+	for j in range(3):
+		dst['center'][j] += src['center'][j]
+		if dst['min'][j] > src['min'][j]:
+			dst['min'][j] = src['min'][j]
+		if dst['max'][j] < src['max'][j]:
+			dst['max'][j] = src['max'][j]
+	return dst
+
 def pack_animation( frames, indices ):
 	
 	if len(frames) == 0 or not indices['valid']:
@@ -239,6 +280,7 @@ def pack_animation( frames, indices ):
 	animation['landmark_count'] = len(indices['landmarks'])
 	animation['action_unit_count'] = len(indices['au'])
 	animation['gaze_count'] = len(indices['gaze'])
+	animation['sound'] = generate_sound_ref()
 	animation['fields'] = []
 	for k in indices.keys():
 		if k == 'valid' or k == 'all_indices':
@@ -246,6 +288,7 @@ def pack_animation( frames, indices ):
 		animation['fields'].append( k )
 
 	animation['aabb'] = generate_aabb( frames[0] )
+	animation['aabb_total'] = generate_aabb()
 	animation['scale'] = 1.0 / animation['aabb']['size'][0]
 	if animation['aabb']['size'][1] > animation['aabb']['size'][0]:
 		animation['scale'] = 1.0 / animation['aabb']['size'][1]
@@ -256,26 +299,23 @@ def pack_animation( frames, indices ):
 	for f in frames:
 		newf = dict(f)
 		newf.pop('valid', None)
-		newf['frame'] = len(animation['frames'])
+		newf['index'] = len(animation['frames'])
 		newf['aabb'] = generate_aabb( f, animation['aabb']['center'] )
 		for i in range(len(newf['landmarks'])):
 			for j in range(3):
 				newf['landmarks'][i][j] -= animation['aabb']['center'][j]
 				newf['landmarks'][i][j] *= animation['scale']
+		animation['aabb_total'] = accumulate_aabb( newf['aabb'], animation['aabb_total'] )
 		animation['frames'].append( newf )
 	
+	for j in range(3):
+		animation['aabb_total']['center'][j] /= len( animation['frames'] )		
+	for j in range(3):
+		animation['aabb_total']['min'][j] -= animation['aabb_total']['center'][j]
+		animation['aabb_total']['max'][j] -= animation['aabb_total']['center'][j]
+		animation['aabb_total']['size'][j] = animation['aabb_total']['max'][j] - animation['aabb_total']['min'][j]
+		
 	return animation
 
-def save_animation_json( anim, path, compress = True ):
-	
-	out = open( path, 'w' )
-	if ( compress ):
-		cc = json.dumps( anim, sort_keys=True, indent=0, separators=(',', ':'))
-		cc = cc.replace( '\n','' )
-	else:
-		cc = json.dumps( anim, sort_keys=True, indent=4, separators=(',', ':'))
-	out.write( cc )
-	out.close()
-
-
-
+def play_animation( anim, speed = 1, loop = True ):
+	pass

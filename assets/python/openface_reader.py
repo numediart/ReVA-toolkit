@@ -91,11 +91,9 @@ def load_csv():
 
 load_csv()
 
-#print( indices )
-#print( frames )
-
 animation = lavatar.pack_animation( frames, indices )
+
+
+
 lavatar.save_animation_json( animation, 'test.json' )
-
-
 
