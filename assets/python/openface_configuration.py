@@ -1,9 +1,5 @@
 import lavatar.lavatar as lavatar
 
-IP = '127.0.0.1'
-PORT = 25000
-
-CSV_PATH = "../openface/laugh_1_300.csv"
 FIELD_SEPARATOR = ','
 
 TIMESTAMP_FIELD = 'timestamp'
@@ -17,87 +13,53 @@ CORRECTION_MATRIX = lavatar.get_matrix([
 	[0,0,0,1]
 ])
 
-indices = lavatar.generate_indices( True ) # False to only extract timestamp & landmarks indices
-osc_sender = lavatar.init_osc_sender( IP, PORT )
-frames = []
-
-def extract_indices( l ):
+def extract_indices( l, all_indices = True ): # set to False to only extract timestamp & landmarks indices
 	
-	global FIELD_SEPARATOR
-	global GAZE_FIELDS
-	global LANDMARKS_FIELDS
-	global FACIAL_ACTION_FIELDS
-	global indices
+	inds = lavatar.generate_indices( True )
 	
 	# searching FIELDS
 	i = 0
 	for word in l.split( FIELD_SEPARATOR ):
 		word = word.strip()
 		if word == TIMESTAMP_FIELD:
-			indices['timestamp'] = i
+			inds['timestamp'] = i
 		else:
 			for xyz in LANDMARKS_FIELDS:
 				for axis in xyz:
 					if axis == word:
-						if indices['landmarks'] == None:
-							indices['landmarks'] = [[None,None,None] for i in range(len(LANDMARKS_FIELDS))]
+						if inds['landmarks'] == None:
+							inds['landmarks'] = [[None,None,None] for i in range(len(LANDMARKS_FIELDS))]
 						index = int( word[2:] )
 						ax = word[:1].lower()
 						if ax == 'x':
-							indices['landmarks'][index][0] = i
+							inds['landmarks'][index][0] = i
 						elif ax == 'y':
-							indices['landmarks'][index][1] = i
+							inds['landmarks'][index][1] = i
 						elif ax == 'z':
-							indices['landmarks'][index][2] = i
+							inds['landmarks'][index][2] = i
 			for xyz in GAZE_FIELDS:
 				for axis in xyz:
 					if axis == word:
-						if indices['gaze'] == None:
-							indices['gaze'] = [[None,None,None] for i in range(len(GAZE_FIELDS))]
+						if inds['gaze'] == None:
+							inds['gaze'] = [[None,None,None] for i in range(len(GAZE_FIELDS))]
 						index = int( word[5:6] )
 						ax = word[-1:].lower()
 						if ax == 'x':
-							indices['gaze'][index][0] = i
+							inds['gaze'][index][0] = i
 						elif ax == 'y':
-							indices['gaze'][index][1] = i
+							inds['gaze'][index][1] = i
 						elif ax == 'z':
-							indices['gaze'][index][2] = i
-			if 'au' in indices.keys():
+							inds['gaze'][index][2] = i
+			if 'au' in inds.keys():
 				for field in ACTION_UNIT_FIELDS:
 					if field == word:
-						if indices['au'] == None:
-							indices['au'] = []
-						indices['au'].append( i )
+						if inds['au'] == None:
+							inds['au'] = []
+						inds['au'].append( i )
 		
 		i += 1
 	
-	return lavatar.validate_indices( indices )
-
-def load_csv( path ):
+	if lavatar.validate_indices( inds ):
+		return inds
 	
-	global indices
-	raw_file = open( path )
-	
-	for line in raw_file:
-		line = line.strip()
-		if len(line) == 0:
-			continue
-		if not indices['valid']:
-			if not extract_indices( line ):
-				return
-		else:
-			f = lavatar.parse_text_frame( line.split( FIELD_SEPARATOR ), indices, CORRECTION_MATRIX )
-			if not f['valid']:
-				continue
-			frames.append( f )
-
-def animation_callback( frame ):
-	lavatar.send_frame( osc_sender, frame )
-
-load_csv( CSV_PATH )
-
-animation = lavatar.pack_animation( frames, indices )
-
-lavatar.play_animation( animation, speed = 0.5, callback = animation_callback )
-
-lavatar.save_animation_json( animation, 'test.json' )
+	return None
