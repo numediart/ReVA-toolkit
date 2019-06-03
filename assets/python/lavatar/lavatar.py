@@ -340,6 +340,7 @@ def pack_animation( frames, indices ):
 		
 	return animation
 
+
 def validate_animation( anim ):
 	
 	if type( anim ) is not dict:
@@ -435,6 +436,27 @@ def validate_animation( anim ):
 		return True, False
 	else:
 		return True, True
+
+def add_sound( anim, sound_path ):
+	
+	if not validate_animation( anim ):
+		print( "lavatar::add_sound, animation is not valid" )
+		return
+	
+	if not 'sound' in anim.keys():
+		print( "lavatar::add_sound, no sound slot in this animation, use optional params" )
+		return
+	
+	if not os.path.exists( sound_path ):
+		print( "lavatar::add_sound, file '%s' no found on the disk, check your path" % sound_path )
+		return
+	
+	abs_path = os.path.abspath(sound_path)
+	anim['sound']['path'] = abs_path
+
+'''
+## PLAYBACK ##
+'''
 
 def generate_interpolation_frame( fields ):
 	

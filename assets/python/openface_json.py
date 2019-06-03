@@ -2,6 +2,7 @@ import lavatar.lavatar as lavatar
 from openface_configuration import *
 
 CSV_PATH = "../openface/laugh_1_300.csv"
+WAV_PATH = "../openface/laugh.wav"
 JSON_PATH = "../json/laugh_1_300.json"
 
 indices = None
@@ -30,4 +31,5 @@ def load_csv( path ):
 load_csv( CSV_PATH )
 
 animation = lavatar.pack_animation( frames, indices )
+lavatar.add_sound( animation, WAV_PATH )
 lavatar.save_animation_json( animation, JSON_PATH )
