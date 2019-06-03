@@ -1,3 +1,10 @@
+import os
+import time
+import json
+import argparse
+from pythonosc import osc_message_builder
+from pythonosc import udp_client
+
 def get_mandatory_indices( usage = 'index' ):
 	if usage == 'index':
 		return [ ('valid',False,bool), ('all_indices',False,bool), ('timestamp',None,int), ('landmarks',None,list) ]
@@ -6,9 +13,9 @@ def get_mandatory_indices( usage = 'index' ):
 
 def get_optional_indices( usage = 'index' ):
 	if usage == 'index':
-		return [ ('gaze_0',None,list), ('gaze_1',None,list), ('au',None,list) ]
+		return [ ('gaze',None,list), ('au',None,list) ]
 	elif usage == 'frame':
-		return [ ('gaze_0',None,list), ('gaze_1',None,list), ('au',None,list) ]
+		return [ ('gaze',None,list), ('au',None,list) ]
 
 def generate_indices( all_indices = True ):
 	d = {}
@@ -50,16 +57,12 @@ def validate_indices( indices ):
 						err += '\n'
 					err += "lavatar::validate_indices, error: missing data in landmarks for position '%i' on axis '%i'!" % (i,j)
 		if indices['all_indices']:
-			for i in range(0,3):
-				if indices['gaze_0'][i] == None:
-					if err != '':
-						err += '\n'
-					err += "lavatar::validate_indices, error: missing data in gaze_0 on axis '%i'!" % i
-			for i in range(0,3):
-				if indices['gaze_1'][i] == None:
-					if err != '':
-						err += '\n'
-					err += "lavatar::validate_indices, error: missing data in gaze_0 on axis '%i'!" % i
+			for i in range(len(indices['gaze'])):
+				for j in range(0,3):
+					if indices['gaze'][i][j] == None:
+						if err != '':
+							err += '\n'
+						err += "lavatar::validate_indices, error: missing data in gaze for position '%i' on axis '%i'!" % (i,j)
 	
 	if err != '':
 		print( err )
@@ -109,16 +112,12 @@ def validate_frame( frame, indices ):
 						err += '\n'
 					err += "lavatar::validate_frame, error: missing data in landmarks for position '%i' on axis '%i'!" % (i,j)
 		if indices['all_indices']:
-			for i in range(0,3):
-				if frame['gaze_0'][i] == None:
-					if err != '':
-						err += '\n'
-					err += "lavatar::validate_frame, error: missing data in gaze_0 on axis '%i'!" % i
-			for i in range(0,3):
-				if frame['gaze_1'][i] == None:
-					if err != '':
-						err += '\n'
-					err += "lavatar::validate_frame, error: missing data in gaze_0 on axis '%i'!" % i
+			for i in range(len(frame['gaze'])):
+				for j in range(0,3):
+					if frame['gaze'][i][j] == None:
+						if err != '':
+							err += '\n'
+						err += "lavatar::validate_frame, error: missing data in gaze for position '%i' on axis '%i'!" % (i,j)
 	
 	if err != '':
 		print( err )
@@ -129,10 +128,18 @@ def validate_frame( frame, indices ):
 	return True
 
 def parse_int( txt ):
-	return int( txt.strip() )
+	try:
+		return int( txt.strip() )
+	except Exception as e:
+		print( e )
+		return None
 
 def parse_float( txt ):
-	return float( txt.strip() )
+	try:
+		return float( txt.strip() )
+	except Exception as e:
+		print( e )
+		return None
 
 def parse_text_frame( words, indices ):
 	
@@ -155,12 +162,10 @@ def parse_text_frame( words, indices ):
 			frame['landmarks'][i][j] = parse_float( words[ indices['landmarks'][i][j] ] )
 	
 	if indices['all_indices']:
-		frame['gaze_0'] = [0,0,0] 
-		for i in range(0,3):
-			frame['gaze_0'][i] = parse_float( words[ indices['gaze_0'][i] ] )
-		frame['gaze_1'] = [0,0,0] 
-		for i in range(0,3):
-			frame['gaze_1'][i] = parse_float( words[ indices['gaze_1'][i] ] )
+		frame['gaze'] = [[0,0,0] for i in range( len(indices['gaze']) )]
+		for i in range( len(indices['gaze']) ):
+			for j in range(0,3):
+				frame['gaze'][i][j] = parse_float( words[ indices['gaze'][i][j] ] )
 		frame['au'] = [None for i in range( len(indices['au']) )]
 		for i in range( len(indices['au']) ):
 			frame['au'][i] = parse_float( words[ indices['au'][i] ] )
@@ -168,3 +173,85 @@ def parse_text_frame( words, indices ):
 	validate_frame( frame, indices )
 	
 	return frame
+
+def generate_aabb():
+	return { 'center':[], 'min':[], 'max':[], 'size':[] }
+
+def process_frame( frame ):
+	
+	if not frame['valid']:
+		return
+	
+	pos0 = frame['landmarks'][0]
+	barycenter = [0,0,0]
+	aabb_min = [pos0[0],pos0[1],pos0[2]]
+	aabb_max = [pos0[0],pos0[1],pos0[2]]
+	aabb_size = []
+	for i in range( 0, len( frame['landmarks'] ) ):
+		for j in range(3):
+			v = frame['landmarks'][i][j]
+			barycenter[j] += v
+			if aabb_min[j] > v:
+				aabb_min[j] = v
+			if aabb_max[j] < v:
+				aabb_max[j] = v
+	
+	for j in range(3):
+		aabb_size.append( aabb_max[j]-aabb_min[j] )
+		barycenter[j] /= len( frame['landmarks'] )
+	
+	return barycenter, aabb_min, aabb_max, aabb_size
+	
+def pack_animation( frames, indices ):
+	
+	if len(frames) == 0 or not indices['valid']:
+		return None
+	
+	animation = {}
+	animation['duration'] = frames[len(frames)-1]['timestamp'] - frames[0]['timestamp']
+	animation['frame_count'] = len(frames)
+	animation['landmark_count'] = len(indices['landmarks'])
+	animation['action_unit_count'] = len(indices['au'])
+	animation['gaze_count'] = len(indices['gaze'])
+	animation['fields'] = []
+	for k in indices.keys():
+		if k == 'valid' or k == 'all_indices':
+			continue
+		animation['fields'].append( k )
+		
+	animation['aabb'] = generate_aabb()
+	animation['aabb']['center'], animation['aabb']['min'], animation['aabb']['max'], animation['aabb']['size'] = process_frame( frames[0] )
+	animation['scale'] = 1.0 / animation['aabb']['size'][0]
+	if animation['aabb']['size'][1] > animation['aabb']['size'][0]:
+		animation['scale'] = 1.0 / animation['aabb']['size'][1]
+	if animation['aabb']['size'][2] > animation['aabb']['size'][1]:
+		animation['scale'] = 1.0 / animation['aabb']['size'][2]
+		
+	animation['frames'] = []
+	for f in frames:
+		newf = dict(f)
+		newf.pop('valid', None)
+		newf['frame'] = len(animation['frames'])
+		newf['aabb'] = generate_aabb()
+		newf['aabb']['center'], newf['aabb']['min'], newf['aabb']['max'], newf['aabb']['size'] = process_frame( f )
+		for i in range(len(newf['landmarks'])):
+			for j in range(3):
+				newf['landmarks'][i][j] *= animation['scale']
+		animation['frames'].append( newf )
+	
+	return animation
+
+def save_animation_json( anim, path, compress = True ):
+	
+	out = open( path, 'w' )
+	if ( compress ):
+		cc = json.dumps( anim, sort_keys=True, indent=0, separators=(',', ':'))
+		cc = cc.replace( '\n','' )
+	else:
+		cc = json.dumps( anim, sort_keys=True, indent=4, separators=(',', ':'))
+	out.write( cc )
+	out.close()
+
+
+
+	
