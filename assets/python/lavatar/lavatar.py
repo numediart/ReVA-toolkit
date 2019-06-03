@@ -1,9 +1,14 @@
 import os
+import numpy
 import time
 import json
 import argparse
+from .transformations import *
 from pythonosc import osc_message_builder
 from pythonosc import udp_client
+
+def get_matrix( data ):
+	return numpy.matrix( data )
 
 def get_mandatory_indices( usage = 'index' ):
 	if usage == 'index':
@@ -141,7 +146,16 @@ def parse_float( txt ):
 		print( e )
 		return None
 
-def parse_text_frame( words, indices ):
+def apply_matrix_position( xyz, matrix ): 
+	x, y, z = translation_from_matrix( matrix * translation_matrix( numpy.array([xyz[0],xyz[1],xyz[2]]) ) )
+	return [ x, y, z ]
+
+# provide RADIANS!!!
+def apply_matrix_rotation( xyz, matrix ):
+	rot = euler_from_matrix( matrix * euler_matrix( xyz[0], xyz[1], xyz[2] ) )
+	return [rot[0],rot[1],rot[2]]
+
+def parse_text_frame( words, indices, matrix = None ):
 	
 	if not indices['valid']:
 		print( "lavatar::parse_text_frame, error: indices are NOT valid!" )
@@ -156,16 +170,23 @@ def parse_text_frame( words, indices ):
 	frame = generate_frame( indices )
 	
 	frame['timestamp'] = parse_float( words[ indices['timestamp'] ] )
+	
 	frame['landmarks'] = [[0,0,0] for i in range( len(indices['landmarks']) )]
 	for i in range( len(indices['landmarks']) ):
 		for j in range(0,3):
 			frame['landmarks'][i][j] = parse_float( words[ indices['landmarks'][i][j] ] )
-	
+		if len(matrix) > 0:
+			frame['landmarks'][i] = apply_matrix_position( frame['landmarks'][i], matrix )
+			
 	if indices['all_indices']:
+		
 		frame['gaze'] = [[0,0,0] for i in range( len(indices['gaze']) )]
 		for i in range( len(indices['gaze']) ):
 			for j in range(0,3):
 				frame['gaze'][i][j] = parse_float( words[ indices['gaze'][i][j] ] )
+			if len(matrix) > 0:
+				frame['gaze'][i] = apply_matrix_rotation( frame['gaze'][i], matrix )
+		
 		frame['au'] = [None for i in range( len(indices['au']) )]
 		for i in range( len(indices['au']) ):
 			frame['au'][i] = parse_float( words[ indices['au'][i] ] )
@@ -174,10 +195,7 @@ def parse_text_frame( words, indices ):
 	
 	return frame
 
-def generate_aabb():
-	return { 'center':[], 'min':[], 'max':[], 'size':[] }
-
-def process_frame( frame ):
+def generate_aabb( frame, center = None ):
 	
 	if not frame['valid']:
 		return
@@ -197,10 +215,18 @@ def process_frame( frame ):
 				aabb_max[j] = v
 	
 	for j in range(3):
-		aabb_size.append( aabb_max[j]-aabb_min[j] )
 		barycenter[j] /= len( frame['landmarks'] )
-	
-	return barycenter, aabb_min, aabb_max, aabb_size
+		if center == None:
+			aabb_min[j] -= barycenter[j]
+			aabb_max[j] -= barycenter[j]
+		else:
+			barycenter[j] -= center[j]
+			aabb_min[j] -= center[j]
+			aabb_max[j] -= center[j]
+	for j in range(3):
+		aabb_size.append( aabb_max[j]-aabb_min[j] )
+
+	return { 'center':barycenter, 'min':aabb_min, 'max':aabb_max, 'size':aabb_size }
 	
 def pack_animation( frames, indices ):
 	
@@ -218,9 +244,8 @@ def pack_animation( frames, indices ):
 		if k == 'valid' or k == 'all_indices':
 			continue
 		animation['fields'].append( k )
-		
-	animation['aabb'] = generate_aabb()
-	animation['aabb']['center'], animation['aabb']['min'], animation['aabb']['max'], animation['aabb']['size'] = process_frame( frames[0] )
+
+	animation['aabb'] = generate_aabb( frames[0] )
 	animation['scale'] = 1.0 / animation['aabb']['size'][0]
 	if animation['aabb']['size'][1] > animation['aabb']['size'][0]:
 		animation['scale'] = 1.0 / animation['aabb']['size'][1]
@@ -232,10 +257,10 @@ def pack_animation( frames, indices ):
 		newf = dict(f)
 		newf.pop('valid', None)
 		newf['frame'] = len(animation['frames'])
-		newf['aabb'] = generate_aabb()
-		newf['aabb']['center'], newf['aabb']['min'], newf['aabb']['max'], newf['aabb']['size'] = process_frame( f )
+		newf['aabb'] = generate_aabb( f, animation['aabb']['center'] )
 		for i in range(len(newf['landmarks'])):
 			for j in range(3):
+				newf['landmarks'][i][j] -= animation['aabb']['center'][j]
 				newf['landmarks'][i][j] *= animation['scale']
 		animation['frames'].append( newf )
 	
@@ -254,4 +279,3 @@ def save_animation_json( anim, path, compress = True ):
 
 
 
-	
