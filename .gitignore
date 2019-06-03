@@ -3,3 +3,4 @@
 *.import
 .import/*
 *test.json
+assets/python/trash/*

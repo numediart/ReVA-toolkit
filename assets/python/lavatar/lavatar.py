@@ -8,40 +8,77 @@ from pythonosc import osc_message_builder
 from pythonosc import udp_client
 
 '''
-## IMPORT ##
-text input manipulation part
+## UTILS ##
+all general & utility functions
 '''
 
 def get_matrix( data ):
 	return numpy.matrix( data )
 
-def get_mandatory_indices( usage = 'index' ):
+def get_mandatory_keys( usage = 'index' ):
 	if usage == 'index':
 		return [ ('valid',False,bool), ('all_indices',False,bool), ('timestamp',None,int), ('landmarks',None,list) ]
 	elif usage == 'frame':
 		return [ ('valid',False,bool), ('timestamp',None,float), ('landmarks',None,list) ]
+	elif usage == 'animation':
+		return [('duration',0,float), ('frame_count',0,int), ('landmark_count',0,int), ('frames',None,list)]
+	elif usage == 'animation_frame':
+		return [('index',0,int), ('landmarks',None,list), ('timestamp',0,float)]
+	elif usage == 'animation_frame_interpolation':
+		return [('landmarks',None,list), ('landmarks_data',None,list), ('timestamp',0,float)]
+	elif usage == 'aabb':
+		return [('center',None,[]),('min',None,[]),('max',None,[]),('size',None,[])]
+	else:
+		return None
 
-def get_optional_indices( usage = 'index' ):
+def get_optional_keys( usage = 'index' ):
 	if usage == 'index':
 		return [ ('gaze',None,list), ('au',None,list) ]
 	elif usage == 'frame':
 		return [ ('gaze',None,list), ('au',None,list) ]
+	elif usage == 'animation':
+		return [('action_unit_count',0,int), ('gaze_count',-1,int), ('sound',None,dict), ('fields',None,list), ('aabb',None,dict), ('aabb_total',None,dict), ('scale',1.0,float)]
+	elif usage == 'animation_frame':
+		return [('au',None,list), ('gaze',None,list)]
+	elif usage == 'animation_frame_interpolation':
+		return [('au',None,list), ('gaze',None,list), ('gaze_data',None,list)]
+	else:
+		return None
+
+def parse_int( txt ):
+	try:
+		return int( txt.strip() )
+	except Exception as e:
+		print( e )
+		return None
+
+def parse_float( txt ):
+	try:
+		return float( txt.strip() )
+	except Exception as e:
+		print( e )
+		return None
+
+'''
+## IMPORT ##
+text input manipulation part
+'''
 
 def generate_indices( all_indices = True ):
 	d = {}
-	for k in get_mandatory_indices():
+	for k in get_mandatory_keys():
 		d[ k[0] ] = k[1]
 	if all_indices:
-		for k in get_optional_indices():
+		for k in get_optional_keys():
 			d[ k[0] ] = k[1]
 	d['all_indices'] = all_indices
 	return d
 
 def validate_indices( indices ):
 	
-	ll = get_mandatory_indices()
+	ll = get_mandatory_keys()
 	if 'all_indices' in indices.keys():
-		ll += get_optional_indices()
+		ll += get_optional_keys()
 	
 	err = ''
 	for i in range(len(ll)):
@@ -49,12 +86,12 @@ def validate_indices( indices ):
 			if err != '':
 				err += '\n'
 			err += "lavatar::validate_indices, error: missing field '%s' in dictionary!" % ll[i][0]
-		if indices[ ll[i][0] ] == None:
+		elif indices[ ll[i][0] ] == None:
 			if err != '':
 				err += '\n'
-			err += "lavatar::validate_indices, error: field '%s' not found in the CSV!" % ll[i][0]
+			err += "lavatar::validate_indices, error: field '%s' is null!" % ll[i][0]
 		# checking type!
-		if type(indices[ ll[i][0] ]) is not ll[i][2]:
+		elif type(indices[ ll[i][0] ]) is not ll[i][2]:
 			if err != '':
 				err += '\n'
 			err += "lavatar::validate_indices, error: field '%s' is not of the right type!" % ll[i][0]
@@ -85,18 +122,18 @@ def validate_indices( indices ):
 def generate_frame( indices ):
 	
 	f = {}
-	for k in get_mandatory_indices( 'frame' ):
+	for k in get_mandatory_keys( 'frame' ):
 		f[ k[0] ] = k[1]
 	if indices['all_indices']:
-		for k in get_optional_indices( 'frame' ):
+		for k in get_optional_keys( 'frame' ):
 			f[ k[0] ] = k[1]
 	return f
 
 def validate_frame( frame, indices ):
 	
-	ll = get_mandatory_indices( 'frame' )
+	ll = get_mandatory_keys( 'frame' )
 	if 'all_indices' in indices.keys():
-		ll += get_optional_indices( 'frame' )
+		ll += get_optional_keys( 'frame' )
 	
 	err = ''
 	for i in range(len(ll)):
@@ -104,12 +141,12 @@ def validate_frame( frame, indices ):
 			if err != '':
 				err += '\n'
 			err += "lavatar::validate_frame, error: missing field '%s' in dictionary!" % ll[i][0]
-		if frame[ ll[i][0] ] == None:
+		elif frame[ ll[i][0] ] == None:
 			if err != '':
 				err += '\n'
-			err += "lavatar::validate_frame, error: field '%s' not found in the CSV!" % ll[i][0]
+			err += "lavatar::validate_frame, error: field '%s' is null!" % ll[i][0]
 		# checking type!
-		if type(frame[ ll[i][0] ]) is not ll[i][2]:
+		elif type(frame[ ll[i][0] ]) is not ll[i][2]:
 			if err != '':
 				err += '\n'
 			err += "lavatar::validate_frame, error: field '%s' is not of the right type!" % ll[i][0]
@@ -136,20 +173,6 @@ def validate_frame( frame, indices ):
 		frame['valid'] = True
 	
 	return True
-
-def parse_int( txt ):
-	try:
-		return int( txt.strip() )
-	except Exception as e:
-		print( e )
-		return None
-
-def parse_float( txt ):
-	try:
-		return float( txt.strip() )
-	except Exception as e:
-		print( e )
-		return None
 
 def apply_matrix_position( xyz, matrix ): 
 	x, y, z = translation_from_matrix( matrix * translation_matrix( numpy.array([xyz[0],xyz[1],xyz[2]]) ) )
@@ -289,11 +312,11 @@ def pack_animation( frames, indices ):
 
 	animation['aabb'] = generate_aabb( frames[0] )
 	animation['aabb_total'] = generate_aabb()
-	animation['scale'] = 1.0 / animation['aabb']['size'][0]
+	animation['scale'] = float( 1.0 / animation['aabb']['size'][0] )
 	if animation['aabb']['size'][1] > animation['aabb']['size'][0]:
-		animation['scale'] = 1.0 / animation['aabb']['size'][1]
+		animation['scale'] = float( 1.0 / animation['aabb']['size'][1] )
 	if animation['aabb']['size'][2] > animation['aabb']['size'][1]:
-		animation['scale'] = 1.0 / animation['aabb']['size'][2]
+		animation['scale'] = float( 1.0 / animation['aabb']['size'][2] )
 		
 	animation['frames'] = []
 	for f in frames:
@@ -317,5 +340,237 @@ def pack_animation( frames, indices ):
 		
 	return animation
 
-def play_animation( anim, speed = 1, loop = True ):
-	pass
+def validate_animation( anim ):
+	
+	if type( anim ) is not dict:
+		return False, False
+	
+	err = ''
+	warn = ''
+	
+	akeys = anim.keys()
+	mfields = get_mandatory_keys( 'animation' )
+	ofields = get_optional_keys( 'animation' )
+	
+	for f in mfields:
+		if not f[0] in akeys:
+			if err != '':
+				err += '\n'
+			err += "lavatar::validate_animation, error: missing animation field '%s'!" % f[0]
+		elif anim[f[0]] == None:
+			if err != '':
+				err += '\n'
+			err += "lavatar::validate_animation, error: animation field '%s' is null!" % f[0]
+		# checking type!
+		elif type(anim[f[0]]) is not f[2]:
+			if err != '':
+				err += '\n'
+			err += "lavatar::validate_animation, error: animation field '%s' is not of the right type!" % f[0]
+	
+	for f in ofields:
+		if not f[0] in akeys:
+			if warn != '':
+				warn += '\n'
+			warn += "lavatar::validate_animation, warning: missing animation field '%s'!" % f[0]
+		elif anim[f[0]] == None:
+			if warn != '':
+				warn += '\n'
+			warn += "lavatar::validate_animation, warning: animation field '%s' is null!" % f[0]
+		# checking type!
+		elif type(anim[f[0]]) is not f[2]:
+			if warn != '':
+				warn += '\n'
+			warn += "lavatar::validate_animation, warning: animation field '%s' is not of the right type!" % f[0]
+	
+	mfields = get_mandatory_keys( 'animation_frame' )
+	ofields = get_optional_keys( 'animation_frame' )
+	
+	fi = 0
+	for frame in anim['frames']:
+		
+		if type(frame) is not dict:
+			if err != '':
+				err += '\n'
+			err += "lavatar::validate_animation, error: frame '%i' is invalid!" % fi
+		
+		akeys = frame.keys()
+		for f in mfields:
+			if not f[0] in akeys:
+				if err != '':
+					err += '\n'
+				err += "lavatar::validate_animation, error: missing field '%s' in frame '%i'!" % (f[0],fi)
+			elif frame[f[0]] == None:
+				if err != '':
+					err += '\n'
+				err += "lavatar::validate_animation, error: field '%s' in frame '%i' is null!" % (f[0],fi)
+			# checking type!
+			elif type(frame[f[0]]) is not f[2]:
+				if err != '':
+					err += '\n'
+				err += "lavatar::validate_animation, error: field '%s' in frame '%i' is not of the right type!" % (f[0],fi)
+
+		for f in ofields:
+			if not f[0] in akeys:
+				if warn != '':
+					warn += '\n'
+				warn += "lavatar::validate_animation, warning: missing field '%s' in frame '%i'!" % (f[0],fi)
+			elif frame[f[0]] == None:
+				if warn != '':
+					warn += '\n'
+				warn += "lavatar::validate_animation, warning: field '%s' in frame '%i' is null!" % (f[0],fi)
+			# checking type!
+			elif type(frame[f[0]]) is not f[2]:
+				if warn != '':
+					warn += '\n'
+				warn += "lavatar::validate_animation, warning: field '%s' in frame '%i' is not of the right type!" % (f[0],fi)
+		
+		fi += 1
+	
+	if err != '':
+		print( err )
+		print( warn )
+		return False, False
+	elif warn != '':
+		print( warn )
+		return True, False
+	else:
+		return True, True
+
+def generate_interpolation_frame( fields ):
+	
+	frame = {}
+	for f in fields:
+		frame[f[0]] = f[1]
+	return frame
+
+def frame_interpolation( anim, fields, index, elapsed ):
+	
+	out = generate_interpolation_frame( fields )
+	
+	if index == 0:
+		index = 1
+	
+	diff_time = anim['frames'][index]['timestamp'] - anim['frames'][index-1]['timestamp']
+	rel_time = elapsed - anim['frames'][index-1]['timestamp']
+	pc = rel_time / diff_time
+	if pc < 0:
+		pc = 0
+	elif pc > 1:
+		pc = 1
+	pci = 1 - pc
+	
+	prevf = anim['frames'][index-1]
+	currf = anim['frames'][index]
+	
+	for f in fields:
+		if f[0] == 'timestamp':
+			out[f[0]] = prevf[f[0]] * pci + currf[f[0]] * pc
+		elif f[0] == 'landmarks':
+			out[f[0]] = []
+			out['landmarks_data'] = []
+			for i in range(anim['landmark_count']):
+				v3 = [0,0,0]
+				for j in range(3):
+					v3[j] = prevf[f[0]][i][j] * pci + currf[f[0]][i][j] * pc
+				out[f[0]].append( v3 )
+				out['landmarks_data'] += v3
+		elif f[0] == 'au':
+			out[f[0]] = []
+			for i in range(anim['action_unit_count']):
+				out[f[0]].append( prevf[f[0]][i] * pci + currf[f[0]][i] * pc )
+		elif f[0] == 'gaze':
+			out[f[0]] = []
+			out['gaze_data'] = []
+			for i in range(anim['gaze_count']):
+				v3 = [0,0,0]
+				for j in range(3):
+					v3[j] = prevf[f[0]][i][j] * pci + currf[f[0]][i][j] * pc
+				out[f[0]].append( v3 )
+				out['gaze_data'] += v3
+	
+	return out
+
+def play_animation( anim, callback = None, fps = 100, speed = 1, loop = True, interpolation = True ):
+	
+	valid, optional = validate_animation( anim )
+	
+	if not valid:
+		return
+	
+	frame_fields = []
+	if interpolation:
+		frame_fields = get_mandatory_keys( 'animation_frame_interpolation' )
+		if optional:
+			frame_fields += get_optional_keys( 'animation_frame_interpolation' )
+	
+	last_time = time.time()
+	idle_time = 1.0 / fps
+
+	elapsed_time = 0
+	total_time = 0
+	current_index = 0
+	
+	print( "playing animation" )
+	
+	while( True ):
+		
+		now = time.time()
+		delta_time = now - last_time
+		last_time = now
+
+		elapsed_time += delta_time * speed
+		total_time += delta_time
+		
+		if elapsed_time >= anim['frames'][current_index]['timestamp']:
+			#print( elapsed_time, ' -> ', anim['frames'][current_index]['index'] )
+			if callback != None and not interpolation:
+				newf = dict(anim['frames'][current_index])
+				newf['now'] = total_time
+				callback( anim['frames'][current_index] )
+			current_index += 1
+
+		if current_index >= anim['frame_count']:
+			if not loop:
+				break
+			print( "animation loop" )
+			elapsed_time -= anim['frames'][current_index-1]['timestamp']
+			current_index = 0
+		
+		if callback != None and interpolation:
+			interframe = frame_interpolation( anim, frame_fields, current_index, elapsed_time )
+			interframe['now'] = total_time
+			callback( interframe )
+		
+		time.sleep( idle_time )
+
+'''
+## OSC ##
+'''
+
+def init_osc_sender( ip, port ):
+	print( "starting emission to " + ip + ":" + str( port ) )
+	return udp_client.SimpleUDPClient( ip, port )
+
+def send_frame( osc_sender, frame, marker_prefix = None ):
+	
+	if marker_prefix == None:
+		marker_prefix = ''
+	
+	keys = frame.keys()
+	ts = [ frame['now'], frame['timestamp'] ]
+	if 'landmarks_data' in keys:
+		data = []
+		data += ts
+		data += frame['landmarks_data']
+		osc_sender.send_message( marker_prefix+'/landmarks', data )
+	if 'au' in keys:
+		data = []
+		data += ts
+		data += frame['au']
+		osc_sender.send_message( marker_prefix+'/actionunits', data )
+	if 'gaze_data' in keys:
+		data = []
+		data += ts
+		data += frame['gaze_data']
+		osc_sender.send_message( marker_prefix+'/gaze', data )
+	

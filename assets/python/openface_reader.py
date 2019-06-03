@@ -1,5 +1,8 @@
 import lavatar.lavatar as lavatar
 
+IP = '127.0.0.1'
+PORT = 25000
+
 CSV_PATH = "../openface/laugh_1_300.csv"
 FIELD_SEPARATOR = ','
 
@@ -15,9 +18,8 @@ CORRECTION_MATRIX = lavatar.get_matrix([
 ])
 
 indices = lavatar.generate_indices( True ) # False to only extract timestamp & landmarks indices
+osc_sender = lavatar.init_osc_sender( IP, PORT )
 frames = []
-
-raw_file = open( CSV_PATH )
 
 def extract_indices( l ):
 	
@@ -71,10 +73,10 @@ def extract_indices( l ):
 	
 	return lavatar.validate_indices( indices )
 
-def load_csv():
+def load_csv( path ):
 	
 	global indices
-	global raw_file
+	raw_file = open( path )
 	
 	for line in raw_file:
 		line = line.strip()
@@ -89,11 +91,13 @@ def load_csv():
 				continue
 			frames.append( f )
 
-load_csv()
+def animation_callback( frame ):
+	lavatar.send_frame( osc_sender, frame )
+
+load_csv( CSV_PATH )
 
 animation = lavatar.pack_animation( frames, indices )
 
-
+lavatar.play_animation( animation, speed = 0.5, callback = animation_callback )
 
 lavatar.save_animation_json( animation, 'test.json' )
-
