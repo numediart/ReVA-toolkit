@@ -5,28 +5,68 @@ extends Spatial
 export (String) var json_path = '' setget load_json
 export (float) var playhead = 0
 
+export (Vector3) var eye_rotation = Vector3() setget _eye_rotation
+export (Vector3) var eye_translation = Vector3() setget _eye_translation
+
 var animation = {}
 var animation_loaded = true
 var prev_playhead = 0
 var current_index = 0
 
+	# right is red, left is blue
 var structure = {
-	'eye_right_brow': 		{ 'indices': [], 'color': Color( 0.7,0,0 ), 'parent': null },
-	'eye_right_perimeter': 	{ 'indices': [], 'color': Color( 1,0,0 ), 'parent': null },
-	'lid_right_upper': 		{ 'indices': [], 'color': Color( 1,0.3,0 ), 'parent': 'eye_right_perimeter' },
-	'lid_right_lower': 		{ 'indices': [], 'color': Color( 1,0.6,0 ), 'parent': 'eye_right_perimeter' },
-	'eye_left_brow': 		{ 'indices': [], 'color': Color( 0,0,0.7 ), 'parent': null },
-	'eye_left_perimeter': 	{ 'indices': [], 'color': Color( 0,0,1 ), 'parent': null },
-	'lid_left_upper': 		{ 'indices': [], 'color': Color( 0,0.3,1 ), 'parent': 'eye_left_perimeter' },
-	'lid_left_lower': 		{ 'indices': [], 'color': Color( 0,0.6,1 ), 'parent': 'eye_left_perimeter' },
-	'mouth_all': 			{ 'indices': [], 'color': Color( 0.2,1,0 ), 'parent': null },
-	'lip_upper': 			{ 'indices': [], 'color': Color( 0.75,1,0 ), 'parent': 'mouth_all' },
-	'lip_lower': 			{ 'indices': [], 'color': Color( 1,1,0 ), 'parent': 'mouth_all' },
-	'nose_all': 			{ 'indices': [], 'color': Color( 0,0.6,0.2 ), 'parent': null },
-	'nose_tip': 			{ 'indices': [], 'color': Color( 0.5,1,0.5 ), 'parent': 'nose_all' },
-	'nostril_right': 		{ 'indices': [], 'color': Color( 0,0.6,1 ), 'parent': 'nose_all' },
-	'nostril_left': 		{ 'indices': [], 'color': Color( 0.8,0.6,0.2 ), 'parent': 'nose_all' }
+	'brow_right': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.7,0.0,0.0 ), 	'parent': null },
+	'eye_right': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 1.0,0.0,0.0 ), 	'parent': null },
+	'lid_right_upper': 	{ 'indices': [], 'correction': null, 'color': Color( 1.0,0.3,0.0 ), 		'parent': 'eye_right' },
+	'lid_right_lower': 	{ 'indices': [], 'correction': null, 'color': Color( 1.0,0.6,0.0 ), 		'parent': 'eye_right' },
+	'brow_left': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.0,0.7 ), 	'parent': null },
+	'eye_left': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.0,1.0 ), 	'parent': null },
+	'lid_left_upper': 	{ 'indices': [], 'correction': null, 'color': Color( 0.0,0.3,1.0 ), 		'parent': 'eye_left' },
+	'lid_left_lower': 	{ 'indices': [], 'correction': null, 'color': Color( 0.0,0.6,1.0 ), 		'parent': 'eye_left' },
+	'mouth_all': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.2,1.0,0.0 ), 	'parent': null },
+	'lip_upper': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.7,1.0,0.0 ), 	'parent': 'mouth_all' },
+	'lip_lower': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 1.0,1.0,0.0 ), 	'parent': 'mouth_all' },
+	'nose_all': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.6,0.2 ), 	'parent': null },
+	'nose_tip': 		{ 'indices': [], 'correction': null, 'color': Color( 0.5,1.0,0.5 ), 		'parent': 'nose_all' },
+	'nostril_right': 	{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.6,1.0 ), 	'parent': 'nose_all' },
+	'nostril_left': 	{ 'indices': [], 'correction': Transform(), 'color': Color( 0.8,0.6,0.2 ), 	'parent': 'nose_all' }
 }
+
+func _eye_rotation( v ):
+	eye_rotation = v
+	
+	var o = structure['eye_right']['correction'].xform( Vector3() )
+	var newt = null
+	var q = Quat()
+	q.set_euler( v )
+	newt = Transform( q )
+	newt.origin = o
+	structure['eye_right']['correction'] = newt
+	q.set_euler( v * Vector3(1,-1,-1) )
+	newt = Transform( q )
+	newt.origin = o * Vector3(-1,1,1)
+	structure['eye_left']['correction'] = newt
+	
+	$axis_R.transform = structure['eye_right']['correction']
+	$axis_L.transform = structure['eye_left']['correction']
+
+func _eye_translation( v ):
+	eye_translation = v
+	
+	var eulers = structure['eye_right']['correction'].basis.get_euler()
+	var newt = null
+	var q = Quat()
+	q.set_euler( eulers )
+	newt = Transform( q )
+	newt.origin = v
+	structure['eye_right']['correction'] = newt
+	q.set_euler( eulers * Vector3(1,-1,-1) )
+	newt = Transform( q )
+	newt.origin = v * Vector3(-1,1,1)
+	structure['eye_left']['correction'] = newt
+	
+	$axis_R.transform = structure['eye_right']['correction']
+	$axis_L.transform = structure['eye_left']['correction']
 
 func load_json( path ):
 	
@@ -81,7 +121,24 @@ func load_structure():
 	for k in structure:
 		if k in animation['structure']:
 			structure[k]['indices'] = animation['structure'][k]
-	print( structure )
+
+func load_data():
+	
+	# transformation of lists into Vector3
+	transform_aabb( animation['aabb'] )
+	transform_aabb( animation['aabb_total'] )
+	for f in range( animation['frame_count'] ):
+		transform_aabb( animation['frames'][f]['aabb'] )
+		var l
+		l = animation['frames'][f]['pose_euler']
+		animation['frames'][f]['pose_euler'] = Vector3( l[0], l[1], l[2] )
+		for i in range( animation['gaze_count'] ):
+			l = animation['frames'][f]['gazes'][i]
+			animation['frames'][f]['gazes'][i] = Vector3( l[0], l[1], l[2] )
+		for i in range( animation['landmark_count'] ):
+			l = animation['frames'][f]['landmarks'][i]
+			animation['frames'][f]['landmarks'][i] = Vector3( l[0], l[1], l[2] )
+	
 
 func load_sound():
 	
@@ -160,25 +217,12 @@ func load_animation():
 	
 	print( "loading animation" )
 	
-	# transformation of lists into Vector3
-	transform_aabb( animation['aabb'] )
-	transform_aabb( animation['aabb_total'] )
-	for f in range( animation['frame_count'] ):
-		transform_aabb( animation['frames'][f]['aabb'] )
-		var l
-		l = animation['frames'][f]['pose_euler']
-		animation['frames'][f]['pose_euler'] = Vector3( l[0], l[1], l[2] )
-		for i in range( animation['gaze_count'] ):
-			l = animation['frames'][f]['gazes'][i]
-			animation['frames'][f]['gazes'][i] = Vector3( l[0], l[1], l[2] )
-		for i in range( animation['landmark_count'] ):
-			l = animation['frames'][f]['landmarks'][i]
-			animation['frames'][f]['landmarks'][i] = Vector3( l[0], l[1], l[2] )
-	
 	load_structure()
+	load_data()
 	load_sound()
 	load_debug()
 	load_animplayer()
+	load_frame()
 	animation_loaded = true
 
 func interpolate_euler( eul_src, eul_dst, pc ):

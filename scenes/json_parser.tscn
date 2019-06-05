@@ -55,7 +55,9 @@ albedo_color = Color( 0, 0, 1, 1 )
 [node name="root" type="Spatial"]
 script = ExtResource( 1 )
 json_path = "res://assets/json/laugh_1_300.json"
-playhead = 8.0
+playhead = 8.3
+eye_rotation = Vector3( 0, 0, -0.46 )
+eye_translation = Vector3( 0.33, 0.13, 0.3 )
 
 [node name="soundplayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource( 12 )
@@ -78,7 +80,8 @@ mesh = SubResource( 4 )
 material/0 = null
 
 [node name="axis" type="Spatial" parent="."]
-transform = Transform( 0.994784, -0.072956, -0.0712869, -0.0437857, -0.936638, 0.347553, -0.092126, -0.342619, -0.934946, 0.0431716, -0.0740876, 0.0383515 )
+editor/display_folded = true
+transform = Transform( 0.995988, -0.0651864, -0.0613082, -0.0383131, -0.929764, 0.366158, -0.0808707, -0.36234, -0.928531, 0.0578544, -0.0824413, 0.0379624 )
 
 [node name="x" type="MeshInstance" parent="axis"]
 transform = Transform( 0.2, 0, 0, 0, 0.004, 0, 0, 0, 0.004, 0.1, 0, 0 )
@@ -93,6 +96,50 @@ mesh = SubResource( 9 )
 material/0 = null
 
 [node name="z" type="MeshInstance" parent="axis"]
+transform = Transform( 0.004, 0, 0, 0, 0.004, 0, 0, 0, 0.2, 0, 0, 0.1 )
+material_override = SubResource( 11 )
+mesh = SubResource( 9 )
+material/0 = null
+
+[node name="axis_R" type="Spatial" parent="."]
+editor/display_folded = true
+transform = Transform( 0.896052, 0.443948, 0, -0.443948, 0.896052, 0, 0, 0, 1, 0.33, 0.13, 0.3 )
+
+[node name="x" type="MeshInstance" parent="axis_R"]
+transform = Transform( 0.2, 0, 0, 0, 0.004, 0, 0, 0, 0.004, 0.1, 0, 0 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
+material/0 = null
+
+[node name="y" type="MeshInstance" parent="axis_R"]
+transform = Transform( 0.004, 0, 0, 0, 0.2, 0, 0, 0, 0.004, 0, 0.1, 0 )
+material_override = SubResource( 10 )
+mesh = SubResource( 9 )
+material/0 = null
+
+[node name="z" type="MeshInstance" parent="axis_R"]
+transform = Transform( 0.004, 0, 0, 0, 0.004, 0, 0, 0, 0.2, 0, 0, 0.1 )
+material_override = SubResource( 11 )
+mesh = SubResource( 9 )
+material/0 = null
+
+[node name="axis_L" type="Spatial" parent="."]
+editor/display_folded = true
+transform = Transform( 0.896052, -0.443948, 0, 0.443948, 0.896052, 0, 0, 0, 1, -0.33, 0.13, 0.3 )
+
+[node name="x" type="MeshInstance" parent="axis_L"]
+transform = Transform( 0.2, 0, 0, 0, 0.004, 0, 0, 0, 0.004, 0.1, 0, 0 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
+material/0 = null
+
+[node name="y" type="MeshInstance" parent="axis_L"]
+transform = Transform( 0.004, 0, 0, 0, 0.2, 0, 0, 0, 0.004, 0, 0.1, 0 )
+material_override = SubResource( 10 )
+mesh = SubResource( 9 )
+material/0 = null
+
+[node name="z" type="MeshInstance" parent="axis_L"]
 transform = Transform( 0.004, 0, 0, 0, 0.004, 0, 0, 0, 0.2, 0, 0, 0.1 )
 material_override = SubResource( 11 )
 mesh = SubResource( 9 )

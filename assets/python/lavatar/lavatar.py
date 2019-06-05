@@ -65,12 +65,12 @@ def get_optional_keys( usage = 'index' ):
 		return [('pose_euler',None,list), ('au',None,list), ('gazes',None,list), ('gaze_data',None,list)]
 	elif usage == 'structrue':
 		return [
-			('eye_right_brow',None,list),
-			('eye_right_perimeter',None,list),
+			('brow_right',None,list),
+			('eye_right',None,list),
 			('lid_right_upper',None,list),
 			('lid_right_lower',None,list),
-			('eye_left_brow',None,list),
-			('eye_left_perimeter',None,list),
+			('brow_left',None,list),
+			('eye_left',None,list),
 			('lid_left_upper',None,list),
 			('lid_left_lower',None,list),
 			('mouth_all',None,list),

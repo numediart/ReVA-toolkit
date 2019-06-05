@@ -32,21 +32,21 @@ CORRECTION_MATRIX = lavatar.concatenate_matrices(
 
 # format structure, call lavatar.get_optional_keys( 'structrue' ) to see all valid fields
 STRUCTURE = {
-	'eye_right_brow': 			[17,18,19,20,21],
-	'eye_right_perimeter' : 	[36,37,38,39,40,41],
-	'lid_right_upper' : 		[37,38],
-	'lid_right_lower' : 		[40,41],
-	'eye_left_brow': 			[22,23,24,25,26],
-	'eye_left_perimeter' : 		[42,43,44,45,46,47],
-	'lid_left_upper' : 			[43,44],
-	'lid_left_lower' : 			[46,47],
-	'mouth_all' : 				[ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67 ],
-	'lip_upper' : 				[ 49, 50, 51, 52, 53 ],
-	'lip_lower' : 				[ 55, 56, 57, 58, 59 ],
-	'nose_tip' : 				[ 30 ],
-	'nose_all' : 				[ 27, 28, 29, 30, 31, 32, 33, 34, 35 ],
-	'nostril_right' : 			[ 31, 32 ],
-	'nostril_left' : 			[ 34, 35 ]
+	'brow_right': 			[17,18,19,20,21],
+	'eye_right' : 			[36,37,38,39,40,41],
+	'lid_right_upper' : 	[37,38],
+	'lid_right_lower' : 	[40,41],
+	'brow_left': 			[22,23,24,25,26],
+	'eye_left' : 			[42,43,44,45,46,47],
+	'lid_left_upper' : 		[43,44],
+	'lid_left_lower' : 		[46,47],
+	'mouth_all' : 			[ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67 ],
+	'lip_upper' : 			[ 49, 50, 51, 52, 53 ],
+	'lip_lower' : 			[ 55, 56, 57, 58, 59 ],
+	'nose_tip' : 			[ 30 ],
+	'nose_all' : 			[ 27, 28, 29, 30, 31, 32, 33, 34, 35 ],
+	'nostril_right' : 		[ 31, 32 ],
+	'nostril_left' : 		[ 34, 35 ]
 }
 
 def extract_indices( l, all_indices = True ): # set to False to only extract timestamp & landmarks indices
