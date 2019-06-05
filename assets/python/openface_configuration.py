@@ -22,15 +22,17 @@ STRUCTURE = {
 	'lid_right_lower' : 		[40,41],
 	'eye_left_brow': 			[22,23,24,25,26],
 	'eye_left_perimeter' : 		[42,43,44,45,46,47],
-	'eye_left_lid_upper' : 		[43,44],
-	'eye_left_lid_lower' : 		[46,47],
+	'lid_left_upper' : 			[43,44],
+	'lid_left_lower' : 			[46,47],
 	'mouth_all' : 				[ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67 ],
 	'lip_upper' : 				[ 49, 50, 51, 52, 53 ],
 	'lip_lower' : 				[ 55, 56, 57, 58, 59 ],
-	'nose_tip' : 				33,
+	'nose_tip' : 				[ 30 ],
 	'nose_all' : 				[ 27, 28, 29, 30, 31, 32, 33, 34, 35 ],
 	'nostril_right' : 			[ 31, 32 ],
-	'nostril_left' : 			[ 34, 35 ]
+	'nostril_left' : 			[ 34, 35 ],
+	'horizontal_axis': 			[16,0],
+	'vertival_axis': 			[16,0]
 }
 
 def extract_indices( l, all_indices = True ): # set to False to only extract timestamp & landmarks indices

@@ -10,6 +10,24 @@ var animation_loaded = true
 var prev_playhead = 0
 var current_index = 0
 
+var structure = {
+	'eye_right_brow': 		{ 'indices': [], 'color': Color( 0.7,0,0 ), 'parent': null },
+	'eye_right_perimeter': 	{ 'indices': [], 'color': Color( 1,0,0 ), 'parent': null },
+	'lid_right_upper': 		{ 'indices': [], 'color': Color( 1,0.3,0 ), 'parent': 'eye_right_perimeter' },
+	'lid_right_lower': 		{ 'indices': [], 'color': Color( 1,0.6,0 ), 'parent': 'eye_right_perimeter' },
+	'eye_left_brow': 		{ 'indices': [], 'color': Color( 0,0,0.7 ), 'parent': null },
+	'eye_left_perimeter': 	{ 'indices': [], 'color': Color( 0,0,1 ), 'parent': null },
+	'lid_left_upper': 		{ 'indices': [], 'color': Color( 0,0.3,1 ), 'parent': 'eye_left_perimeter' },
+	'lid_left_lower': 		{ 'indices': [], 'color': Color( 0,0.6,1 ), 'parent': 'eye_left_perimeter' },
+	'mouth_all': 			{ 'indices': [], 'color': Color( 0.2,1,0 ), 'parent': null },
+	'lip_upper': 			{ 'indices': [], 'color': Color( 0.75,1,0 ), 'parent': 'mouth_all' },
+	'lip_lower': 			{ 'indices': [], 'color': Color( 1,1,0 ), 'parent': 'mouth_all' },
+	'nose_all': 			{ 'indices': [], 'color': Color( 0,0.6,0.2 ), 'parent': null },
+	'nose_tip': 			{ 'indices': [], 'color': Color( 0.5,1,0.5 ), 'parent': 'nose_all' },
+	'nostril_right': 		{ 'indices': [], 'color': Color( 0,0.6,1 ), 'parent': 'nose_all' },
+	'nostril_left': 		{ 'indices': [], 'color': Color( 0.8,0.6,0.2 ), 'parent': 'nose_all' }
+}
+
 func load_json( path ):
 	
 	clear_all()
@@ -29,10 +47,39 @@ func load_json( path ):
 	    print("Error String: ", result_json.error_string)
 
 func clear_all():
+	
 	$soundplayer.stream = null
 	while( $debug.get_child_count() > 0 ):
 		$debug.remove_child( $debug.get_child(0) )
 	$animplayer.remove_animation( "json" )
+
+func structure_find( i ):
+	
+	var keys = []
+	var forbid = []
+	for k in structure:
+		if k in forbid:
+			continue
+		if i in structure[k][ 'indices' ]:
+			keys.append( k )
+			if structure[k][ 'parent' ] != null:
+				keys.erase( structure[k][ 'parent' ] )
+				if not structure[k][ 'parent' ] in forbid:
+					forbid.append( structure[k][ 'parent' ] )
+	# anti-collision
+	if len( keys ) > 0:
+		return structure[keys[0]]
+	return null
+
+func load_structure():
+	
+	if not 'structure' in animation:
+		return
+	
+	for k in structure:
+		if k in animation['structure']:
+			structure[k]['indices'] = animation['structure'][k]
+	print( structure )
 
 func load_sound():
 	
@@ -58,10 +105,18 @@ func load_debug():
 	for i in range( animation['landmark_count'] ):
 		var d = tmpl.duplicate()
 		d.visible = true
+		var struct = structure_find(i)
+		if struct == null:
+			d.get_child(0).material_override.albedo_color = Color(1,1,1)
+		else:
+			var m = d.get_child(0).material_override.duplicate()
+			d.get_child(0).material_override = m
+			d.get_child(0).material_override.albedo_color = struct['color']
 		$debug.add_child( d )
 	var f0 = animation['frames'][0]['landmarks']
 	for i in range(len(f0)):
 		$debug.get_child( i ).translation = f0[i]
+			
 
 func load_animplayer():
 	
@@ -88,6 +143,7 @@ func load_animation():
 			var l = animation['frames'][f]['landmarks'][i]
 			animation['frames'][f]['landmarks'][i] = Vector3( l[0], l[1], l[2] )
 	
+	load_structure()
 	load_sound()
 	load_debug()
 	load_animplayer()
