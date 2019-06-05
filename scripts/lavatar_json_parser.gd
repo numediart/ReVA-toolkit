@@ -49,6 +49,8 @@ func load_json( path ):
 func clear_all():
 	
 	$soundplayer.stream = null
+	while( $gazes.get_child_count() > 0 ):
+		$gazes.remove_child( $gazes.get_child(0) )
 	while( $landmarks.get_child_count() > 0 ):
 		$landmarks.remove_child( $landmarks.get_child(0) )
 	$animplayer.remove_animation( "json" )
@@ -101,7 +103,17 @@ func load_sound():
 
 func load_debug():
 	
-	var tmpl = $dot_tmpl
+	var tmpl = $axis
+	tmpl.translation = Vector3()
+	tmpl.rotation = Vector3()
+	for i in range( animation['gaze_count'] ):
+		var d = tmpl.duplicate()
+		d.visible = true
+		$gazes.add_child( d )
+		
+	tmpl = $dot_tmpl
+	tmpl.translation = Vector3()
+	tmpl.rotation = Vector3()
 	for i in range( animation['landmark_count'] ):
 		var d = tmpl.duplicate()
 		d.visible = true
@@ -148,14 +160,17 @@ func load_animation():
 	
 	print( "loading animation" )
 	
+	# transformation of lists into Vector3
 	transform_aabb( animation['aabb'] )
 	transform_aabb( animation['aabb_total'] )
-	
 	for f in range( animation['frame_count'] ):
 		transform_aabb( animation['frames'][f]['aabb'] )
 		var l
 		l = animation['frames'][f]['pose_euler']
 		animation['frames'][f]['pose_euler'] = Vector3( l[0], l[1], l[2] )
+		for i in range( animation['gaze_count'] ):
+			l = animation['frames'][f]['gazes'][i]
+			animation['frames'][f]['gazes'][i] = Vector3( l[0], l[1], l[2] )
 		for i in range( animation['landmark_count'] ):
 			l = animation['frames'][f]['landmarks'][i]
 			animation['frames'][f]['landmarks'][i] = Vector3( l[0], l[1], l[2] )
@@ -210,17 +225,38 @@ func load_frame():
 	var delta = playhead - prev_frame['timestamp']
 	var pc = delta / diff
 	var pci = 1 - pc
-	
 	var v3
-	
 	v3 = frame['aabb']['center'] * pc + prev_frame['aabb']['center'] * pci
 	$axis.translation = v3
 	$axis.rotation = interpolate_euler( prev_frame['pose_euler'], frame['pose_euler'], pc )
 	
+	var tmp_landmarks = []
 	for i in range( animation['landmark_count'] ):
 		v3 = frame['landmarks'][i] * pc + prev_frame['landmarks'][i] * pci
+		tmp_landmarks.append( v3 )
 		$landmarks.get_child( i ).translation = v3
-
+		
+	for i in range( animation['gaze_count'] ):
+		var side = 'right'
+		if i%2 == 1:
+			side = 'left'
+		var upper = structure['lid_' + side + '_upper']
+		var lower = structure['lid_' + side + '_lower']
+		if len( upper['indices'] ) == 0 or len( lower['indices'] ) == 0 :
+			continue
+		# average upper
+		var upper_v3 = Vector3()
+		for id in upper['indices']:
+			upper_v3 += tmp_landmarks[ id ]
+		upper_v3 /= len( upper['indices'] )
+		# average lower
+		var lower_v3 = Vector3()
+		for id in lower['indices']:
+			lower_v3 += tmp_landmarks[ id ]
+		lower_v3 /= len( lower['indices'] )
+		$gazes.get_child( i ).translation = ( upper_v3 + lower_v3 ) * 0.5
+		$gazes.get_child( i ).rotation = interpolate_euler( prev_frame['gazes'][i], frame['gazes'][i], pc )
+		
 func _ready():
 	pass # Replace with function body.
 

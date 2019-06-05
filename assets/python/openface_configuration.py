@@ -79,20 +79,20 @@ def extract_indices( l, all_indices = True ): # set to False to only extract tim
 						if inds['pose_euler'] == None:
 							inds['pose_euler'] = []
 						inds['pose_euler'].append( i )
-			if 'gaze' in inds.keys():
+			if 'gazes' in inds.keys():
 				for xyz in GAZE_FIELDS:
 					for axis in xyz:
 						if axis == word:
-							if inds['gaze'] == None:
-								inds['gaze'] = [[None,None,None] for i in range(len(GAZE_FIELDS))]
+							if inds['gazes'] == None:
+								inds['gazes'] = [[None,None,None] for i in range(len(GAZE_FIELDS))]
 							index = int( word[5:6] )
 							ax = word[-1:].lower()
 							if ax == 'x':
-								inds['gaze'][index][0] = i
+								inds['gazes'][index][0] = i
 							elif ax == 'y':
-								inds['gaze'][index][1] = i
+								inds['gazes'][index][1] = i
 							elif ax == 'z':
-								inds['gaze'][index][2] = i
+								inds['gazes'][index][2] = i
 			if 'au' in inds.keys():
 				for field in ACTION_UNIT_FIELDS:
 					if field == word:
