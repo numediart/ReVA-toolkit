@@ -55,6 +55,7 @@ albedo_color = Color( 0, 0, 1, 1 )
 [node name="root" type="Spatial"]
 script = ExtResource( 1 )
 json_path = "res://assets/json/laugh_1_300.json"
+playhead = 8.6
 
 [node name="soundplayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource( 9 )
@@ -62,9 +63,12 @@ stream = SubResource( 9 )
 [node name="animplayer" type="AnimationPlayer" parent="."]
 anims/json = SubResource( 10 )
 
-[node name="debug" type="Spatial" parent="."]
+[node name="landmarks" type="Spatial" parent="."]
+
+[node name="gazes" type="Spatial" parent="."]
 
 [node name="dot_tmpl" type="Spatial" parent="."]
+editor/display_folded = true
 visible = false
 
 [node name="sphere" type="MeshInstance" parent="dot_tmpl"]
@@ -74,6 +78,8 @@ mesh = SubResource( 4 )
 material/0 = null
 
 [node name="axis" type="Spatial" parent="."]
+editor/display_folded = true
+transform = Transform( 0.996539, 0.0677957, 0.0481063, 0.0474929, -0.939271, 0.339873, 0.0682268, -0.336412, -0.93924, 0.0806585, -0.0656783, 0.0295663 )
 
 [node name="x" type="MeshInstance" parent="axis"]
 transform = Transform( 0.2, 0, 0, 0, 0.004, 0, 0, 0, 0.004, 0.1, 0, 0 )

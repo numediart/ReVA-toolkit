@@ -49,8 +49,8 @@ func load_json( path ):
 func clear_all():
 	
 	$soundplayer.stream = null
-	while( $debug.get_child_count() > 0 ):
-		$debug.remove_child( $debug.get_child(0) )
+	while( $landmarks.get_child_count() > 0 ):
+		$landmarks.remove_child( $landmarks.get_child(0) )
 	$animplayer.remove_animation( "json" )
 
 func structure_find( i ):
@@ -112,12 +112,11 @@ func load_debug():
 			var m = d.get_child(0).material_override.duplicate()
 			d.get_child(0).material_override = m
 			d.get_child(0).material_override.albedo_color = struct['color']
-		$debug.add_child( d )
+		$landmarks.add_child( d )
 	var f0 = animation['frames'][0]['landmarks']
 	for i in range(len(f0)):
-		$debug.get_child( i ).translation = f0[i]
-			
-
+		$landmarks.get_child( i ).translation = f0[i]
+	
 func load_animplayer():
 	
 	$animplayer.disconnect( "animation_started", self, "play_sound" )
@@ -134,13 +133,31 @@ func load_animplayer():
 	$animplayer.add_animation( "json", a )
 	$animplayer.connect( "animation_started", self, "play_sound" )
 
+func transform_aabb( aabb ):
+	var l 
+	l = aabb['center']
+	aabb['center'] = Vector3( l[0], l[1], l[2] ) * animation['scale']
+	l = aabb['min']
+	aabb['min'] = Vector3( l[0], l[1], l[2] ) * animation['scale']
+	l = aabb['max']
+	aabb['max'] = Vector3( l[0], l[1], l[2] ) * animation['scale']
+	l = aabb['size']
+	aabb['size'] = Vector3( l[0], l[1], l[2] ) * animation['scale']
+
 func load_animation():
 	
 	print( "loading animation" )
 	
+	transform_aabb( animation['aabb'] )
+	transform_aabb( animation['aabb_total'] )
+	
 	for f in range( animation['frame_count'] ):
+		transform_aabb( animation['frames'][f]['aabb'] )
+		var l
+		l = animation['frames'][f]['pose_euler']
+		animation['frames'][f]['pose_euler'] = Vector3( l[0], l[1], l[2] )
 		for i in range( animation['landmark_count'] ):
-			var l = animation['frames'][f]['landmarks'][i]
+			l = animation['frames'][f]['landmarks'][i]
 			animation['frames'][f]['landmarks'][i] = Vector3( l[0], l[1], l[2] )
 	
 	load_structure()
@@ -148,6 +165,14 @@ func load_animation():
 	load_debug()
 	load_animplayer()
 	animation_loaded = true
+
+func interpolate_euler( eul_src, eul_dst, pc ):
+	var srcq = Quat()
+	srcq.set_euler( eul_src )
+	var dstq = Quat()
+	dstq.set_euler( eul_dst )
+	var interq = srcq.slerp( dstq, pc )
+	return interq.get_euler()
 
 func load_frame():
 	
@@ -186,9 +211,15 @@ func load_frame():
 	var pc = delta / diff
 	var pci = 1 - pc
 	
+	var v3
+	
+	v3 = frame['aabb']['center'] * pc + prev_frame['aabb']['center'] * pci
+	$axis.translation = v3
+	$axis.rotation = interpolate_euler( prev_frame['pose_euler'], frame['pose_euler'], pc )
+	
 	for i in range( animation['landmark_count'] ):
-		var v3 = frame['landmarks'][i] * pc + prev_frame['landmarks'][i] * pci
-		$debug.get_child( i ).translation = v3
+		v3 = frame['landmarks'][i] * pc + prev_frame['landmarks'][i] * pci
+		$landmarks.get_child( i ).translation = v3
 
 func _ready():
 	pass # Replace with function body.
