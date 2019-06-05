@@ -213,17 +213,18 @@ def validate_frame( frame, indices ):
 	
 	return True
 
-def apply_matrix_position( xyz, matrix ): 
-	x, y, z = translation_from_matrix( matrix * translation_matrix( numpy.array([xyz[0],xyz[1],xyz[2]]) ) )
+def apply_matrix_position( xyz, matrix ):
+	trans = translation_matrix( numpy.array([xyz[0],xyz[1],xyz[2]]) )
+	x, y, z = translation_from_matrix( concatenate_matrices( matrix, trans ) )
 	return [ x, y, z ]
 
 # provide RADIANS!!!
 def apply_matrix_rotation( xyz, matrix ):
-	em = euler_matrix( xyz[0], xyz[1], xyz[2] )
-	rot = euler_from_matrix( concatenate_matrices( em, matrix ) )
+	em = euler_matrix( xyz[0], xyz[1], xyz[2], axes='sxyz' )
+	rot = euler_from_matrix( concatenate_matrices( matrix, em ), axes='sxyz' ) # godot convention for rotations!!!
 	return [rot[0],rot[1],rot[2]]
 
-def parse_text_frame( words, indices, matrix = None ):
+def parse_text_frame( words, indices, mat_trans = None, mat_rot = None ):
 	
 	if not indices['valid']:
 		print( "lavatar::parse_text_frame, error: indices are NOT valid!" )
@@ -243,8 +244,8 @@ def parse_text_frame( words, indices, matrix = None ):
 	for i in range( len(indices['landmarks']) ):
 		for j in range(0,3):
 			frame['landmarks'][i][j] = parse_float( words[ indices['landmarks'][i][j] ] )
-		if len(matrix) > 0:
-			frame['landmarks'][i] = apply_matrix_position( frame['landmarks'][i], matrix )
+		if len(mat_trans) > 0:
+			frame['landmarks'][i] = apply_matrix_position( frame['landmarks'][i], mat_trans )
 			
 	if indices['all_indices']:
 		
@@ -252,8 +253,8 @@ def parse_text_frame( words, indices, matrix = None ):
 		for i in range( len(indices['gazes']) ):
 			for j in range(0,3):
 				frame['gazes'][i][j] = parse_float( words[ indices['gazes'][i][j] ] )
-			if len(matrix) > 0:
-				frame['gazes'][i] = apply_matrix_rotation( frame['gazes'][i], matrix )
+			if len(mat_rot) > 0:
+				frame['gazes'][i] = apply_matrix_rotation( frame['gazes'][i], mat_rot )
 		
 		frame['au'] = [None for i in range( len(indices['au']) )]
 		for i in range( len(indices['au']) ):
@@ -262,8 +263,8 @@ def parse_text_frame( words, indices, matrix = None ):
 		frame['pose_euler'] = [None for i in range( len(indices['pose_euler']) )]
 		for i in range( len(indices['pose_euler']) ):
 			frame['pose_euler'][i] = parse_float( words[ indices['pose_euler'][i] ] )
-		if len(matrix) > 0:
-			frame['pose_euler'] = apply_matrix_rotation( frame['pose_euler'], matrix )
+		if len(mat_rot) > 0:
+			frame['pose_euler'] = apply_matrix_rotation( frame['pose_euler'], mat_rot )
 	
 	validate_frame( frame, indices )
 	

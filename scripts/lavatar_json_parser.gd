@@ -2,18 +2,32 @@ tool
 
 extends Spatial
 
-export (String) var json_path = '' setget load_json
+export (String) var json_path = '' setget set_json_path
 export (float) var playhead = 0
+
+export (Vector3) var brow_rotation = Vector3() setget _brow_rotation
+export (Vector3) var brow_translation = Vector3() setget _brow_translation
 
 export (Vector3) var eye_rotation = Vector3() setget _eye_rotation
 export (Vector3) var eye_translation = Vector3() setget _eye_translation
 
+export (Vector3) var mouth_rotation = Vector3() setget _mouth_rotation
+export (Vector3) var mouth_translation = Vector3() setget _mouth_translation
+
+export (Vector3) var nose_rotation = Vector3() setget _nose_rotation
+export (Vector3) var nose_translation = Vector3() setget _nose_translation
+
+export (Vector3) var nostril_rotation = Vector3() setget _nostril_rotation
+export (Vector3) var nostril_translation = Vector3() setget _nostril_translation
+
 var animation = {}
+var original_animation = {} # full copy of the animation once successfully loaded
+
 var animation_loaded = true
 var prev_playhead = 0
 var current_index = 0
 
-	# right is red, left is blue
+# right is red, left is blue -> keep hierarchy!!!
 var structure = {
 	'brow_right': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.7,0.0,0.0 ), 	'parent': null },
 	'eye_right': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 1.0,0.0,0.0 ), 	'parent': null },
@@ -32,59 +46,95 @@ var structure = {
 	'nostril_left': 	{ 'indices': [], 'correction': Transform(), 'color': Color( 0.8,0.6,0.2 ), 	'parent': 'nose_all' }
 }
 
+func apply_correction( key ):
+	
+	if not 'frame_count' in animation:
+		return
+	
+	var struct = structure[key]
+	if ( struct['correction'] == null ):
+		return
+	var transfo = struct['correction']
+	if struct['parent'] != null and structure[struct['parent']]['correction'] != null:
+		transfo = structure[struct['parent']]['correction'] * transfo
+	
+	for f in range(animation['frame_count']):
+		
+		var src_frame = original_animation['frames'][f]['landmarks']
+		var dst_frame = animation['frames'][f]['landmarks']
+		var framet = transfo * animation['frames'][f]['pose_transform']
+		
+		# computation of group barycenter
+		var bary = Vector3()
+		for i in struct['indices']:
+			bary += src_frame[i]
+		bary /= len( struct['indices'] )
+		for i in struct['indices']:
+			var rel = src_frame[i] - bary
+			rel = framet.xform( rel )
+			dst_frame[i] = bary + rel
+
+func update_correction( keys, trans, rot ):
+	
+	var q = Quat()
+	for k in keys:
+		if k.find( "left" ) != -1:
+			q.set_euler( rot * Vector3(1,-1,-1) )
+			structure[k]['correction'] = Transform( q )
+			structure[k]['correction'].origin = trans * Vector3(-1,1,1)
+		else:
+			q.set_euler( rot )
+			structure[k]['correction'] = Transform( q )
+			structure[k]['correction'].origin = trans
+		
+		apply_correction( k )
+		
+	load_frame()
+
+func _brow_rotation( v ):
+	brow_rotation = v
+	update_correction( ['brow_right','brow_left'], structure['brow_right']['correction'].xform( Vector3() ), v )
+
+func _brow_translation( v ):
+	brow_translation = v
+	update_correction( ['brow_right','brow_left'], v, structure['brow_right']['correction'].basis.get_euler() )
+
 func _eye_rotation( v ):
 	eye_rotation = v
-	
-	var o = structure['eye_right']['correction'].xform( Vector3() )
-	var newt = null
-	var q = Quat()
-	q.set_euler( v )
-	newt = Transform( q )
-	newt.origin = o
-	structure['eye_right']['correction'] = newt
-	q.set_euler( v * Vector3(1,-1,-1) )
-	newt = Transform( q )
-	newt.origin = o * Vector3(-1,1,1)
-	structure['eye_left']['correction'] = newt
-	
-	$axis_R.transform = structure['eye_right']['correction']
-	$axis_L.transform = structure['eye_left']['correction']
+	update_correction( ['eye_right','eye_left'], structure['eye_right']['correction'].xform( Vector3() ), v )
 
 func _eye_translation( v ):
 	eye_translation = v
-	
-	var eulers = structure['eye_right']['correction'].basis.get_euler()
-	var newt = null
-	var q = Quat()
-	q.set_euler( eulers )
-	newt = Transform( q )
-	newt.origin = v
-	structure['eye_right']['correction'] = newt
-	q.set_euler( eulers * Vector3(1,-1,-1) )
-	newt = Transform( q )
-	newt.origin = v * Vector3(-1,1,1)
-	structure['eye_left']['correction'] = newt
-	
-	$axis_R.transform = structure['eye_right']['correction']
-	$axis_L.transform = structure['eye_left']['correction']
+	update_correction( ['eye_right','eye_left'], v, structure['eye_right']['correction'].basis.get_euler() )
 
-func load_json( path ):
-	
-	clear_all()
+func _mouth_rotation( v ):
+	mouth_rotation = v
+	update_correction( ['mouth_all'], structure['mouth_all']['correction'].xform( Vector3() ), v )
+
+func _mouth_translation( v ):
+	mouth_translation = v
+	update_correction( ['mouth_all'], v, structure['mouth_all']['correction'].basis.get_euler() )
+
+func _nose_rotation( v ):
+	nose_rotation = v
+	update_correction( ['nose_all'], structure['nose_all']['correction'].xform( Vector3() ), v )
+
+func _nose_translation( v ):
+	nose_translation = v
+	update_correction( ['nose_all'], v, structure['nose_all']['correction'].basis.get_euler() )
+
+func _nostril_rotation( v ):
+	nostril_rotation = v
+	update_correction( ['nostril_right','nostril_left'], structure['nostril_right']['correction'].xform( Vector3() ), v )
+
+func _nostril_translation( v ):
+	nostril_translation = v
+	update_correction( ['nostril_right','nostril_left'], v, structure['nostril_right']['correction'].basis.get_euler() )
+
+func set_json_path( path ):
 	
 	json_path = path
-	animation = {}
-	var file = File.new()
-	file.open( path, file.READ )
-	var result_json = JSON.parse(file.get_as_text())
-	file.close()
-	if result_json.error == OK:  # If parse OK
-		animation = result_json.result
-		animation_loaded = false
-	else:  # If parse has errors
-	    print("Error: ", result_json.error)
-	    print("Error Line: ", result_json.error_line)
-	    print("Error String: ", result_json.error_string)
+	animation_loaded = false
 
 func clear_all():
 	
@@ -122,6 +172,22 @@ func load_structure():
 		if k in animation['structure']:
 			structure[k]['indices'] = animation['structure'][k]
 
+func load_json():
+	
+	animation = {}
+	var file = File.new()
+	file.open( json_path, file.READ )
+	var result_json = JSON.parse(file.get_as_text())
+	file.close()
+	if result_json.error == OK:  # If parse OK
+		animation = result_json.result
+	else:  # If parse has errors
+		print("Error: ", result_json.error)
+		print("Error Line: ", result_json.error_line)
+		print("Error String: ", result_json.error_string)
+		return false
+	return true
+
 func load_data():
 	
 	# transformation of lists into Vector3
@@ -132,6 +198,10 @@ func load_data():
 		var l
 		l = animation['frames'][f]['pose_euler']
 		animation['frames'][f]['pose_euler'] = Vector3( l[0], l[1], l[2] )
+		# generation of a rotation transform
+		var q = Quat()
+		q.set_euler( animation['frames'][f]['pose_euler'] )
+		animation['frames'][f]['pose_transform'] = Transform( q )
 		for i in range( animation['gaze_count'] ):
 			l = animation['frames'][f]['gazes'][i]
 			animation['frames'][f]['gazes'][i] = Vector3( l[0], l[1], l[2] )
@@ -139,6 +209,8 @@ func load_data():
 			l = animation['frames'][f]['landmarks'][i]
 			animation['frames'][f]['landmarks'][i] = Vector3( l[0], l[1], l[2] )
 	
+	# everything is ok, let's make a full copy of the data
+	original_animation = animation.duplicate( true )
 
 func load_sound():
 	
@@ -217,13 +289,19 @@ func load_animation():
 	
 	print( "loading animation" )
 	
+	animation_loaded = true
+	
+	clear_all()
+	if not load_json():
+		# recover from the original
+		animation = original_animation.duplicate( true )
+		return
 	load_structure()
 	load_data()
 	load_sound()
 	load_debug()
 	load_animplayer()
 	load_frame()
-	animation_loaded = true
 
 func interpolate_euler( eul_src, eul_dst, pc ):
 	var srcq = Quat()
@@ -281,9 +359,9 @@ func load_frame():
 		$landmarks.get_child( i ).translation = v3
 		
 	for i in range( animation['gaze_count'] ):
-		var side = 'right'
+		var side = 'left'
 		if i%2 == 1:
-			side = 'left'
+			side = 'right'
 		var upper = structure['lid_' + side + '_upper']
 		var lower = structure['lid_' + side + '_lower']
 		if len( upper['indices'] ) == 0 or len( lower['indices'] ) == 0 :
@@ -298,8 +376,11 @@ func load_frame():
 		for id in lower['indices']:
 			lower_v3 += tmp_landmarks[ id ]
 		lower_v3 /= len( lower['indices'] )
-		$gazes.get_child( i ).translation = ( upper_v3 + lower_v3 ) * 0.5
-		$gazes.get_child( i ).rotation = interpolate_euler( prev_frame['gazes'][i], frame['gazes'][i], pc )
+		var pos = ( upper_v3 + lower_v3 ) * 0.5
+		$gazes.get_child( i ).translation = pos
+		var la = frame['gazes'][i] * pc + prev_frame['gazes'][i] * pci
+		la = la.normalized()
+		$gazes.get_child( i ).look_at( pos + la, Vector3(0,1,0) )
 		
 func _ready():
 	pass # Replace with function body.
