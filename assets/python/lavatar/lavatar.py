@@ -1,4 +1,5 @@
 import os
+import math
 import numpy
 import time
 import json
@@ -12,8 +13,28 @@ from pythonosc import udp_client
 all general & utility functions
 '''
 
-def get_matrix( data ):
+def mat( data ):
 	return numpy.matrix( data )
+
+def mat_euler( x, y, z ):
+	'''
+	alpha, beta, gamma = 0.123, -1.234, 2.345
+	origin, xaxis, yaxis, zaxis = [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]
+	I = identity_matrix()
+	Rx = rotation_matrix(alpha, xaxis)
+	print(Rx)
+	Ry = rotation_matrix(beta, yaxis)
+	print(Ry)
+	Rz = rotation_matrix(gamma, zaxis)
+	print(Rz)
+	R = concatenate_matrices(Rx, Ry, Rz)
+	euler = euler_from_matrix(R, 'rxyz')
+	numpy.allclose([alpha, beta, gamma], euler)
+	Re = euler_matrix(alpha, beta, gamma, 'rxyz')
+	print(Re)
+	print(is_same_transform(R, Re))
+	'''
+	return euler_matrix( x, y, z, 'rxyz')
 
 def get_mandatory_keys( usage = 'index' ):
 	if usage == 'index':
@@ -33,15 +54,33 @@ def get_mandatory_keys( usage = 'index' ):
 
 def get_optional_keys( usage = 'index' ):
 	if usage == 'index':
-		return [ ('gaze',None,list), ('au',None,list) ]
+		return [ ('pose_euler',None,list), ('gazes',None,list), ('au',None,list) ]
 	elif usage == 'frame':
-		return [ ('gaze',None,list), ('au',None,list) ]
+		return [ ('pose_euler',None,list), ('gazes',None,list), ('au',None,list) ]
 	elif usage == 'animation':
 		return [('action_unit_count',0,int), ('gaze_count',-1,int), ('sound',None,dict), ('fields',None,list), ('aabb',None,dict), ('aabb_total',None,dict), ('scale',1.0,float)]
 	elif usage == 'animation_frame':
-		return [('au',None,list), ('gaze',None,list)]
+		return [('pose_euler',None,list), ('au',None,list), ('gazes',None,list)]
 	elif usage == 'animation_frame_interpolation':
-		return [('au',None,list), ('gaze',None,list), ('gaze_data',None,list)]
+		return [('pose_euler',None,list), ('au',None,list), ('gazes',None,list), ('gaze_data',None,list)]
+	elif usage == 'structrue':
+		return [
+			('eye_right_brow',None,list),
+			('eye_right_perimeter',None,list),
+			('lid_right_upper',None,list),
+			('lid_right_lower',None,list),
+			('eye_left_brow',None,list),
+			('eye_left_perimeter',None,list),
+			('lid_left_upper',None,list),
+			('lid_left_lower',None,list),
+			('mouth_all',None,list),
+			('lip_upper',None,list),
+			('lip_lower',None,list),
+			('nose_tip',None,list),
+			('nose_all',None,list),
+			('nostril_right',None,list),
+			('nostril_left',None,list)
+		]
 	else:
 		return None
 
@@ -104,9 +143,9 @@ def validate_indices( indices ):
 						err += '\n'
 					err += "lavatar::validate_indices, error: missing data in landmarks for position '%i' on axis '%i'!" % (i,j)
 		if indices['all_indices']:
-			for i in range(len(indices['gaze'])):
+			for i in range(len(indices['gazes'])):
 				for j in range(0,3):
-					if indices['gaze'][i][j] == None:
+					if indices['gazes'][i][j] == None:
 						if err != '':
 							err += '\n'
 						err += "lavatar::validate_indices, error: missing data in gaze for position '%i' on axis '%i'!" % (i,j)
@@ -159,9 +198,9 @@ def validate_frame( frame, indices ):
 						err += '\n'
 					err += "lavatar::validate_frame, error: missing data in landmarks for position '%i' on axis '%i'!" % (i,j)
 		if indices['all_indices']:
-			for i in range(len(frame['gaze'])):
+			for i in range(len(frame['gazes'])):
 				for j in range(0,3):
-					if frame['gaze'][i][j] == None:
+					if frame['gazes'][i][j] == None:
 						if err != '':
 							err += '\n'
 						err += "lavatar::validate_frame, error: missing data in gaze for position '%i' on axis '%i'!" % (i,j)
@@ -180,7 +219,8 @@ def apply_matrix_position( xyz, matrix ):
 
 # provide RADIANS!!!
 def apply_matrix_rotation( xyz, matrix ):
-	rot = euler_from_matrix( matrix * euler_matrix( xyz[0], xyz[1], xyz[2] ) )
+	em = euler_matrix( xyz[0], xyz[1], xyz[2] )
+	rot = euler_from_matrix( concatenate_matrices( em, matrix ) )
 	return [rot[0],rot[1],rot[2]]
 
 def parse_text_frame( words, indices, matrix = None ):
@@ -208,16 +248,22 @@ def parse_text_frame( words, indices, matrix = None ):
 			
 	if indices['all_indices']:
 		
-		frame['gaze'] = [[0,0,0] for i in range( len(indices['gaze']) )]
-		for i in range( len(indices['gaze']) ):
+		frame['gazes'] = [[0,0,0] for i in range( len(indices['gazes']) )]
+		for i in range( len(indices['gazes']) ):
 			for j in range(0,3):
-				frame['gaze'][i][j] = parse_float( words[ indices['gaze'][i][j] ] )
+				frame['gazes'][i][j] = parse_float( words[ indices['gazes'][i][j] ] )
 			if len(matrix) > 0:
-				frame['gaze'][i] = apply_matrix_rotation( frame['gaze'][i], matrix )
+				frame['gazes'][i] = apply_matrix_rotation( frame['gazes'][i], matrix )
 		
 		frame['au'] = [None for i in range( len(indices['au']) )]
 		for i in range( len(indices['au']) ):
 			frame['au'][i] = parse_float( words[ indices['au'][i] ] )
+		
+		frame['pose_euler'] = [None for i in range( len(indices['pose_euler']) )]
+		for i in range( len(indices['pose_euler']) ):
+			frame['pose_euler'][i] = parse_float( words[ indices['pose_euler'][i] ] )
+		if len(matrix) > 0:
+			frame['pose_euler'] = apply_matrix_rotation( frame['pose_euler'], matrix )
 	
 	validate_frame( frame, indices )
 	
@@ -302,14 +348,14 @@ def pack_animation( frames, indices ):
 	animation['frame_count'] = len(frames)
 	animation['landmark_count'] = len(indices['landmarks'])
 	animation['action_unit_count'] = len(indices['au'])
-	animation['gaze_count'] = len(indices['gaze'])
+	animation['gaze_count'] = len(indices['gazes'])
 	animation['sound'] = generate_sound_ref()
 	animation['fields'] = []
 	for k in indices.keys():
 		if k == 'valid' or k == 'all_indices':
 			continue
 		animation['fields'].append( k )
-
+	animation['structure'] = {}
 	animation['aabb'] = generate_aabb( frames[0] )
 	animation['aabb_total'] = generate_aabb()
 	animation['scale'] = float( 1.0 / animation['aabb']['size'][0] )
@@ -340,6 +386,31 @@ def pack_animation( frames, indices ):
 		
 	return animation
 
+def add_structure( anim, struct ):
+	
+	if not validate_animation( anim ):
+		print( "lavatar::add_structure, animation is not valid" )
+		return
+	
+	if type( struct ) is not dict:
+		print( "lavatar::add_structure, error: provide a dict with valid keys" )
+		return
+	
+	validf = get_optional_keys( 'structrue' )
+	sks = struct.keys()
+	for f in validf:
+		if f[0] in sks:
+			if type( struct[f[0]] ) is not f[2]:
+				print( "lavatar::add_structure, warning: field '%s' does not have the right type and will be ignored" % f[0] )
+				continue
+			if f[2] is list:
+				anim['structure'][f[0]] = list( struct[f[0]] )
+			elif f[2] is float:
+				anim['structure'][f[0]] = float( struct[f[0]] )
+			elif f[2] is int:
+				anim['structure'][f[0]] = int( struct[f[0]] )
+			elif f[2] is dict:
+				anim['structure'][f[0]] = dict( struct[f[0]] )
 
 def validate_animation( anim ):
 	
@@ -500,7 +571,7 @@ def frame_interpolation( anim, fields, index, elapsed ):
 			out[f[0]] = []
 			for i in range(anim['action_unit_count']):
 				out[f[0]].append( prevf[f[0]][i] * pci + currf[f[0]][i] * pc )
-		elif f[0] == 'gaze':
+		elif f[0] == 'gazes':
 			out[f[0]] = []
 			out['gaze_data'] = []
 			for i in range(anim['gaze_count']):
