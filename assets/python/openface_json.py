@@ -31,5 +31,6 @@ def load_csv( path ):
 load_csv( CSV_PATH )
 
 animation = lavatar.pack_animation( frames, indices )
+lavatar.add_structure( animation, STRUCTURE )
 lavatar.add_sound( animation, WAV_PATH )
 lavatar.save_animation_json( animation, JSON_PATH )
