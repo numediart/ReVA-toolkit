@@ -32,7 +32,7 @@ var animation_loaded = true
 var prev_playhead = 0
 var current_index = 0
 
-# right is red, left is blue -> keep hierarchy!!!
+# right is red, left is blue -> respect order or it will be weird!!!
 var structure = {
 	'brow_right': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.7,0.0,0.0 ), 	'parent': null },
 	'eye_right': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 1.0,0.0,0.0 ), 	'parent': null },
@@ -50,6 +50,9 @@ var structure = {
 	'nostril_right': 	{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.6,1.0 ), 	'parent': 'nose_all' },
 	'nostril_left': 	{ 'indices': [], 'correction': Transform(), 'color': Color( 0.8,0.6,0.2 ), 	'parent': 'nose_all' }
 }
+
+# contains all values of current frame
+var current_frame = null
 
 func _brow_rotation( v ):
 	brow_rotation = v
@@ -372,7 +375,7 @@ func load_animplayer():
 	
 	var ti;
 	ti = a.add_track( 0 )
-	a.track_set_path( ti, "../root:playhead" )
+	a.track_set_path( ti, "../" + self.name + ":playhead" )
 	a.track_insert_key( ti, 0.0, 0.0 )
 	a.track_insert_key( ti, animation['duration'], animation['duration'] )
 	
@@ -444,24 +447,27 @@ func load_frame():
 	
 	if current_index == 0:
 		current_index = 1
-		
+	
 	var prev_frame = animation['frames'][ current_index-1 ]
 	frame = animation['frames'][ current_index ]
+	
+	current_frame = prev_frame.duplicate()
 	
 	var diff = frame['timestamp'] - prev_frame['timestamp']
 	var delta = playhead - prev_frame['timestamp']
 	var pc = delta / diff
 	var pci = 1 - pc
-	var v3
-	v3 = frame['aabb']['center'] * pc + prev_frame['aabb']['center'] * pci
-	$axis.translation = v3
-	$axis.rotation = interpolate_euler( prev_frame['pose_euler'], frame['pose_euler'], pc )
+
+	current_frame['aabb']['center'] = frame['aabb']['center'] * pc + prev_frame['aabb']['center'] * pci
+	$axis.translation = current_frame['aabb']['center']
+	current_frame['pose_euler'] = interpolate_euler( prev_frame['pose_euler'], frame['pose_euler'], pc )
+	$axis.rotation = current_frame['pose_euler']
 	
 	var tmp_landmarks = []
 	for i in range( animation['landmark_count'] ):
-		v3 = frame['landmarks'][i] * pc + prev_frame['landmarks'][i] * pci
-		tmp_landmarks.append( v3 )
-		$landmarks.get_child( i ).translation = v3
+		current_frame['landmarks'][i] = frame['landmarks'][i] * pc + prev_frame['landmarks'][i] * pci
+		tmp_landmarks.append( current_frame['landmarks'][i] )
+		$landmarks.get_child( i ).translation = current_frame['landmarks'][i]
 		
 	for i in range( animation['gaze_count'] ):
 		var side = 'left'
@@ -484,8 +490,9 @@ func load_frame():
 		var pos = ( upper_v3 + lower_v3 ) * 0.5
 		$gazes.get_child( i ).translation = pos
 		var la = frame['gazes'][i] * pc + prev_frame['gazes'][i] * pci
-		la = la.normalized()
-		$gazes.get_child( i ).look_at( pos + la, Vector3(0,1,0) )
+		la = pos + la.normalized()
+		current_frame['gazes'][i] = global_transform.xform( la )
+		$gazes.get_child( i ).look_at( current_frame['gazes'][i], Vector3(0,1,0) )
 		
 func _ready():
 	pass # Replace with function body.
@@ -503,3 +510,9 @@ func _process(delta):
 		load_frame()
 		prev_playhead = playhead
 
+############# GETTERS #############
+
+func get_pose_euler():
+	if current_frame == null:
+		return Vector3()
+	return current_frame['pose_euler']
