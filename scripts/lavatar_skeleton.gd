@@ -22,12 +22,19 @@ func prepare():
 			'id': id,
 			'name': n,
 			'glob': Transform( get_bone_global_pose( id ) ),
-			'ctrl': null
+			'target': null
 		}
-		match( n ):
+		match( tb['name'] ):
 			'head':
-#				tb['ctrl'] = get_node('ctrl_head')
-#				tb['ctrl'].rotation = tb['glob'].basis.get_euler()
+				var eul = tb['glob'].basis.get_euler()
+				var q = Quat()
+				q.set_euler( eul )
+				tb['target'] = {
+					'pid': get_bone_parent( tb['id'] ),
+					'ctrl': get_node( "ctrl_head" ),
+					'locq' : q,
+					'origin': Vector3( 0,0,-2 )
+				}
 				pass
 		tracked_bones.append( tb )
 	
@@ -47,12 +54,13 @@ func upadte_tracked_bones():
 		
 		match( tb['name'] ):
 			'head':
-				var pose = get_bone_pose( tb['id'] )
-				var rot = json_server.get_pose_euler()
+				var center = json_server.get_center()
 				var q = Quat()
-				q.set_euler( rot )
-				var t = tb['glob'] * Transform( q )
-#				tb['ctrl'].rotation = t.basis.get_euler()
+				q.set_euler( json_server.get_pose_euler() )
+				var t = Transform( q * tb['target']['locq'] )
+				t.origin = get_bone_global_pose( tb['target']['pid']).xform( tb['target']['origin'] )
+				tb['target']['ctrl'].global_transform = t
+				pass
 		
 		$dots.get_child( i ).rotation = tb['glob'].basis.get_euler()
 		$dots.get_child( i ).translation = tb['glob'].origin

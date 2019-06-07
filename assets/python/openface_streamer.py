@@ -25,7 +25,8 @@ def load_csv( path ):
 			if indices == None:
 				return
 		else:
-			f = lavatar.parse_text_frame( line.split( FIELD_SEPARATOR ), indices, MAT_TRANSLATION, MAT_ROTATION )			if not f['valid']:
+			f = lavatar.parse_text_frame( line.split( FIELD_SEPARATOR ), indices, MAT_TRANSLATION, MAT_ROTATION )
+			if not f['valid']:
 				continue
 			frames.append( f )
 

@@ -5,6 +5,9 @@ extends Spatial
 export (String) var json_path = '' setget set_json_path
 export (float) var playhead = 0
 
+export (bool) var center_offset = true setget _center_offset
+export (bool) var center_rotation = true setget _center_rotation
+
 export (Vector3) var brow_rotation = Vector3() setget _brow_rotation
 export (Vector3) var brow_translation = Vector3() setget _brow_translation
 export (Vector3) var brow_scale = Vector3(1,1,1) setget _brow_scale
@@ -53,6 +56,14 @@ var structure = {
 
 # contains all values of current frame
 var current_frame = null
+
+func _center_offset( b ):
+	center_offset = b
+	load_frame()
+
+func _center_rotation( b ):
+	center_rotation = b
+	load_frame()
 
 func _brow_rotation( v ):
 	brow_rotation = v
@@ -451,7 +462,7 @@ func load_frame():
 	var prev_frame = animation['frames'][ current_index-1 ]
 	frame = animation['frames'][ current_index ]
 	
-	current_frame = prev_frame.duplicate()
+	current_frame = prev_frame.duplicate(true)
 	
 	var diff = frame['timestamp'] - prev_frame['timestamp']
 	var delta = playhead - prev_frame['timestamp']
@@ -459,13 +470,18 @@ func load_frame():
 	var pci = 1 - pc
 
 	current_frame['aabb']['center'] = frame['aabb']['center'] * pc + prev_frame['aabb']['center'] * pci
-	$axis.translation = current_frame['aabb']['center']
+	if not center_offset:
+		$axis.translation = Vector3()
+	else:
+		$axis.translation = current_frame['aabb']['center']
 	current_frame['pose_euler'] = interpolate_euler( prev_frame['pose_euler'], frame['pose_euler'], pc )
 	$axis.rotation = current_frame['pose_euler']
 	
 	var tmp_landmarks = []
 	for i in range( animation['landmark_count'] ):
 		current_frame['landmarks'][i] = frame['landmarks'][i] * pc + prev_frame['landmarks'][i] * pci
+		if not center_offset:
+			current_frame['landmarks'][i] -= current_frame['aabb']['center']
 		tmp_landmarks.append( current_frame['landmarks'][i] )
 		$landmarks.get_child( i ).translation = current_frame['landmarks'][i]
 		
@@ -487,12 +503,13 @@ func load_frame():
 		for id in lower['indices']:
 			lower_v3 += tmp_landmarks[ id ]
 		lower_v3 /= len( lower['indices'] )
-		var pos = ( upper_v3 + lower_v3 ) * 0.5
-		$gazes.get_child( i ).translation = pos
+		var pos = global_transform.xform(  ( upper_v3 + lower_v3 ) * 0.5 )
 		var la = frame['gazes'][i] * pc + prev_frame['gazes'][i] * pci
-		la = pos + la.normalized()
-		current_frame['gazes'][i] = global_transform.xform( la )
-		$gazes.get_child( i ).look_at( current_frame['gazes'][i], Vector3(0,1,0) )
+		la = la.normalized()
+		current_frame['gazes'][i] = la
+		la = pos + la
+		$gazes.get_child( i ).look_at_from_position( pos, pos + current_frame['gazes'][i], Vector3(0,1,0) )
+#		current_frame['gazes'][i] = $gazes.get_child( i ).global_transform.basis.get_euler()
 		
 func _ready():
 	pass # Replace with function body.
@@ -512,7 +529,12 @@ func _process(delta):
 
 ############# GETTERS #############
 
+func get_center():
+	if current_frame == null or not center_offset:
+		return Vector3()
+	return current_frame['aabb']['center']
+
 func get_pose_euler():
-	if current_frame == null:
+	if current_frame == null or not center_rotation:
 		return Vector3()
 	return current_frame['pose_euler']
