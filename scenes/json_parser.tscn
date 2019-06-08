@@ -57,6 +57,7 @@ script = ExtResource( 1 )
 json_path = "res://assets/json/laugh_1_300.json"
 playhead = 9.96667
 center_offset = false
+center_rotation = false
 
 [node name="soundplayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource( 9 )

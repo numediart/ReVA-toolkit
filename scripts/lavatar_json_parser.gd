@@ -316,6 +316,7 @@ func load_data():
 		var q = Quat()
 		q.set_euler( animation['frames'][f]['pose_euler'] )
 		animation['frames'][f]['pose_transform'] = Transform( q )
+		
 		for i in range( animation['gaze_count'] ):
 			l = animation['frames'][f]['gazes'][i]
 			animation['frames'][f]['gazes'][i] = Vector3( l[0], l[1], l[2] )
@@ -477,11 +478,17 @@ func load_frame():
 	current_frame['pose_euler'] = interpolate_euler( prev_frame['pose_euler'], frame['pose_euler'], pc )
 	$axis.rotation = current_frame['pose_euler']
 	
+	var q = Quat()
+	if not center_rotation:
+		q.set_euler( current_frame['pose_euler'] )
+		q = q.inverse()
+	var pose = Transform( q )
+	if not center_offset:
+		pose.origin = current_frame['aabb']['center'] * -1
+	
 	var tmp_landmarks = []
 	for i in range( animation['landmark_count'] ):
-		current_frame['landmarks'][i] = frame['landmarks'][i] * pc + prev_frame['landmarks'][i] * pci
-		if not center_offset:
-			current_frame['landmarks'][i] -= current_frame['aabb']['center']
+		current_frame['landmarks'][i] = pose.xform( frame['landmarks'][i] * pc + prev_frame['landmarks'][i] * pci )
 		tmp_landmarks.append( current_frame['landmarks'][i] )
 		$landmarks.get_child( i ).translation = current_frame['landmarks'][i]
 		
@@ -510,7 +517,7 @@ func load_frame():
 		la = pos + la
 		$gazes.get_child( i ).look_at_from_position( pos, pos + current_frame['gazes'][i], Vector3(0,1,0) )
 #		current_frame['gazes'][i] = $gazes.get_child( i ).global_transform.basis.get_euler()
-		
+	
 func _ready():
 	pass # Replace with function body.
 
