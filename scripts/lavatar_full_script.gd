@@ -3,10 +3,21 @@ tool
 extends Skeleton
 
 export (Vector3) var mask_offset = Vector3()
+export (bool) var enable_ik = false setget _enable_ik
 
 var iks = null
 var json = null
 var tester_pos = null
+
+func _enable_ik( b ):
+	enable_ik = b
+	for i in get_child_count():
+		var c = get_child( i )
+		if c.get_class() == "SkeletonIK":
+			if enable_ik:
+				c.start()
+			else:
+				c.stop()
 
 func prepare_iks():
 	
@@ -20,27 +31,27 @@ func prepare_iks():
 		'bid': find_bone( 'levator05.R' ),
 		'ctrl': get_node( "ctrls/lip_corner_right" )
 	}
-	iks[ 'lip_lowerL' ] = {
+	iks[ 'lip_lower_left' ] = {
 		'bid': find_bone( 'oris07.L' ),
 		'ctrl': get_node( "ctrls/lip_lowerL" )
 	}
-	iks[ 'lip_lowerC' ] = {
-		'bid': find_bone( 'oris01' ),
+	iks[ 'lip_lower' ] = {
+		'bid': find_bone( 'oris02' ),
 		'ctrl': get_node( "ctrls/lip_lowerC" )
 	}
-	iks[ 'lip_lowerR' ] = {
+	iks[ 'lip_lower_right' ] = {
 		'bid': find_bone( 'oris07.R' ),
 		'ctrl': get_node( "ctrls/lip_lowerR" )
 	}
-	iks[ 'lip_upperL' ] = {
+	iks[ 'lip_upper_left' ] = {
 		'bid': find_bone( 'oris03.L' ),
 		'ctrl': get_node( "ctrls/lip_upperL" )
 	}
-	iks[ 'lip_upperC' ] = {
-		'bid': find_bone( 'oris05' ),
+	iks[ 'lip_upper' ] = {
+		'bid': find_bone( 'oris06' ),
 		'ctrl': get_node( "ctrls/lip_upperC" )
 	}
-	iks[ 'lip_upperR' ] = {
+	iks[ 'lip_upper_right' ] = {
 		'bid': find_bone( 'oris03.R' ),
 		'ctrl': get_node( "ctrls/lip_upperR" )
 	}
@@ -77,7 +88,7 @@ func _process(delta):
 	var t2
 	
 	bid = find_bone( "head" )
-	q.set_euler( json.get_pose_euler() )
+#	q.set_euler( json.get_pose_euler() )
 	t = Transform(q)
 	pid = get_bone_parent( bid )
 	set_bone_pose( bid, t )
@@ -105,20 +116,3 @@ func _process(delta):
 		t = t * ik['glob_rot'].inverse()
 		ik['ctrl'].transform = headt * ik['bone_glob']
 		ik['ctrl'].translation += t.origin
-		# ctrl location is expressed in skeleton space
-		# we need to convert it to local
-		v = ik['ctrl'].translation
-#		t.origin -= get_bone_transform( ik['pid'] ).origin
-#		t = t * get_bone_rest( ik['bid'] ).inverse()
-#		t.origin = get_bone_rest( ik['bid'] ).xform( t.origin )
-		t = t * headti * ik['bone_glob'].inverse()
-#		set_bone_pose( iks[ k ]['bid'], t )
-	
-#	bid = find_bone( 'levator05.L' )
-#	pid = get_bone_parent( bid )
-#	q.set_euler( get_bone_global_pose( pid ).basis.get_euler() )
-#	t = Transform(q)
-#	t2 = Transform()
-#	t2.origin = diff
-#	t2 = t2 * t.inverse()
-#	$ctrls/lip_corner_left.translation = get_bone_global_pose( bid ).origin + t2.origin

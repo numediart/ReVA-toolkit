@@ -51,7 +51,13 @@ var structure = {
 	'lip_corner_right': { 'indices': [], 'correction': null, 'color': Color( 1.0,1.0,0.4 ), 		'parent': 'mouth_all' },
 	'lip_corner_left': 	{ 'indices': [], 'correction': null, 'color': Color( 0.7,1.0,0.0 ), 		'parent': 'mouth_all' },
 	'lip_upper': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.7,1.0,0.0 ), 	'parent': 'mouth_all' },
+	'lip_upper_left': 	{ 'indices': [], 'correction': null, 'color': Color( 0.7,1.0,0.0 ), 		'parent': 'lip_upper' },
+	'lip_upper_center': { 'indices': [], 'correction': null, 'color': Color( 0.7,1.0,0.0 ), 		'parent': 'lip_upper' },
+	'lip_upper_right': 	{ 'indices': [], 'correction': null, 'color': Color( 0.7,1.0,0.0 ), 		'parent': 'lip_upper' },
 	'lip_lower': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 1.0,1.0,0.0 ), 	'parent': 'mouth_all' },
+	'lip_lower_left': 	{ 'indices': [], 'correction': null, 'color': Color( 1.0,1.0,0.0 ), 		'parent': 'lip_lower' },
+	'lip_lower_center': { 'indices': [], 'correction': null, 'color': Color( 1.0,1.0,0.0 ), 		'parent': 'lip_lower' },
+	'lip_lower_right': 	{ 'indices': [], 'correction': null, 'color': Color( 1.0,1.0,0.0 ), 		'parent': 'lip_lower' },
 	'nose_all': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.6,0.2 ), 	'parent': null },
 	'nose_tip': 		{ 'indices': [], 'correction': null, 'color': Color( 0.5,1.0,0.5 ), 		'parent': 'nose_all' },
 	'nostril_right': 	{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.6,1.0 ), 	'parent': 'nose_all' },
@@ -545,7 +551,13 @@ func get_center():
 func get_pose_euler():
 	if current_frame == null:
 		return Vector3()
-	return current_frame['pose_euler']
+	# removal of first frame rotation
+	var q0 = Quat()
+	q0.set_euler( animation['frames'][0]['pose_euler'] )
+	var qc = Quat()
+	qc.set_euler( current_frame['pose_euler'] )
+	qc *= q0.inverse()
+	return qc.get_euler()
 
 func get_gaze( i ):
 	if current_frame == null or i < 0 or i >= len( current_frame['gazes'] ):
