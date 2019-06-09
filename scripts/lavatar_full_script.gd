@@ -18,6 +18,10 @@ func _enable_ik( b ):
 				c.start()
 			else:
 				c.stop()
+	if not enable_ik:
+		for i in get_bone_count():
+			set_bone_pose( i, Transform() )
+		prepare_iks()
 
 func prepare_iks():
 	
@@ -55,6 +59,18 @@ func prepare_iks():
 		'bid': find_bone( 'oris03.R' ),
 		'ctrl': get_node( "ctrls/lip_upperR" )
 	}
+#	iks[ 'lid_upper_left' ] = {
+#		'bid': find_bone( 'orbicularis03.L' ),
+#		'ctrl': get_node( "ctrls/lid_upperL" )
+#	}
+	iks[ 'brow_left' ] = {
+		'bid': find_bone( 'oculi01.L' ),
+		'ctrl': get_node( "ctrls/browL" )
+	}
+	iks[ 'brow_right' ] = {
+		'bid': find_bone( 'oculi01.R' ),
+		'ctrl': get_node( "ctrls/browR" )
+	}
 
 	var headt = get_bone_global_pose( find_bone( 'head' ) )
 	var headti = headt.affine_inverse()
@@ -84,13 +100,13 @@ func _process(delta):
 	var pid
 	var v
 	var q = Quat()
+	var q2 = Quat()
 	var t
 	var t2
 	
 	bid = find_bone( "head" )
-#	q.set_euler( json.get_pose_euler() )
+	q.set_euler( json.get_pose_euler() * 0.3 )
 	t = Transform(q)
-	pid = get_bone_parent( bid )
 	set_bone_pose( bid, t )
 	var headt = get_bone_global_pose( bid )
 	var headti = headt.affine_inverse()
