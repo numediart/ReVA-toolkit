@@ -49,6 +49,26 @@ def get_mandatory_keys( usage = 'index' ):
 		return [('landmarks',None,list), ('landmarks_data',None,list), ('timestamp',0,float)]
 	elif usage == 'aabb':
 		return [('center',None,[]),('min',None,[]),('max',None,[]),('size',None,[])]
+	elif usage == 'structrue':
+		return [
+			('brow_right',None,list),
+			('eye_right',None,list),
+			('lid_right_upper',None,list),
+			('lid_right_lower',None,list),
+			('brow_left',None,list),
+			('eye_left',None,list),
+			('lid_left_upper',None,list),
+			('lid_left_lower',None,list),
+			('mouth_all',None,list),
+			('lip_corner_right',None,list),
+			('lip_corner_left',None,list),
+			('lip_upper',None,list),
+			('lip_lower',None,list),
+			('nose_tip',None,list),
+			('nose_all',None,list),
+			('nostril_right',None,list),
+			('nostril_left',None,list)
+		]
 	else:
 		return None
 
@@ -63,24 +83,6 @@ def get_optional_keys( usage = 'index' ):
 		return [('pose_euler',None,list), ('au',None,list), ('gazes',None,list)]
 	elif usage == 'animation_frame_interpolation':
 		return [('pose_euler',None,list), ('au',None,list), ('gazes',None,list), ('gaze_data',None,list)]
-	elif usage == 'structrue':
-		return [
-			('brow_right',None,list),
-			('eye_right',None,list),
-			('lid_right_upper',None,list),
-			('lid_right_lower',None,list),
-			('brow_left',None,list),
-			('eye_left',None,list),
-			('lid_left_upper',None,list),
-			('lid_left_lower',None,list),
-			('mouth_all',None,list),
-			('lip_upper',None,list),
-			('lip_lower',None,list),
-			('nose_tip',None,list),
-			('nose_all',None,list),
-			('nostril_right',None,list),
-			('nostril_left',None,list)
-		]
 	else:
 		return None
 
@@ -329,6 +331,21 @@ def generate_aabb( frame = None, center = None ):
 def generate_sound_ref():
 	return { 'path': None, 'codec': None }
 
+def generate_structure():
+	
+	out = {}
+	keys = get_mandatory_keys( 'structrue' )
+	for k in keys:
+		if k[2] is list:
+			out[k[0]] = []
+		if k[2] is dict:
+			out[k[0]] = {}
+		if k[2] is float:
+			out[k[0]] = 0.0
+		if k[2] is int:
+			out[k[0]] = 0
+	return out
+
 def accumulate_aabb( src, dst ):
 	
 	for j in range(3):
@@ -356,7 +373,7 @@ def pack_animation( frames, indices ):
 		if k == 'valid' or k == 'all_indices':
 			continue
 		animation['fields'].append( k )
-	animation['structure'] = {}
+	animation['structure'] = generate_structure()
 	animation['aabb'] = generate_aabb( frames[0] )
 	animation['aabb_total'] = generate_aabb()
 	animation['scale'] = float( 1.0 / animation['aabb']['size'][0] )
@@ -397,7 +414,7 @@ def add_structure( anim, struct ):
 		print( "lavatar::add_structure, error: provide a dict with valid keys" )
 		return
 	
-	validf = get_optional_keys( 'structrue' )
+	validf = get_mandatory_keys( 'structrue' )
 	sks = struct.keys()
 	for f in validf:
 		if f[0] in sks:

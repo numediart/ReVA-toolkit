@@ -34,6 +34,8 @@ var original_animation = {} # full copy of the animation once successfully loade
 var animation_loaded = true
 var prev_playhead = 0
 var current_index = 0
+# contains all values of current frame
+var current_frame = null
 
 # right is red, left is blue -> respect order or it will be weird!!!
 var structure = {
@@ -45,7 +47,9 @@ var structure = {
 	'eye_left': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.0,1.0 ), 	'parent': null },
 	'lid_left_upper': 	{ 'indices': [], 'correction': null, 'color': Color( 0.0,0.3,1.0 ), 		'parent': 'eye_left' },
 	'lid_left_lower': 	{ 'indices': [], 'correction': null, 'color': Color( 0.0,0.6,1.0 ), 		'parent': 'eye_left' },
-	'mouth_all': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.2,1.0,0.0 ), 	'parent': null },
+	'mouth_all': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.4,1.0,1.0 ), 	'parent': null },
+	'lip_corner_right': { 'indices': [], 'correction': null, 'color': Color( 1.0,1.0,0.4 ), 		'parent': 'mouth_all' },
+	'lip_corner_left': 	{ 'indices': [], 'correction': null, 'color': Color( 0.7,1.0,0.0 ), 		'parent': 'mouth_all' },
 	'lip_upper': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.7,1.0,0.0 ), 	'parent': 'mouth_all' },
 	'lip_lower': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 1.0,1.0,0.0 ), 	'parent': 'mouth_all' },
 	'nose_all': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.6,0.2 ), 	'parent': null },
@@ -53,9 +57,6 @@ var structure = {
 	'nostril_right': 	{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.6,1.0 ), 	'parent': 'nose_all' },
 	'nostril_left': 	{ 'indices': [], 'correction': Transform(), 'color': Color( 0.8,0.6,0.2 ), 	'parent': 'nose_all' }
 }
-
-# contains all values of current frame
-var current_frame = null
 
 func _center_offset( b ):
 	center_offset = b
@@ -542,6 +543,29 @@ func get_center():
 	return current_frame['aabb']['center']
 
 func get_pose_euler():
-	if current_frame == null or not center_rotation:
+	if current_frame == null:
 		return Vector3()
 	return current_frame['pose_euler']
+
+func get_gaze( i ):
+	if current_frame == null or i < 0 or i >= len( current_frame['gazes'] ):
+		return Vector3()
+	return current_frame['gazes'][i]
+
+func get_delta( group ):
+	
+	if not group in structure or current_frame == null or len( structure[group]['indices'] ) == 0:
+		return Vector3()
+	
+	var l = len( structure[group]['indices'] )
+	var first_frame_avrg = Vector3()
+	var current_frame_avrg = Vector3()
+	var ids = structure[group]['indices']
+	# averaging default & current frame
+	for id in ids:
+		first_frame_avrg += animation['frames'][0]['landmarks'][id]
+		current_frame_avrg += current_frame['landmarks'][id]
+	first_frame_avrg /= l
+	current_frame_avrg /= l
+	return ( current_frame_avrg - first_frame_avrg ) * scale
+	

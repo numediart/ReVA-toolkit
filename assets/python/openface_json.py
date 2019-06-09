@@ -1,9 +1,15 @@
 import lavatar.lavatar as lavatar
 from openface_configuration import *
 
+CSV_PATH = "../openface/steady.csv"
+WAV_PATH = ""
+JSON_PATH = "../json/steady.json"
+
+'''
 CSV_PATH = "../openface/laugh_1_300.csv"
 WAV_PATH = "../openface/laugh.wav"
 JSON_PATH = "../json/laugh_1_300.json"
+'''
 
 indices = None
 frames = []
