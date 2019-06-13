@@ -5,10 +5,13 @@ func calibration_enable( b ):
 	$json.visible = b
 	
 	if b:
+		$sasha._enable_ik( true )
 		$sasha/att_face_cam/face_cam.make_current()
 		$ui/main.hide()
+		$ui/calib.reset()
 		$ui/calib.show()
 	else:
+		$sasha._enable_ik( false )
 		$cam.make_current()
 		$ui/main.show()
 		$ui/calib.hide()
@@ -36,3 +39,7 @@ func _on_calibration_pressed():
 
 func _on_calib_validate_pressed():
 	calibration_enable( false )
+
+
+func _on_rotx_value_changed(value):
+	pass # Replace with function body.

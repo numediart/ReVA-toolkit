@@ -144,12 +144,15 @@ surfaces/0 = {
 [node name="dev" type="Spatial"]
 script = ExtResource( 1 )
 __meta__ = {
-"_edit_horizontal_guides_": [ 21.0 ]
+"_edit_horizontal_guides_": [ 21.0 ],
+"_edit_vertical_guides_": [ 178.108 ]
 }
 
 [node name="ui" type="Node2D" parent="."]
 
 [node name="main" type="Node2D" parent="ui"]
+editor/display_folded = true
+visible = false
 
 [node name="btn_load" type="Button" parent="ui/main"]
 margin_left = 120.0
@@ -205,6 +208,17 @@ focus_mode = 0
 theme = ExtResource( 2 )
 enabled_focus_mode = 0
 text = "validate"
+flat = true
+
+[node name="btn_reset" type="Button" parent="ui/calib"]
+margin_left = 110.0
+margin_top = 10.0
+margin_right = 193.0
+margin_bottom = 42.0
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "reset"
 flat = true
 
 [node name="nose" type="Button" parent="ui/calib"]
@@ -336,6 +350,211 @@ centered = false
 [node name="TextureButton" type="TextureButton" parent="ui/calib"]
 margin_right = 40.0
 margin_bottom = 40.0
+
+[node name="sliders" type="Node2D" parent="ui/calib"]
+editor/display_folded = true
+position = Vector2( 0, 399 )
+
+[node name="trans" type="Label" parent="ui/calib/sliders"]
+margin_left = 57.0
+margin_top = 1.0
+margin_right = 126.0
+margin_bottom = 19.0
+theme = ExtResource( 2 )
+text = "translation"
+
+[node name="x" type="HSlider" parent="ui/calib/sliders/trans"]
+editor/display_folded = true
+margin_left = 21.0
+margin_top = 19.0
+margin_right = 221.0
+margin_bottom = 35.0
+theme = ExtResource( 2 )
+min_value = -0.2
+max_value = 0.2
+step = 0.0
+ticks_on_borders = false
+
+[node name="lbl" type="Label" parent="ui/calib/sliders/trans/x"]
+margin_left = -22.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "x"
+
+[node name="y" type="HSlider" parent="ui/calib/sliders/trans"]
+editor/display_folded = true
+margin_left = 21.0
+margin_top = 39.0
+margin_right = 221.0
+margin_bottom = 55.0
+theme = ExtResource( 2 )
+min_value = -0.2
+max_value = 0.2
+step = 0.0
+ticks_on_borders = false
+
+[node name="lbl" type="Label" parent="ui/calib/sliders/trans/y"]
+margin_left = -22.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "y"
+
+[node name="z" type="HSlider" parent="ui/calib/sliders/trans"]
+editor/display_folded = true
+margin_left = 21.0
+margin_top = 59.0
+margin_right = 221.0
+margin_bottom = 75.0
+theme = ExtResource( 2 )
+min_value = -0.2
+max_value = 0.2
+step = 0.0
+ticks_on_borders = false
+
+[node name="lbl" type="Label" parent="ui/calib/sliders/trans/z"]
+margin_left = -22.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "z"
+
+[node name="rot" type="Label" parent="ui/calib/sliders"]
+margin_left = 57.0
+margin_top = 81.0
+margin_right = 126.0
+margin_bottom = 99.0
+theme = ExtResource( 2 )
+text = "rotation"
+
+[node name="x" type="HSlider" parent="ui/calib/sliders/rot"]
+editor/display_folded = true
+margin_left = 21.0
+margin_top = 19.0
+margin_right = 221.0
+margin_bottom = 35.0
+theme = ExtResource( 2 )
+min_value = -1.571
+max_value = 1.571
+step = 0.0
+ticks_on_borders = false
+
+[node name="lbl" type="Label" parent="ui/calib/sliders/rot/x"]
+margin_left = -22.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "x"
+
+[node name="y" type="HSlider" parent="ui/calib/sliders/rot"]
+editor/display_folded = true
+margin_left = 21.0
+margin_top = 39.0
+margin_right = 221.0
+margin_bottom = 55.0
+theme = ExtResource( 2 )
+min_value = -1.571
+max_value = 1.571
+step = 0.0
+ticks_on_borders = false
+
+[node name="lbl" type="Label" parent="ui/calib/sliders/rot/y"]
+margin_left = -22.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "y"
+
+[node name="z" type="HSlider" parent="ui/calib/sliders/rot"]
+editor/display_folded = true
+margin_left = 21.0
+margin_top = 59.0
+margin_right = 221.0
+margin_bottom = 75.0
+theme = ExtResource( 2 )
+min_value = -1.571
+max_value = 1.571
+step = 0.0
+ticks_on_borders = false
+
+[node name="lbl" type="Label" parent="ui/calib/sliders/rot/z"]
+margin_left = -22.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "z"
+
+[node name="scale" type="Label" parent="ui/calib/sliders"]
+margin_left = 57.0
+margin_top = 161.0
+margin_right = 126.0
+margin_bottom = 179.0
+theme = ExtResource( 2 )
+text = "scale"
+
+[node name="x" type="HSlider" parent="ui/calib/sliders/scale"]
+editor/display_folded = true
+margin_left = 21.0
+margin_top = 19.0
+margin_right = 221.0
+margin_bottom = 35.0
+theme = ExtResource( 2 )
+max_value = 5.0
+step = 0.0
+ticks_on_borders = false
+
+[node name="lbl" type="Label" parent="ui/calib/sliders/scale/x"]
+margin_left = -22.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "x"
+
+[node name="y" type="HSlider" parent="ui/calib/sliders/scale"]
+editor/display_folded = true
+margin_left = 21.0
+margin_top = 39.0
+margin_right = 221.0
+margin_bottom = 55.0
+theme = ExtResource( 2 )
+max_value = 5.0
+step = 0.0
+ticks_on_borders = false
+
+[node name="lbl" type="Label" parent="ui/calib/sliders/scale/y"]
+margin_left = -22.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "y"
+
+[node name="z" type="HSlider" parent="ui/calib/sliders/scale"]
+editor/display_folded = true
+margin_left = 21.0
+margin_top = 59.0
+margin_right = 221.0
+margin_bottom = 75.0
+theme = ExtResource( 2 )
+max_value = 5.0
+step = 0.0
+ticks_on_borders = false
+
+[node name="lbl" type="Label" parent="ui/calib/sliders/scale/z"]
+margin_left = -22.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "z"
 
 [node name="cam" type="Camera" parent="."]
 transform = Transform( 0.914031, 0.00861085, 0.405553, 0, 0.999775, -0.0212276, -0.405645, 0.0194026, 0.913825, 1.69651, 1.46162, 5.66793 )
@@ -1548,3 +1767,22 @@ environment = ExtResource( 12 )
 [connection signal="file_selected" from="ui/json_load" to="." method="_on_json_load_file_selected"]
 [connection signal="hide" from="ui/json_load" to="." method="_on_json_load_hide"]
 [connection signal="pressed" from="ui/calib/btn_validate" to="." method="_on_calib_validate_pressed"]
+[connection signal="pressed" from="ui/calib/btn_reset" to="ui/calib" method="_on_btn_reset_pressed"]
+[connection signal="pressed" from="ui/calib/nose" to="ui/calib" method="_on_nose_pressed"]
+[connection signal="pressed" from="ui/calib/eyes" to="ui/calib" method="_on_eyes_pressed"]
+[connection signal="pressed" from="ui/calib/mouth" to="ui/calib" method="_on_mouth_pressed"]
+[connection signal="pressed" from="ui/calib/nostrils" to="ui/calib" method="_on_nostrils_pressed"]
+[connection signal="pressed" from="ui/calib/upper_lip" to="ui/calib" method="_on_upper_lip_pressed"]
+[connection signal="pressed" from="ui/calib/lower_lip" to="ui/calib" method="_on_lower_lip_pressed"]
+[connection signal="pressed" from="ui/calib/lower_lid" to="ui/calib" method="_on_lower_lid_pressed"]
+[connection signal="pressed" from="ui/calib/upper_lid" to="ui/calib" method="_on_upper_lid_pressed"]
+[connection signal="pressed" from="ui/calib/brows" to="ui/calib" method="_on_brows_pressed"]
+[connection signal="value_changed" from="ui/calib/sliders/trans/x" to="ui/calib" method="_on_transx_value_changed"]
+[connection signal="value_changed" from="ui/calib/sliders/trans/y" to="ui/calib" method="_on_transy_value_changed"]
+[connection signal="value_changed" from="ui/calib/sliders/trans/z" to="ui/calib" method="_on_transz_value_changed"]
+[connection signal="value_changed" from="ui/calib/sliders/rot/x" to="ui/calib" method="_on_rotx_value_changed"]
+[connection signal="value_changed" from="ui/calib/sliders/rot/y" to="ui/calib" method="_on_roty_value_changed"]
+[connection signal="value_changed" from="ui/calib/sliders/rot/z" to="ui/calib" method="_on_rotz_value_changed"]
+[connection signal="value_changed" from="ui/calib/sliders/scale/x" to="ui/calib" method="_on_scalex_value_changed"]
+[connection signal="value_changed" from="ui/calib/sliders/scale/y" to="ui/calib" method="_on_scaley_value_changed"]
+[connection signal="value_changed" from="ui/calib/sliders/scale/z" to="ui/calib" method="_on_scalez_value_changed"]
