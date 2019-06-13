@@ -360,11 +360,6 @@ func load_video():
 	
 	if not 'video' in animation or animation['video']['path'] == null:
 		return
-	
-	var player = get_node( "../ui/vid" )
-	if player != null:
-		player.stream.set_file( animation['video']['path'] )
-		print( animation['video']['path'] )
 
 func load_debug():
 	
@@ -583,12 +578,27 @@ func get_delta( group ):
 	var l = len( structure[group]['indices'] )
 	var first_frame_avrg = Vector3()
 	var current_frame_avrg = Vector3()
-	var ids = structure[group]['indices']
 	# averaging default & current frame
-	for id in ids:
+	for id in structure[group]['indices']:
 		first_frame_avrg += animation['frames'][0]['landmarks'][id]
 		current_frame_avrg += current_frame['landmarks'][id]
 	first_frame_avrg /= l
 	current_frame_avrg /= l
 	return ( current_frame_avrg - first_frame_avrg ) * scale
+
+func get_global( group ):
 	
+	if not group in structure or current_frame == null or len( structure[group]['indices'] ) == 0:
+		return Vector3()
+	var l = len( structure[group]['indices'] )
+	var current_frame_avrg = Vector3()
+	for id in structure[group]['indices']:
+		current_frame_avrg += current_frame['landmarks'][id]
+	return global_transform.xform( current_frame_avrg / l )
+
+func get_video():
+	
+	if not 'video' in animation or animation['video']['path'] == null:
+		return null
+	
+	return  animation['video']['path']

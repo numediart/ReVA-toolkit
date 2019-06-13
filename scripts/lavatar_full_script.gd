@@ -5,6 +5,12 @@ extends Skeleton
 export (Vector3) var mask_offset = Vector3()
 export (bool) var enable_ik = false setget _enable_ik
 
+enum POS_TYPE {
+	DELTA,
+	LOCAL, # not used
+	GLOBAL
+}
+
 var iks = null
 var json = null
 var tester_pos = null
@@ -29,35 +35,43 @@ func prepare_iks():
 	
 	iks[ 'lip_corner_left' ] = {
 		'bid': find_bone( 'levator05.L' ),
-		'ctrl': get_node( "ctrls/lip_corner_left" )
+		'ctrl': get_node( "ctrls/lip_corner_left" ),
+		'type': POS_TYPE.DELTA
 	}
 	iks[ 'lip_corner_right' ] = {
 		'bid': find_bone( 'levator05.R' ),
-		'ctrl': get_node( "ctrls/lip_corner_right" )
+		'ctrl': get_node( "ctrls/lip_corner_right" ),
+		'type': POS_TYPE.DELTA
 	}
 	iks[ 'lip_lower_left' ] = {
 		'bid': find_bone( 'oris07.L' ),
-		'ctrl': get_node( "ctrls/lip_lowerL" )
+		'ctrl': get_node( "ctrls/lip_lowerL" ),
+		'type': POS_TYPE.DELTA
 	}
 	iks[ 'lip_lower' ] = {
 		'bid': find_bone( 'oris02' ),
-		'ctrl': get_node( "ctrls/lip_lowerC" )
+		'ctrl': get_node( "ctrls/lip_lowerC" ),
+		'type': POS_TYPE.DELTA
 	}
 	iks[ 'lip_lower_right' ] = {
 		'bid': find_bone( 'oris07.R' ),
-		'ctrl': get_node( "ctrls/lip_lowerR" )
+		'ctrl': get_node( "ctrls/lip_lowerR" ),
+		'type': POS_TYPE.DELTA
 	}
 	iks[ 'lip_upper_left' ] = {
 		'bid': find_bone( 'oris03.L' ),
-		'ctrl': get_node( "ctrls/lip_upperL" )
+		'ctrl': get_node( "ctrls/lip_upperL" ),
+		'type': POS_TYPE.DELTA
 	}
 	iks[ 'lip_upper' ] = {
 		'bid': find_bone( 'oris06' ),
-		'ctrl': get_node( "ctrls/lip_upperC" )
+		'ctrl': get_node( "ctrls/lip_upperC" ),
+		'type': POS_TYPE.DELTA
 	}
 	iks[ 'lip_upper_right' ] = {
 		'bid': find_bone( 'oris03.R' ),
-		'ctrl': get_node( "ctrls/lip_upperR" )
+		'ctrl': get_node( "ctrls/lip_upperR" ),
+		'type': POS_TYPE.DELTA
 	}
 #	iks[ 'lid_upper_left' ] = {
 #		'bid': find_bone( 'orbicularis03.L' ),
@@ -65,13 +79,35 @@ func prepare_iks():
 #	}
 	iks[ 'brow_left' ] = {
 		'bid': find_bone( 'oculi01.L' ),
-		'ctrl': get_node( "ctrls/browL" )
+		'ctrl': get_node( "ctrls/browL" ),
+		'type': POS_TYPE.DELTA
 	}
 	iks[ 'brow_right' ] = {
 		'bid': find_bone( 'oculi01.R' ),
-		'ctrl': get_node( "ctrls/browR" )
+		'ctrl': get_node( "ctrls/browR" ),
+		'type': POS_TYPE.DELTA
 	}
-
+	iks[ 'lid_left_upper' ] = {
+		'bid': find_bone( 'orbicularis03.L.end' ),
+		'ctrl': get_node( "ctrls/lid_upperL" ),
+		'type': POS_TYPE.GLOBAL
+	}
+	iks[ 'lid_left_lower' ] = {
+		'bid': find_bone( 'orbicularis04.L.end' ),
+		'ctrl': get_node( "ctrls/lid_lowerL" ),
+		'type': POS_TYPE.GLOBAL
+	}
+	iks[ 'lid_right_upper' ] = {
+		'bid': find_bone( 'orbicularis03.R.end' ),
+		'ctrl': get_node( "ctrls/lid_upperR" ),
+		'type': POS_TYPE.GLOBAL
+	}
+	iks[ 'lid_right_lower' ] = {
+		'bid': find_bone( 'orbicularis04.R.end' ),
+		'ctrl': get_node( "ctrls/lid_lowerR" ),
+		'type': POS_TYPE.GLOBAL
+	}
+	
 	var headt = get_bone_global_pose( find_bone( 'head' ) )
 	var headti = headt.affine_inverse()
 	for k in iks:
@@ -123,12 +159,18 @@ func _process(delta):
 	q.set_euler( json.get_gaze(1) )
 	set_bone_pose( bid, Transform(q) )
 	
-	var diff = get_node( "../tester" ).global_transform.origin - tester_pos
+#	var diff = get_node( "../tester" ).global_transform.origin - tester_pos
 	
 	for k in iks:
 		var ik = iks[k]
 		t = Transform()
-		t.origin = json.get_delta( k )
-		t = t * ik['glob_rot'].inverse()
-		ik['ctrl'].transform = headt * ik['bone_glob']
-		ik['ctrl'].translation += t.origin
+		match ik['type']:
+			POS_TYPE.DELTA:
+				t.origin = json.get_delta( k )
+				t = t * ik['glob_rot'].inverse()
+				ik['ctrl'].transform = headt * ik['bone_glob']
+				ik['ctrl'].translation += t.origin
+			POS_TYPE.GLOBAL:
+				ik['ctrl'].global_transform.origin = json.get_global( k )
+			POS_TYPE.LOCAL:
+				print( "????????" )
