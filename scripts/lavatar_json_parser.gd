@@ -265,6 +265,9 @@ func clear_all():
 	while( $landmarks.get_child_count() > 0 ):
 		$landmarks.remove_child( $landmarks.get_child(0) )
 	$animplayer.remove_animation( "json" )
+	
+	prev_playhead = 0
+	current_index = 0
 
 func structure_find( i ):
 	

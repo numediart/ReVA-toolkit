@@ -19,6 +19,10 @@ config/name="Laughing avatar"
 run/main_scene="res://scenes/dev_gd.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/fullscreen=true
+
 [rendering]
 
 quality/filters/msaa=2

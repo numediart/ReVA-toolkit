@@ -149,9 +149,10 @@ __meta__ = {
 }
 
 [node name="ui" type="Node2D" parent="."]
+editor/display_folded = true
 
 [node name="main" type="Node2D" parent="ui"]
-editor/display_folded = true
+visible = false
 
 [node name="btn_play" type="Button" parent="ui/main"]
 margin_left = 20.0
@@ -166,9 +167,9 @@ text = "play"
 flat = true
 
 [node name="btn_calibration" type="Button" parent="ui/main"]
-margin_left = 120.0
+margin_left = 110.0
 margin_top = 10.0
-margin_right = 203.0
+margin_right = 193.0
 margin_bottom = 42.0
 focus_mode = 0
 theme = ExtResource( 2 )
@@ -177,10 +178,9 @@ text = "calibration"
 flat = true
 
 [node name="btn_load" type="Button" parent="ui/main"]
-editor/display_folded = true
-margin_left = 220.0
+margin_left = 200.0
 margin_top = 10.0
-margin_right = 310.0
+margin_right = 290.0
 margin_bottom = 40.0
 focus_mode = 0
 theme = ExtResource( 2 )
@@ -194,7 +194,7 @@ margin_top = 6.0
 margin_right = 745.0
 margin_bottom = 26.0
 theme = ExtResource( 2 )
-text = "res://assets/json/mouth_open.json"
+text = "none"
 
 [node name="json_load" type="FileDialog" parent="ui"]
 margin_left = -100.0
@@ -210,7 +210,6 @@ show_hidden_files = true
 
 [node name="calib" type="Node2D" parent="ui"]
 editor/display_folded = true
-visible = false
 script = ExtResource( 3 )
 
 [node name="btn_validate" type="Button" parent="ui/calib"]
@@ -221,13 +220,13 @@ margin_bottom = 42.0
 focus_mode = 0
 theme = ExtResource( 2 )
 enabled_focus_mode = 0
-text = "validate"
+text = "back"
 flat = true
 
 [node name="btn_reset" type="Button" parent="ui/calib"]
-margin_left = 110.0
+margin_left = 100.0
 margin_top = 10.0
-margin_right = 193.0
+margin_right = 183.0
 margin_bottom = 42.0
 focus_mode = 0
 theme = ExtResource( 2 )
@@ -361,10 +360,6 @@ scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 5 )
 centered = false
 
-[node name="TextureButton" type="TextureButton" parent="ui/calib"]
-margin_right = 40.0
-margin_bottom = 40.0
-
 [node name="sliders" type="Node2D" parent="ui/calib"]
 editor/display_folded = true
 position = Vector2( 0, 399 )
@@ -378,7 +373,6 @@ theme = ExtResource( 2 )
 text = "translation"
 
 [node name="x" type="HSlider" parent="ui/calib/sliders/trans"]
-editor/display_folded = true
 margin_left = 21.0
 margin_top = 19.0
 margin_right = 221.0
@@ -396,8 +390,15 @@ margin_bottom = 16.0
 theme = ExtResource( 2 )
 text = "x"
 
+[node name="val" type="Label" parent="ui/calib/sliders/trans/x"]
+margin_left = 209.0
+margin_top = -2.0
+margin_right = 276.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "0"
+
 [node name="y" type="HSlider" parent="ui/calib/sliders/trans"]
-editor/display_folded = true
 margin_left = 21.0
 margin_top = 39.0
 margin_right = 221.0
@@ -415,8 +416,15 @@ margin_bottom = 16.0
 theme = ExtResource( 2 )
 text = "y"
 
+[node name="val" type="Label" parent="ui/calib/sliders/trans/y"]
+margin_left = 209.0
+margin_top = -2.0
+margin_right = 276.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "0"
+
 [node name="z" type="HSlider" parent="ui/calib/sliders/trans"]
-editor/display_folded = true
 margin_left = 21.0
 margin_top = 59.0
 margin_right = 221.0
@@ -434,6 +442,14 @@ margin_bottom = 16.0
 theme = ExtResource( 2 )
 text = "z"
 
+[node name="val" type="Label" parent="ui/calib/sliders/trans/z"]
+margin_left = 209.0
+margin_top = -2.0
+margin_right = 276.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "0"
+
 [node name="rot" type="Label" parent="ui/calib/sliders"]
 margin_left = 57.0
 margin_top = 81.0
@@ -443,7 +459,6 @@ theme = ExtResource( 2 )
 text = "rotation"
 
 [node name="x" type="HSlider" parent="ui/calib/sliders/rot"]
-editor/display_folded = true
 margin_left = 21.0
 margin_top = 19.0
 margin_right = 221.0
@@ -461,8 +476,15 @@ margin_bottom = 16.0
 theme = ExtResource( 2 )
 text = "x"
 
+[node name="val" type="Label" parent="ui/calib/sliders/rot/x"]
+margin_left = 209.0
+margin_top = -2.0
+margin_right = 276.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "0"
+
 [node name="y" type="HSlider" parent="ui/calib/sliders/rot"]
-editor/display_folded = true
 margin_left = 21.0
 margin_top = 39.0
 margin_right = 221.0
@@ -480,8 +502,15 @@ margin_bottom = 16.0
 theme = ExtResource( 2 )
 text = "y"
 
+[node name="val" type="Label" parent="ui/calib/sliders/rot/y"]
+margin_left = 209.0
+margin_top = -2.0
+margin_right = 276.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "0"
+
 [node name="z" type="HSlider" parent="ui/calib/sliders/rot"]
-editor/display_folded = true
 margin_left = 21.0
 margin_top = 59.0
 margin_right = 221.0
@@ -499,6 +528,14 @@ margin_bottom = 16.0
 theme = ExtResource( 2 )
 text = "z"
 
+[node name="val" type="Label" parent="ui/calib/sliders/rot/z"]
+margin_left = 209.0
+margin_top = -2.0
+margin_right = 276.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "0"
+
 [node name="scale" type="Label" parent="ui/calib/sliders"]
 margin_left = 57.0
 margin_top = 161.0
@@ -508,7 +545,6 @@ theme = ExtResource( 2 )
 text = "scale"
 
 [node name="x" type="HSlider" parent="ui/calib/sliders/scale"]
-editor/display_folded = true
 margin_left = 21.0
 margin_top = 19.0
 margin_right = 221.0
@@ -525,8 +561,15 @@ margin_bottom = 16.0
 theme = ExtResource( 2 )
 text = "x"
 
+[node name="val" type="Label" parent="ui/calib/sliders/scale/x"]
+margin_left = 209.0
+margin_top = -2.0
+margin_right = 276.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "0"
+
 [node name="y" type="HSlider" parent="ui/calib/sliders/scale"]
-editor/display_folded = true
 margin_left = 21.0
 margin_top = 39.0
 margin_right = 221.0
@@ -543,8 +586,15 @@ margin_bottom = 16.0
 theme = ExtResource( 2 )
 text = "y"
 
+[node name="val" type="Label" parent="ui/calib/sliders/scale/y"]
+margin_left = 209.0
+margin_top = -2.0
+margin_right = 276.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "0"
+
 [node name="z" type="HSlider" parent="ui/calib/sliders/scale"]
-editor/display_folded = true
 margin_left = 21.0
 margin_top = 59.0
 margin_right = 221.0
@@ -560,6 +610,14 @@ margin_right = -2.0
 margin_bottom = 16.0
 theme = ExtResource( 2 )
 text = "z"
+
+[node name="val" type="Label" parent="ui/calib/sliders/scale/z"]
+margin_left = 209.0
+margin_top = -2.0
+margin_right = 276.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = "0"
 
 [node name="cam" type="Camera" parent="."]
 transform = Transform( 0.914031, 0.00861085, 0.405553, 0, 0.999775, -0.0212276, -0.405645, 0.0194026, 0.913825, 1.69651, 1.46162, 5.66793 )
@@ -583,6 +641,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.646093, 1.2101, 0.597937 )
 visible = false
 
 [node name="json" type="Spatial" parent="."]
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1.09821, -0.0570413, 0, 0.0627454, 0.998372, -0.00206684, 1.65931, 1.27387 )
 script = ExtResource( 6 )
 json_path = "res://assets/json/mouth_open.json"
@@ -591,7 +650,7 @@ center_offset = false
 brow_rotation = Vector3( 0, 0.02, 0 )
 brow_translation = Vector3( -0.07, 0, 0.1 )
 eye_translation = Vector3( -0.1, -0.115, 0 )
-eye_scale = Vector3( 1.76, 2, 1 )
+eye_scale = Vector3( 1.76, 4, 1 )
 mouth_translation = Vector3( 0, -0.09, 0 )
 mouth_scale = Vector3( 1.3, 1, 1 )
 nose_translation = Vector3( 0, -0.12, -0.05 )
@@ -638,6 +697,7 @@ mesh = SubResource( 5 )
 material/0 = null
 
 [node name="sasha" type="Skeleton" parent="."]
+editor/display_folded = true
 bones/0/name = "spine03"
 bones/0/parent = -1
 bones/0/rest = Transform( 1, 0, 0, 0, -0.13505, -0.990839, 0, 0.990839, -0.13505, 0, -2.79927, 0.0018694 )
@@ -1030,6 +1090,7 @@ bones/77/enabled = true
 bones/77/bound_children = [  ]
 script = ExtResource( 7 )
 mask_offset = Vector3( 0, 0.93, -0.06 )
+enable_ik = true
 
 [node name="ctrls" type="Node" parent="sasha"]
 editor/display_folded = true
@@ -1083,23 +1144,23 @@ transform = Transform( 0.262777, -0.208846, -0.941984, -0.810774, -0.577059, -0.
 visible = false
 
 [node name="lid_upperL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -1, -4.61005e-08, -1.67638e-08, -3.81842e-08, 1, 5.36442e-07, -6.33299e-08, 2.08616e-07, -1, 0.276949, 1.85292, 1.28376 )
+transform = Transform( -1, -4.61005e-08, -1.67638e-08, -3.81842e-08, 1, 5.36442e-07, -6.33299e-08, 2.08616e-07, -1, 0.276949, 1.88267, 1.28546 )
 visible = false
 
 [node name="lid_lowerL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.999999, -2.42144e-08, 3.65078e-07, -1.39698e-08, 1, 1.43424e-06, -9.81614e-07, 9.574e-07, -1, 0.273328, 1.79274, 1.28676 )
+transform = Transform( -0.999999, -2.42144e-08, 3.65078e-07, -1.39698e-08, 1, 1.43424e-06, -9.81614e-07, 9.574e-07, -1, 0.273328, 1.76267, 1.28505 )
 visible = false
 
 [node name="lid_upperR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.999999, -7.77654e-08, -3.27826e-07, -2.57511e-07, 1, 9.27597e-07, 4.56348e-07, 7.78586e-07, -1, -0.288011, 1.83741, 1.33554 )
+transform = Transform( -0.999999, -7.77654e-08, -3.27826e-07, -2.57511e-07, 1, 9.27597e-07, 4.56348e-07, 7.78586e-07, -1, -0.288011, 1.86671, 1.33721 )
 visible = false
 
 [node name="lid_lowerR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -1, 6.70552e-08, -4.58211e-07, -1.44355e-07, 1, 1.22562e-06, 1.38767e-06, 1.07661e-06, -1, -0.291202, 1.77612, 1.33985 )
+transform = Transform( -1, 6.70552e-08, -4.58211e-07, -1.44355e-07, 1, 1.22562e-06, 1.38767e-06, 1.07661e-06, -1, -0.291202, 1.74458, 1.33805 )
 visible = false
 
 [node name="eyeL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.97788, -0.0439155, 0.204506, -1.86265e-08, 0.977712, 0.209953, -0.209169, 0.205308, -0.956084, 0.286656, 1.92764, 0.929565 )
+transform = Transform( -0.97788, -0.0439154, 0.204506, -1.86265e-08, 0.977712, 0.209952, -0.209169, 0.205308, -0.956084, 0.286656, 1.92764, 0.929565 )
 
 [node name="eyeR" type="Position3D" parent="sasha/ctrls"]
 transform = Transform( -0.994367, 0.0233136, -0.10339, -2.04891e-08, 0.975507, 0.219969, 0.105986, 0.21873, -0.970012, -0.284035, 1.92543, 0.928468 )
@@ -1200,7 +1261,7 @@ material/0 = null
 
 [node name="att_jaw" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.999991, 0.00354246, -0.0024731, 0.00386954, -0.479803, 0.877368, 0.00192144, -0.877368, -0.479814, -0.000347604, 1.60091, 0.496719 )
+transform = Transform( 0.999998, 0.00345258, -0.00354057, 0.00472174, -0.453712, 0.891141, 0.00147032, -0.891142, -0.453719, -0.000343763, 1.60091, 0.496739 )
 visible = false
 bone_name = "jaw"
 
@@ -1233,7 +1294,7 @@ material/0 = null
 
 [node name="att_browL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.254483, 0.210269, 0.94394, 0.812775, -0.575437, -0.0909388, 0.524057, 0.790354, -0.317339, 0.312082, 2.1397, 1.26099 )
+transform = Transform( 0.254483, 0.210269, 0.94394, 0.812775, -0.575437, -0.0909387, 0.524057, 0.790354, -0.317339, 0.318854, 2.146, 1.27357 )
 visible = false
 bone_name = "oculi01.L"
 
@@ -1266,7 +1327,7 @@ material/0 = null
 
 [node name="att_browR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.262777, -0.208846, -0.941984, -0.810774, -0.577059, -0.0982362, -0.523064, 0.789549, -0.320965, -0.319872, 2.13725, 1.25977 )
+transform = Transform( 0.262777, -0.208846, -0.941984, -0.810774, -0.577059, -0.0982363, -0.523064, 0.789549, -0.320965, -0.324126, 2.13665, 1.27726 )
 visible = false
 bone_name = "oculi01.R"
 
@@ -1299,7 +1360,7 @@ material/0 = null
 
 [node name="att_eyeL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999641, -0.00944402, -0.0250796, -0.00996104, 0.999739, 0.0205775, 0.0248783, 0.0208195, -0.999475, 0.286656, 1.92764, 0.929565 )
+transform = Transform( -0.97788, -0.0439155, 0.204506, -1.49012e-08, 0.977712, 0.209952, -0.209169, 0.205308, -0.956084, 0.286656, 1.92764, 0.929565 )
 visible = false
 bone_name = "eye.L"
 
@@ -1332,7 +1393,7 @@ material/0 = null
 
 [node name="att_eyeR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999584, 0.00161912, 0.0287596, 0.00221749, 0.999782, 0.0207866, -0.0287195, 0.0208411, -0.999371, -0.284035, 1.92543, 0.928468 )
+transform = Transform( -0.994367, 0.0233136, -0.10339, -2.23517e-08, 0.975507, 0.219969, 0.105986, 0.21873, -0.970012, -0.284006, 1.92578, 0.928422 )
 visible = false
 bone_name = "eye.R"
 
@@ -1364,7 +1425,7 @@ material/0 = null
 
 [node name="att_lipL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.280847, -0.845072, 0.45495, 0.29311, 0.375858, 0.8791, -0.913899, 0.380244, 0.142141, 0.253029, 1.36924, 1.1746 )
+transform = Transform( -0.280847, -0.845072, 0.45495, 0.29311, 0.375858, 0.8791, -0.913899, 0.380244, 0.14214, 0.252416, 1.37778, 1.13846 )
 visible = false
 bone_name = "levator05.L"
 
@@ -1397,7 +1458,7 @@ material/0 = null
 
 [node name="att_lipR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.300648, 0.83421, -0.462281, -0.303694, 0.375741, 0.875551, 0.90409, 0.403626, 0.140378, -0.254526, 1.36728, 1.17362 )
+transform = Transform( -0.300648, 0.83421, -0.462281, -0.303694, 0.375741, 0.875551, 0.904091, 0.403626, 0.140378, -0.270983, 1.37518, 1.14501 )
 visible = false
 bone_name = "levator05.R"
 
@@ -1430,7 +1491,7 @@ material/0 = null
 
 [node name="att_lip_lowerL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.978413, -0.018636, -0.205819, 0.174927, 0.455621, -0.872817, 0.110041, -0.889979, -0.442525, 0.0945538, 1.18306, 1.14867 )
+transform = Transform( -0.982805, 0.00028199, -0.181696, 0.162388, 0.451048, -0.877602, 0.0817615, -0.892499, -0.443552, 0.0835129, 1.17779, 1.13499 )
 visible = false
 bone_name = "oris07.L"
 
@@ -1463,7 +1524,7 @@ material/0 = null
 
 [node name="att_lip_lowerC" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999991, -0.00304132, 0.00306833, -0.0038694, 0.94639, -0.323002, -0.00192149, -0.323012, -0.946392, 7.49987e-05, 1.18518, 1.11401 )
+transform = Transform( -0.999991, -0.00304132, 0.00306833, -0.00386939, 0.94639, -0.323003, -0.00192148, -0.323012, -0.946392, -0.00983073, 1.17469, 1.09953 )
 visible = false
 bone_name = "oris02"
 
@@ -1496,7 +1557,7 @@ material/0 = null
 
 [node name="att_lip_lowerR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.976708, 0.019044, 0.213723, -0.181909, 0.45475, -0.871844, -0.113793, -0.890416, -0.440691, -0.0945034, 1.17882, 1.14822 )
+transform = Transform( -0.970124, 0.0379472, 0.237353, -0.195465, 0.450678, -0.871024, -0.140078, -0.891879, -0.430007, -0.105283, 1.17103, 1.12928 )
 visible = false
 bone_name = "oris07.R"
 
@@ -1529,7 +1590,7 @@ material/0 = null
 
 [node name="att_lip_upperL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.146179, -0.793566, -0.590664, 0.582983, -0.551487, 0.596652, -0.799227, -0.25713, 0.543251, 0.124469, 1.36933, 1.26199 )
+transform = Transform( -0.146011, -0.793523, -0.590764, 0.585811, -0.550609, 0.5948, -0.797233, -0.259218, 0.545224, 0.124178, 1.36417, 1.26137 )
 visible = false
 bone_name = "oris03.L"
 
@@ -1562,7 +1623,7 @@ material/0 = null
 
 [node name="att_lip_upperC" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999991, -0.000882444, -0.00422921, -0.00386958, -0.252392, 0.967617, -0.00192129, 0.967624, 0.252387, -0.000996142, 1.37054, 1.29817 )
+transform = Transform( -0.999991, -0.000882437, -0.00422921, -0.00386959, -0.252392, 0.967617, -0.0019213, 0.967624, 0.252387, -0.00585958, 1.36162, 1.27834 )
 visible = false
 bone_name = "oris05"
 
@@ -1595,7 +1656,7 @@ material/0 = null
 
 [node name="att_lip_upperR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.126751, 0.793466, 0.59527, -0.606038, -0.537027, 0.586788, 0.785272, -0.28638, 0.548941, -0.126312, 1.367, 1.26114 )
+transform = Transform( -0.126918, 0.793516, 0.595169, -0.608814, -0.536071, 0.584896, 0.783143, -0.288101, 0.551116, -0.126604, 1.36186, 1.26046 )
 visible = false
 bone_name = "oris03.R"
 
@@ -1628,7 +1689,7 @@ material/0 = null
 
 [node name="att_lid_upperL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.99999, -0.00391546, 0.00182616, -0.00386958, 0.999693, 0.0244758, -0.00192156, 0.0244682, -0.999699, 0.297788, 2.02928, 1.36538 )
+transform = Transform( -1, -3.53903e-08, -3.72529e-09, -1.07102e-08, 1, 5.66244e-07, -5.96046e-08, 2.38419e-07, -1, 0.272943, 1.86771, 1.3731 )
 visible = false
 bone_name = "orbicularis03.L.end"
 
@@ -1661,7 +1722,7 @@ material/0 = null
 
 [node name="att_lid_lowerL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.99999, -0.00391544, 0.00182652, -0.00386954, 0.999693, 0.0244767, -0.00192246, 0.0244689, -0.9997, 0.3003, 1.72619, 1.34665 )
+transform = Transform( -1, -2.6077e-08, 3.65078e-07, -1.11759e-08, 1, 1.49012e-06, -9.87202e-07, 9.83477e-07, -1, 0.269723, 1.72661, 1.34622 )
 visible = false
 bone_name = "orbicularis04.L.end"
 
@@ -1694,7 +1755,7 @@ material/0 = null
 
 [node name="att_lid_upperR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.99999, -0.00391548, 0.00182584, -0.0038698, 0.999693, 0.0244762, -0.00192098, 0.0244687, -0.999699, -0.294344, 2.02271, 1.36413 )
+transform = Transform( -0.999999, -7.96281e-08, -3.29688e-07, -2.58442e-07, 1, 8.79169e-07, 4.58211e-07, 7.7486e-07, -1, -0.28798, 1.86032, 1.37347 )
 visible = false
 bone_name = "orbicularis03.R.end"
 
@@ -1727,7 +1788,7 @@ material/0 = null
 
 [node name="att_lid_lowerR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.99999, -0.00391533, 0.00182573, -0.00386971, 0.999693, 0.0244765, -0.00192004, 0.024469, -0.999699, -0.294455, 1.72389, 1.34551 )
+transform = Transform( -1, 6.56582e-08, -4.59608e-07, -1.45752e-07, 1, 1.2219e-06, 1.38627e-06, 1.04308e-06, -1, -0.291336, 1.73627, 1.35325 )
 visible = false
 bone_name = "orbicularis04.R.end"
 

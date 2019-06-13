@@ -168,30 +168,39 @@ func _on_brows_pressed():
 	load_sliders('brows')
 
 func _on_transx_value_changed(value):
+	$sliders/trans/x/val.text = str( value )
 	set_value( area_sel, 'trans', 0, value )
 
 func _on_transy_value_changed(value):
+	$sliders/trans/y/val.text = str( value )
 	set_value( area_sel, 'trans', 1, value )
 	
 func _on_transz_value_changed(value):
+	$sliders/trans/z/val.text = str( value )
 	set_value( area_sel, 'trans', 2, value )
 
 func _on_rotx_value_changed(value):
+	$sliders/rot/x/val.text = str( value )
 	set_value( area_sel, 'rot', 0, value )
 
 func _on_roty_value_changed(value):
+	$sliders/rot/y/val.text = str( value )
 	set_value( area_sel, 'rot', 1, value )
 
 func _on_rotz_value_changed(value):
+	$sliders/rot/z/val.text = str( value )
 	set_value( area_sel, 'rot', 2, value )
 
 func _on_scalex_value_changed(value):
+	$sliders/scale/x/val.text = str( value )
 	set_value( area_sel, 'scale', 0, value )
 
 func _on_scaley_value_changed(value):
+	$sliders/scale/y/val.text = str( value )
 	set_value( area_sel, 'scale', 1, value )
 
 func _on_scalez_value_changed(value):
+	$sliders/scale/z/val.text = str( value )
 	set_value( area_sel, 'scale', 2, value )
 
 func _on_btn_reset_pressed():
