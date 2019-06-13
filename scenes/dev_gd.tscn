@@ -13,7 +13,7 @@
 [ext_resource path="res://materials/tongue.material" type="Material" id=11]
 [ext_resource path="res://assets/envs/environment_sky.tres" type="Environment" id=12]
 
-[sub_resource type="Animation" id=26]
+[sub_resource type="Animation" id=15]
 
 length = 11.633
 tracks/0/type = "value"
@@ -29,47 +29,47 @@ tracks/0/keys = {
 "values": [ 0.0, 11.633 ]
 }
 
-[sub_resource type="SpatialMaterial" id=16]
+[sub_resource type="SpatialMaterial" id=2]
 
 flags_unshaded = true
 
-[sub_resource type="SphereMesh" id=17]
+[sub_resource type="SphereMesh" id=3]
 
 radial_segments = 12
 rings = 6
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=4]
 
 flags_unshaded = true
 albedo_color = Color( 1, 0, 0, 1 )
 
-[sub_resource type="CubeMesh" id=4]
+[sub_resource type="CubeMesh" id=5]
 
 size = Vector3( 1, 1, 1 )
-
-[sub_resource type="SpatialMaterial" id=5]
-
-flags_unshaded = true
-albedo_color = Color( 0, 1, 0, 1 )
 
 [sub_resource type="SpatialMaterial" id=6]
 
 flags_unshaded = true
+albedo_color = Color( 0, 1, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=7]
+
+flags_unshaded = true
 albedo_color = Color( 0, 0, 1, 1 )
 
-[sub_resource type="SpatialMaterial" id=19]
+[sub_resource type="SpatialMaterial" id=8]
 
 flags_unshaded = true
 albedo_color = Color( 1, 0, 1, 1 )
 
-[sub_resource type="SphereMesh" id=20]
+[sub_resource type="SphereMesh" id=9]
 
 radius = 2.0
 height = 4.0
 radial_segments = 12
 rings = 6
 
-[sub_resource type="ArrayMesh" id=21]
+[sub_resource type="ArrayMesh" id=10]
 
 surfaces/0 = {
 "aabb": AABB( -3.3404, -2.9867, -0.62218, 6.6808, 5.97102, 2.03455 ),
@@ -83,7 +83,7 @@ surfaces/0 = {
 "vertex_count": 6378
 }
 
-[sub_resource type="ArrayMesh" id=22]
+[sub_resource type="ArrayMesh" id=11]
 
 custom_aabb = AABB( -3, -3, -3, 6, 6, 6 )
 surfaces/0 = {
@@ -98,7 +98,7 @@ surfaces/0 = {
 "vertex_count": 578
 }
 
-[sub_resource type="ArrayMesh" id=23]
+[sub_resource type="ArrayMesh" id=12]
 
 custom_aabb = AABB( -3, -3, -3, 6, 6, 6 )
 surfaces/0 = {
@@ -113,7 +113,7 @@ surfaces/0 = {
 "vertex_count": 745
 }
 
-[sub_resource type="ArrayMesh" id=24]
+[sub_resource type="ArrayMesh" id=13]
 
 surfaces/0 = {
 "aabb": AABB( -0.310387, 1.17425, 0.680935, 0.613662, 0.34656, 0.590395 ),
@@ -127,7 +127,7 @@ surfaces/0 = {
 "vertex_count": 2218
 }
 
-[sub_resource type="ArrayMesh" id=25]
+[sub_resource type="ArrayMesh" id=14]
 
 surfaces/0 = {
 "aabb": AABB( -0.21121, 1.20172, 0.47045, 0.42242, 0.2396, 0.64185 ),
@@ -387,7 +387,6 @@ theme = ExtResource( 2 )
 min_value = -0.2
 max_value = 0.2
 step = 0.0
-ticks_on_borders = false
 
 [node name="lbl" type="Label" parent="ui/calib/sliders/trans/x"]
 margin_left = -22.0
@@ -407,7 +406,6 @@ theme = ExtResource( 2 )
 min_value = -0.2
 max_value = 0.2
 step = 0.0
-ticks_on_borders = false
 
 [node name="lbl" type="Label" parent="ui/calib/sliders/trans/y"]
 margin_left = -22.0
@@ -427,7 +425,6 @@ theme = ExtResource( 2 )
 min_value = -0.2
 max_value = 0.2
 step = 0.0
-ticks_on_borders = false
 
 [node name="lbl" type="Label" parent="ui/calib/sliders/trans/z"]
 margin_left = -22.0
@@ -455,7 +452,6 @@ theme = ExtResource( 2 )
 min_value = -1.571
 max_value = 1.571
 step = 0.0
-ticks_on_borders = false
 
 [node name="lbl" type="Label" parent="ui/calib/sliders/rot/x"]
 margin_left = -22.0
@@ -475,7 +471,6 @@ theme = ExtResource( 2 )
 min_value = -1.571
 max_value = 1.571
 step = 0.0
-ticks_on_borders = false
 
 [node name="lbl" type="Label" parent="ui/calib/sliders/rot/y"]
 margin_left = -22.0
@@ -495,7 +490,6 @@ theme = ExtResource( 2 )
 min_value = -1.571
 max_value = 1.571
 step = 0.0
-ticks_on_borders = false
 
 [node name="lbl" type="Label" parent="ui/calib/sliders/rot/z"]
 margin_left = -22.0
@@ -522,7 +516,6 @@ margin_bottom = 35.0
 theme = ExtResource( 2 )
 max_value = 5.0
 step = 0.0
-ticks_on_borders = false
 
 [node name="lbl" type="Label" parent="ui/calib/sliders/scale/x"]
 margin_left = -22.0
@@ -541,7 +534,6 @@ margin_bottom = 55.0
 theme = ExtResource( 2 )
 max_value = 5.0
 step = 0.0
-ticks_on_borders = false
 
 [node name="lbl" type="Label" parent="ui/calib/sliders/scale/y"]
 margin_left = -22.0
@@ -560,7 +552,6 @@ margin_bottom = 75.0
 theme = ExtResource( 2 )
 max_value = 5.0
 step = 0.0
-ticks_on_borders = false
 
 [node name="lbl" type="Label" parent="ui/calib/sliders/scale/z"]
 margin_left = -22.0
@@ -592,11 +583,10 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.646093, 1.2101, 0.597937 )
 visible = false
 
 [node name="json" type="Spatial" parent="."]
-editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1.09821, -0.0570413, 0, 0.0627454, 0.998372, 0.00945387, 1.70156, 1.26954 )
+transform = Transform( 1, 0, 0, 0, 1.09821, -0.0570413, 0, 0.0627454, 0.998372, -0.00206684, 1.65931, 1.27387 )
 script = ExtResource( 6 )
 json_path = "res://assets/json/mouth_open.json"
-playhead = 10.6077
+playhead = 0.957193
 center_offset = false
 brow_rotation = Vector3( 0, 0.02, 0 )
 brow_translation = Vector3( -0.07, 0, 0.1 )
@@ -609,7 +599,7 @@ nose_translation = Vector3( 0, -0.12, -0.05 )
 [node name="soundplayer" type="AudioStreamPlayer" parent="json"]
 
 [node name="animplayer" type="AnimationPlayer" parent="json"]
-anims/json = SubResource( 26 )
+anims/json = SubResource( 15 )
 
 [node name="landmarks" type="Spatial" parent="json"]
 
@@ -621,30 +611,30 @@ visible = false
 
 [node name="sphere" type="MeshInstance" parent="json/dot_tmpl"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 16 )
-mesh = SubResource( 17 )
+material_override = SubResource( 2 )
+mesh = SubResource( 3 )
 material/0 = null
 
 [node name="axis" type="Spatial" parent="json"]
 editor/display_folded = true
-transform = Transform( 0.997451, 0.0710235, 0.0069399, -0.0713209, 0.988854, 0.130688, 0.00241942, -0.13085, 0.991398, 0, 0, 0 )
+transform = Transform( 0.999287, 0.0323001, -0.0195441, -0.0327235, 0.999227, -0.0217448, 0.0188267, 0.0223689, 0.999571, 0, 0, 0 )
 
 [node name="x" type="MeshInstance" parent="json/axis"]
 transform = Transform( 0.2, 0, 0, 0, 0.004, 0, 0, 0, 0.004, 0.1, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y" type="MeshInstance" parent="json/axis"]
 transform = Transform( 0.004, 0, 0, 0, 0.2, 0, 0, 0, 0.004, 0, 0.1, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z" type="MeshInstance" parent="json/axis"]
 transform = Transform( 0.004, 0, 0, 0, 0.004, 0, 0, 0, 0.2, 0, 0, 0.1 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="sasha" type="Skeleton" parent="."]
@@ -1045,59 +1035,74 @@ mask_offset = Vector3( 0, 0.93, -0.06 )
 editor/display_folded = true
 
 [node name="lip_corner_left" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.294725, -0.84271, 0.450532, 0.249329, 0.387325, 0.887589, -0.922482, 0.373926, 0.0959571, 0.270154, 1.38599, 1.17296 )
+transform = Transform( -0.280847, -0.845072, 0.45495, 0.29311, 0.375858, 0.8791, -0.913899, 0.380244, 0.142141, 0.252416, 1.37778, 1.13846 )
 visible = false
 
 [node name="lip_corner_right" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.286759, 0.836693, -0.466598, -0.264108, 0.399135, 0.878031, 0.920877, 0.375017, 0.106521, -0.262415, 1.39012, 1.19068 )
+transform = Transform( -0.300648, 0.83421, -0.462281, -0.303694, 0.375741, 0.875551, 0.904091, 0.403626, 0.140378, -0.27249, 1.37067, 1.14362 )
 visible = false
 
 [node name="lip_lowerL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.978117, -0.0333806, -0.205363, 0.17343, 0.414453, -0.893393, 0.114936, -0.909459, -0.399594, 0.103165, 1.21563, 1.16953 )
+transform = Transform( -0.978413, -0.018636, -0.205819, 0.174927, 0.455621, -0.872817, 0.110042, -0.889979, -0.442525, 0.0868482, 1.17947, 1.13335 )
 visible = false
 
 [node name="lip_lowerC" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.999879, -0.0139105, -0.0069091, -0.0104198, 0.930645, -0.365776, 0.011518, -0.365661, -0.930677, 0.0067252, 1.21915, 1.14246 )
+transform = Transform( -0.999991, -0.00304132, 0.00306833, -0.0038694, 0.94639, -0.323002, -0.00192149, -0.323012, -0.946392, -0.00983073, 1.17469, 1.09953 )
 visible = false
 
 [node name="lip_lowerR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.976791, 0.00429573, 0.21415, -0.193219, 0.413807, -0.889624, -0.0924379, -0.910355, -0.40337, -0.0899184, 1.214, 1.18252 )
+transform = Transform( -0.976708, 0.019044, 0.213723, -0.181909, 0.45475, -0.871844, -0.113793, -0.890416, -0.440691, -0.10741, 1.16396, 1.13296 )
 visible = false
 
 [node name="lip_upperL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.160634, -0.792914, -0.587778, 0.544991, -0.567754, 0.616961, -0.822911, -0.22123, 0.523332, 0.13918, 1.40507, 1.26092 )
+transform = Transform( -0.146179, -0.793566, -0.590664, 0.582983, -0.551487, 0.596652, -0.799227, -0.25713, 0.543251, 0.123063, 1.36343, 1.24345 )
 visible = false
 
 [node name="lip_upperC" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.999879, 0.0134344, -0.00779489, -0.0104199, -0.208027, 0.978067, 0.0115182, 0.97803, 0.208142, 0.0121989, 1.40954, 1.29901 )
+transform = Transform( -0.999991, -0.000882444, -0.00422921, -0.00386958, -0.252392, 0.967617, -0.00192129, 0.967624, 0.252387, -0.00585956, 1.36162, 1.27834 )
+visible = false
 
 [node name="lip_upperC2" type="Position3D" parent="sasha/ctrls"]
 transform = Transform( -1, 1.50995e-07, -3.88152e-13, -3.45141e-08, -0.228636, 0.973512, 1.46997e-07, 0.973512, 0.228636, 0.0294126, 1.40851, 1.35191 )
+visible = false
 
 [node name="lip_upperC3" type="Position3D" parent="sasha/ctrls"]
 transform = Transform( -1, 1.50995e-07, -3.88152e-13, -3.45141e-08, -0.228636, 0.973512, 1.46997e-07, 0.973512, 0.228636, 0.0294126, 1.40851, 1.35191 )
+visible = false
 
 [node name="lip_upperR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.112285, 0.793464, 0.59817, -0.570423, -0.544379, 0.615036, 0.81364, -0.272152, 0.513737, -0.112878, 1.40819, 1.27177 )
+transform = Transform( -0.126751, 0.793466, 0.59527, -0.606038, -0.537027, 0.586788, 0.785272, -0.28638, 0.548941, -0.126312, 1.367, 1.26114 )
 visible = false
 
 [node name="browL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( 0.255502, 0.224549, 0.940369, 0.837445, -0.537444, -0.099202, 0.48312, 0.812855, -0.325364, 0.317245, 2.24468, 1.19581 )
+transform = Transform( 0.254483, 0.210269, 0.94394, 0.812775, -0.575437, -0.0909388, 0.524057, 0.790354, -0.31734, 0.31599, 2.14771, 1.27751 )
+visible = false
 
 [node name="browR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( 0.2617, -0.194519, -0.945345, -0.832056, -0.541811, -0.118853, -0.48908, 0.817682, -0.303644, -0.333285, 2.23037, 1.19171 )
+transform = Transform( 0.262777, -0.208846, -0.941984, -0.810774, -0.577059, -0.0982362, -0.523065, 0.789549, -0.320965, -0.316454, 2.14112, 1.28798 )
+visible = false
 
 [node name="lid_upperL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -1, -4.61005e-08, -1.67638e-08, -3.81842e-08, 1, 5.36442e-07, -6.33299e-08, 2.08616e-07, -1, 0.306506, 1.93298, 1.22649 )
+transform = Transform( -1, -4.61005e-08, -1.67638e-08, -3.81842e-08, 1, 5.36442e-07, -6.33299e-08, 2.08616e-07, -1, 0.276949, 1.85292, 1.28376 )
+visible = false
 
 [node name="lid_lowerL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.999999, -2.42144e-08, 3.65078e-07, -1.39698e-08, 1, 1.43424e-06, -9.81614e-07, 9.574e-07, -1, 0.307319, 1.83521, 1.24245 )
+transform = Transform( -0.999999, -2.42144e-08, 3.65078e-07, -1.39698e-08, 1, 1.43424e-06, -9.81614e-07, 9.574e-07, -1, 0.273328, 1.79274, 1.28676 )
+visible = false
 
 [node name="lid_upperR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.999999, -7.77654e-08, -3.27826e-07, -2.57511e-07, 1, 9.27597e-07, 4.56348e-07, 7.78586e-07, -1, -0.319199, 1.91915, 1.26091 )
+transform = Transform( -0.999999, -7.77654e-08, -3.27826e-07, -2.57511e-07, 1, 9.27597e-07, 4.56348e-07, 7.78586e-07, -1, -0.288011, 1.83741, 1.33554 )
+visible = false
 
 [node name="lid_lowerR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -1, 6.70552e-08, -4.58211e-07, -1.44355e-07, 1, 1.22562e-06, 1.38767e-06, 1.07661e-06, -1, -0.326475, 1.81289, 1.27251 )
+transform = Transform( -1, 6.70552e-08, -4.58211e-07, -1.44355e-07, 1, 1.22562e-06, 1.38767e-06, 1.07661e-06, -1, -0.291202, 1.77612, 1.33985 )
+visible = false
+
+[node name="eyeL" type="Position3D" parent="sasha/ctrls"]
+transform = Transform( -0.97788, -0.0439155, 0.204506, -1.86265e-08, 0.977712, 0.209953, -0.209169, 0.205308, -0.956084, 0.286656, 1.92764, 0.929565 )
+
+[node name="eyeR" type="Position3D" parent="sasha/ctrls"]
+transform = Transform( -0.994367, 0.0233136, -0.10339, -2.04891e-08, 0.975507, 0.219969, 0.105986, 0.21873, -0.970012, -0.284035, 1.92543, 0.928468 )
 
 [node name="ik_lipL" type="SkeletonIK" parent="sasha"]
 root_bone = "levator03.L"
@@ -1149,9 +1154,19 @@ root_bone = "orbicularis04.R"
 tip_bone = "orbicularis04.R.end"
 target_node = NodePath("../ctrls/lid_lowerR")
 
+[node name="ik_eyeL" type="SkeletonIK" parent="sasha"]
+root_bone = "special05.L"
+tip_bone = "eye.L"
+target_node = NodePath("../ctrls/eyeL")
+
+[node name="ik_eyeR" type="SkeletonIK" parent="sasha"]
+root_bone = "special05.R"
+tip_bone = "eye.R"
+target_node = NodePath("../ctrls/eyeR")
+
 [node name="att_head" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.999879, 0.0108805, 0.011084, 0.0104199, 0.0593001, -0.998186, -0.0115181, 0.998181, 0.0591795, 0, 1.58652, 0.344782 )
+transform = Transform( 0.999991, -0.00197449, 0.00384274, 0.00386954, 0.0137528, -0.999898, 0.00192144, 0.999904, 0.0137604, 0, 1.58652, 0.344782 )
 visible = false
 bone_name = "head"
 
@@ -1161,31 +1176,31 @@ visible = false
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_head/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_head/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_head/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_head/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_jaw" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.999879, -0.00443328, -0.0148858, 0.0104199, -0.519261, 0.854552, -0.0115181, -0.854603, -0.519154, 0.00151889, 1.60781, 0.495898 )
+transform = Transform( 0.999991, 0.00354246, -0.0024731, 0.00386954, -0.479803, 0.877368, 0.00192144, -0.877368, -0.479814, -0.000347604, 1.60091, 0.496719 )
 visible = false
 bone_name = "jaw"
 
@@ -1194,31 +1209,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_jaw/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_jaw/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_jaw/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_jaw/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_browL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.255502, 0.224549, 0.94037, 0.837445, -0.537444, -0.099202, 0.48312, 0.812855, -0.325364, 0.320008, 2.18289, 1.23065 )
+transform = Transform( 0.254483, 0.210269, 0.94394, 0.812775, -0.575437, -0.0909388, 0.524057, 0.790354, -0.317339, 0.312082, 2.1397, 1.26099 )
 visible = false
 bone_name = "oculi01.L"
 
@@ -1227,31 +1242,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_browL/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_browL/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_browL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_browL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_browR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.2617, -0.194519, -0.945345, -0.832056, -0.541811, -0.118853, -0.48908, 0.817682, -0.303644, -0.311875, 2.1763, 1.23794 )
+transform = Transform( 0.262777, -0.208846, -0.941984, -0.810774, -0.577059, -0.0982362, -0.523064, 0.789549, -0.320965, -0.319872, 2.13725, 1.25977 )
 visible = false
 bone_name = "oculi01.R"
 
@@ -1260,31 +1275,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_browR/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_browR/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_browR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_browR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_eyeL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.532796, -0.83835, -0.115323, -0.845592, 0.532766, 0.0336749, 0.0332086, 0.115457, -0.992758, 0.29179, 1.95579, 0.909589 )
+transform = Transform( -0.999641, -0.00944402, -0.0250796, -0.00996104, 0.999739, 0.0205775, 0.0248783, 0.0208195, -0.999475, 0.286656, 1.92764, 0.929565 )
 visible = false
 bone_name = "eye.L"
 
@@ -1293,31 +1308,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_eyeL/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_eyeL/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_eyeL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_eyeL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_eyeR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.535462, -0.840273, -0.0849759, -0.83606, 0.541622, -0.0874598, 0.119516, 0.0242133, -0.992538, -0.278838, 1.94984, 0.916162 )
+transform = Transform( -0.999584, 0.00161912, 0.0287596, 0.00221749, 0.999782, 0.0207866, -0.0287195, 0.0208411, -0.999371, -0.284035, 1.92543, 0.928468 )
 visible = false
 bone_name = "eye.R"
 
@@ -1325,31 +1340,31 @@ bone_name = "eye.R"
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_eyeR/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_eyeR/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_eyeR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_eyeR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lipL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.294725, -0.84271, 0.450532, 0.249329, 0.387325, 0.887589, -0.922482, 0.373926, 0.0959571, 0.265285, 1.40893, 1.18019 )
+transform = Transform( -0.280847, -0.845072, 0.45495, 0.29311, 0.375858, 0.8791, -0.913899, 0.380244, 0.142141, 0.253029, 1.36924, 1.1746 )
 visible = false
 bone_name = "levator05.L"
 
@@ -1358,31 +1373,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lipL/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lipL/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lipL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lipL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lipR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.286759, 0.836693, -0.466598, -0.264108, 0.399135, 0.878031, 0.920877, 0.375017, 0.106521, -0.242214, 1.40364, 1.18604 )
+transform = Transform( -0.300648, 0.83421, -0.462281, -0.303694, 0.375741, 0.875551, 0.90409, 0.403626, 0.140378, -0.254526, 1.36728, 1.17362 )
 visible = false
 bone_name = "levator05.R"
 
@@ -1391,31 +1406,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lipR/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lipR/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lipR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lipR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lip_lowerL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.978117, -0.0333807, -0.205363, 0.17343, 0.414453, -0.893393, 0.114936, -0.909459, -0.399594, 0.107807, 1.22074, 1.16487 )
+transform = Transform( -0.978413, -0.018636, -0.205819, 0.174927, 0.455621, -0.872817, 0.110041, -0.889979, -0.442525, 0.0945538, 1.18306, 1.14867 )
 visible = false
 bone_name = "oris07.L"
 
@@ -1424,31 +1439,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lip_lowerL/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lip_lowerL/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lip_lowerL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lip_lowerL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lip_lowerC" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999879, -0.0139105, -0.0069091, -0.0104198, 0.930645, -0.365776, 0.011518, -0.365661, -0.930677, 0.0128741, 1.22066, 1.1314 )
+transform = Transform( -0.999991, -0.00304132, 0.00306833, -0.0038694, 0.94639, -0.323002, -0.00192149, -0.323012, -0.946392, 7.49987e-05, 1.18518, 1.11401 )
 visible = false
 bone_name = "oris02"
 
@@ -1457,31 +1472,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lip_lowerC/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lip_lowerC/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lip_lowerC/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lip_lowerC/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lip_lowerR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.976791, 0.00429571, 0.21415, -0.193219, 0.413807, -0.889624, -0.092438, -0.910355, -0.40337, -0.0812059, 1.21527, 1.16712 )
+transform = Transform( -0.976708, 0.019044, 0.213723, -0.181909, 0.45475, -0.871844, -0.113793, -0.890416, -0.440691, -0.0945034, 1.17882, 1.14822 )
 visible = false
 bone_name = "oris07.R"
 
@@ -1490,31 +1505,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lip_lowerR/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lip_lowerR/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lip_lowerR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lip_lowerR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lip_upperL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.160634, -0.792914, -0.587778, 0.544991, -0.567754, 0.616961, -0.822911, -0.22123, 0.523332, 0.137871, 1.41217, 1.26919 )
+transform = Transform( -0.146179, -0.793566, -0.590664, 0.582983, -0.551487, 0.596652, -0.799227, -0.25713, 0.543251, 0.124469, 1.36933, 1.26199 )
 visible = false
 bone_name = "oris03.L"
 
@@ -1523,31 +1538,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lip_upperL/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lip_upperL/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lip_upperL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lip_upperL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lip_upperC" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999879, 0.0134344, -0.00779489, -0.0104199, -0.208027, 0.978067, 0.0115182, 0.97803, 0.208142, 0.0128791, 1.41422, 1.30694 )
+transform = Transform( -0.999991, -0.000882444, -0.00422921, -0.00386958, -0.252392, 0.967617, -0.00192129, 0.967624, 0.252387, -0.000996142, 1.37054, 1.29817 )
 visible = false
 bone_name = "oris05"
 
@@ -1556,31 +1571,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lip_upperC/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lip_upperC/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lip_upperC/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lip_upperC/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lip_upperR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.112285, 0.793464, 0.59817, -0.570424, -0.544379, 0.615036, 0.81364, -0.272152, 0.513737, -0.112878, 1.40819, 1.27177 )
+transform = Transform( -0.126751, 0.793466, 0.59527, -0.606038, -0.537027, 0.586788, 0.785272, -0.28638, 0.548941, -0.126312, 1.367, 1.26114 )
 visible = false
 bone_name = "oris03.R"
 
@@ -1589,31 +1604,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lip_upperR/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lip_upperR/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lip_upperR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lip_upperR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lid_upperL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999879, -0.01066, -0.0112962, -0.0104199, 0.999723, -0.0211036, 0.011518, -0.0209837, -0.999714, 0.307848, 2.07726, 1.34014 )
+transform = Transform( -0.99999, -0.00391546, 0.00182616, -0.00386958, 0.999693, 0.0244758, -0.00192156, 0.0244682, -0.999699, 0.297788, 2.02928, 1.36538 )
 visible = false
 bone_name = "orbicularis03.L.end"
 
@@ -1622,31 +1637,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lid_upperL/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lid_upperL/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lid_upperL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lid_upperL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lid_lowerL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999879, -0.01066, -0.0112959, -0.0104199, 0.999723, -0.0211028, 0.0115171, -0.0209829, -0.999715, 0.312258, 1.77365, 1.33519 )
+transform = Transform( -0.99999, -0.00391544, 0.00182652, -0.00386954, 0.999693, 0.0244767, -0.00192246, 0.0244689, -0.9997, 0.3003, 1.72619, 1.34665 )
 visible = false
 bone_name = "orbicularis04.L.end"
 
@@ -1655,31 +1670,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lid_lowerL/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lid_lowerL/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lid_lowerL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lid_lowerL/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lid_upperR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999879, -0.0106601, -0.0112965, -0.0104201, 0.999723, -0.0211032, 0.0115185, -0.0209831, -0.999714, -0.28419, 2.06681, 1.34705 )
+transform = Transform( -0.99999, -0.00391548, 0.00182584, -0.0038698, 0.999693, 0.0244762, -0.00192098, 0.0244687, -0.999699, -0.294344, 2.02271, 1.36413 )
 visible = false
 bone_name = "orbicularis03.R.end"
 
@@ -1688,31 +1703,31 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lid_upperR/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lid_upperR/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lid_upperR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lid_upperR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="att_lid_lowerR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999879, -0.0106599, -0.0112967, -0.01042, 0.999723, -0.0211029, 0.0115195, -0.0209828, -0.999714, -0.282431, 1.76746, 1.34204 )
+transform = Transform( -0.99999, -0.00391533, 0.00182573, -0.00386971, 0.999693, 0.0244765, -0.00192004, 0.024469, -0.999699, -0.294455, 1.72389, 1.34551 )
 visible = false
 bone_name = "orbicularis04.R.end"
 
@@ -1721,56 +1736,56 @@ editor/display_folded = true
 
 [node name="sphere" type="MeshInstance" parent="sasha/att_lid_lowerR/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
-material_override = SubResource( 19 )
-mesh = SubResource( 20 )
+material_override = SubResource( 8 )
+mesh = SubResource( 9 )
 material/0 = null
 
 [node name="x2" type="MeshInstance" parent="sasha/att_lid_lowerR/dot"]
 transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
-material_override = SubResource( 3 )
-mesh = SubResource( 4 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="y2" type="MeshInstance" parent="sasha/att_lid_lowerR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
-material_override = SubResource( 5 )
-mesh = SubResource( 4 )
+material_override = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="z2" type="MeshInstance" parent="sasha/att_lid_lowerR/dot"]
 transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
-material_override = SubResource( 6 )
-mesh = SubResource( 4 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="body" type="MeshInstance" parent="sasha"]
 material_override = ExtResource( 8 )
-mesh = SubResource( 21 )
+mesh = SubResource( 10 )
 material/0 = null
 
 [node name="eyes" type="MeshInstance" parent="sasha"]
 material_override = ExtResource( 9 )
-mesh = SubResource( 22 )
+mesh = SubResource( 11 )
 material/0 = null
 
 [node name="hairs" type="MeshInstance" parent="sasha"]
 material_override = ExtResource( 10 )
-mesh = SubResource( 23 )
+mesh = SubResource( 12 )
 material/0 = null
 
 [node name="teeth" type="MeshInstance" parent="sasha"]
 transform = Transform( 1, 0, 0, 0, 0.999535, 0.0304895, 0, -0.0304895, 0.999535, 0, 0, 0 )
 visible = false
-mesh = SubResource( 24 )
+mesh = SubResource( 13 )
 material/0 = null
 
 [node name="tongue" type="MeshInstance" parent="sasha"]
 material_override = ExtResource( 11 )
-mesh = SubResource( 25 )
+mesh = SubResource( 14 )
 material/0 = null
 
 [node name="att_face_cam" type="BoneAttachment" parent="sasha"]
-transform = Transform( 0.999879, 0.0108805, 0.011084, 0.0104199, 0.0593001, -0.998186, -0.0115181, 0.998181, 0.0591795, 0, 1.58652, 0.344782 )
+transform = Transform( 0.999991, -0.00197449, 0.00384274, 0.00386954, 0.0137528, -0.999898, 0.00192144, 0.999904, 0.0137604, 0, 1.58652, 0.344782 )
 bone_name = "head"
 
 [node name="face_cam" type="Camera" parent="sasha/att_face_cam"]
@@ -1806,4 +1821,4 @@ environment = ExtResource( 12 )
 [connection signal="value_changed" from="ui/calib/sliders/scale/x" to="ui/calib" method="_on_scalex_value_changed"]
 [connection signal="value_changed" from="ui/calib/sliders/scale/y" to="ui/calib" method="_on_scaley_value_changed"]
 [connection signal="value_changed" from="ui/calib/sliders/scale/z" to="ui/calib" method="_on_scalez_value_changed"]
-[connection signal="animation_finished" from="json/animplayer" to="json" method="_on_animplayer_animation_finished"]
+[connection signal="animation_finished" from="json/animplayer" to="." method="_on_animplayer_animation_finished"]

@@ -7,8 +7,8 @@ export (bool) var enable_ik = false setget _enable_ik
 export (String) var disable_ik = ''
 
 enum POS_TYPE {
+	DEFAULT,
 	DELTA,
-	LOCAL, # not used
 	GLOBAL
 }
 
@@ -104,6 +104,16 @@ func prepare_iks():
 		'ctrl': get_node( "ctrls/lid_lowerR" ),
 		'type': POS_TYPE.GLOBAL
 	}
+	iks[ 'eye_left' ] = {
+		'bid': find_bone( 'eye.L' ),
+		'ctrl': get_node( "ctrls/eyeL" ),
+		'type': POS_TYPE.DEFAULT
+	}
+	iks[ 'eye_right' ] = {
+		'bid': find_bone( 'eye.R' ),
+		'ctrl': get_node( "ctrls/eyeR" ),
+		'type': POS_TYPE.DEFAULT
+	}
 	
 	var headt = get_bone_global_pose( find_bone( 'head' ) )
 	var headti = headt.affine_inverse()
@@ -148,13 +158,23 @@ func _process(delta):
 	t = get_bone_global_pose( bid )
 	json.translation = t.xform( mask_offset )
 	
-	bid = find_bone( "eye.R" )
-	q.set_euler( json.get_gaze(0) )
-	set_bone_pose( bid, Transform(q) )
+	q.set_euler( Vector3(0,PI,0) )
+	t = headt * iks[ 'eye_left' ]['bone_glob'] # * Transform(q)
+	v = t.origin
+	iks[ 'eye_left' ]['ctrl'].global_transform = Transform( json.get_gaze(0) * q )
+	iks[ 'eye_left' ]['ctrl'].global_transform.origin = v
 	
-	bid = find_bone( "eye.L" )
-	q.set_euler( json.get_gaze(1) )
-	set_bone_pose( bid, Transform(q) )
+	t = headt * iks[ 'eye_right' ]['bone_glob'] # * Transform(q)
+	v = t.origin
+	iks[ 'eye_right' ]['ctrl'].global_transform = Transform( json.get_gaze(1) * q )
+	iks[ 'eye_right' ]['ctrl'].global_transform.origin = v
+	
+#	bid = find_bone( "eye.R" )
+#	q.set_euler( json.get_gaze(0) )
+#	set_bone_pose( bid, Transform(q) )
+#	bid = find_bone( "eye.L" )
+#	q.set_euler( json.get_gaze(1) )
+#	set_bone_pose( bid, Transform(q) )
 	
 #	var diff = get_node( "../tester" ).global_transform.origin - tester_pos
 	
@@ -169,5 +189,3 @@ func _process(delta):
 				ik['ctrl'].translation += t.origin
 			POS_TYPE.GLOBAL:
 				ik['ctrl'].global_transform.origin = json.get_global( k )
-			POS_TYPE.LOCAL:
-				print( "????????" )

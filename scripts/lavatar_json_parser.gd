@@ -340,7 +340,19 @@ func load_data():
 
 func load_sound():
 	
-	if not 'sound' in animation or animation['sound']['path'] == null:
+	if not 'sound' in animation:
+		return
+	if not 'path' in animation['sound']:
+		print( "no path to sound file in this json" )
+		return
+	if not 'bits_per_sample' in animation['sound']:
+		print( "no bits_per_sample info in this json" )
+		return
+	if not 'sample_rate' in animation['sound']:
+		print( "no sample_rate info in this json" )
+		return
+	if not 'channels' in animation['sound']:
+		print( "no channels info in this json" )
 		return
 	
 	var file = File.new()
@@ -350,10 +362,18 @@ func load_sound():
 	var buffer = file.get_buffer(file.get_len())
 	file.close()
 	var stream = AudioStreamSample.new()
-	stream.format = AudioStreamSample.FORMAT_16_BITS
+	animation['sound']['bits_per_sample'] = int(animation['sound']['bits_per_sample'])
+	match animation['sound']['bits_per_sample']:
+		8:
+			stream.format = AudioStreamSample.FORMAT_8_BITS
+		16:
+			stream.format = AudioStreamSample.FORMAT_16_BITS
+		_:
+			print( "unsupported format '" + str(animation['sound']['bits_per_sample']) + "', awaits serious sound issues..." )
+		
 	stream.data = buffer
-	stream.mix_rate = 22050
-	stream.stereo = false
+	stream.mix_rate = animation['sound']['sample_rate']
+	stream.stereo = animation['sound']['channels'] == 2
 	$soundplayer.stream = stream
 
 func load_video():
@@ -392,8 +412,6 @@ func load_debug():
 	
 func load_animplayer():
 	
-	$animplayer.disconnect( "animation_started", self, "play_sound" )
-	
 	var a = Animation.new()
 	a.length = animation['duration']
 	
@@ -404,7 +422,6 @@ func load_animplayer():
 	a.track_insert_key( ti, animation['duration'], animation['duration'] )
 	
 	$animplayer.add_animation( "json", a )
-	$animplayer.connect( "animation_started", self, "play_sound" )
 
 func transform_aabb( aabb ):
 	var l 
@@ -535,9 +552,11 @@ func _ready():
 	pass # Replace with function body.
 
 #warning-ignore:unused_argument
-func play_sound( n ):
-	if playhead == 0:
-		$soundplayer.play( playhead )
+func play_sound():
+	
+	if not 'sound' in animation or animation['sound']['path'] == null:
+		return null
+	$soundplayer.play()
 
 #warning-ignore:unused_argument
 func _process(delta):
@@ -546,10 +565,6 @@ func _process(delta):
 	if prev_playhead != playhead:
 		load_frame()
 		prev_playhead = playhead
-
-func _on_animplayer_animation_finished(anim_name):
-	if anim_name == 'json':
-		$animplayer.play( 'json' )
 
 ############# GETTERS #############
 
@@ -571,8 +586,10 @@ func get_pose_euler():
 
 func get_gaze( i ):
 	if current_frame == null or i < 0 or i >= len( current_frame['gazes'] ):
-		return Vector3()
-	return current_frame['gazes'][i]
+		return Quat()
+	var q = Quat()
+	q.set_euler( $gazes.get_child( i ).global_transform.basis.get_euler() )
+	return q
 
 func get_delta( group ):
 	

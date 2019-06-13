@@ -13,7 +13,8 @@ func calibration_enable( b ):
 		$ui/calib.reset()
 		$ui/calib.show()
 	else:
-		$sasha._enable_ik( false )
+		if !playing:
+			$sasha._enable_ik( false )
 		$cam.make_current()
 		$ui/main.show()
 		$ui/calib.hide()
@@ -23,7 +24,25 @@ func _ready():
 	
 func _process(delta):
 	pass
+
+func change_play( b ):
 	
+	playing = b
+	
+	if playing:
+		playing = $json.is_animation_valid()
+	
+	if playing:
+		$ui/main/btn_play.text = 'pause'
+		$sasha._enable_ik( true )
+		$json/animplayer.play("json")
+		$json/soundplayer.play(0)
+	else:
+		$ui/main/btn_play.text = 'play'
+		$sasha._enable_ik( false )
+		$json/animplayer.stop()
+		$json/soundplayer.stop()
+
 func _on_load_pressed():
 	$ui/json_load.popup()
 	$ui/json_load.rect_position = Vector2( 10,10 )
@@ -31,6 +50,8 @@ func _on_load_pressed():
 
 func _on_json_load_file_selected(path):
 	$ui/main/btn_load/json_path.text = path
+	change_play( false )
+	$json.set_json_path( path )
 
 func _on_json_load_hide():
 	$ui/main/btn_load.pressed = false
@@ -43,17 +64,7 @@ func _on_calib_validate_pressed():
 	calibration_enable( false )
 
 func _on_play_pressed():
-	
-	playing = !playing
-	
-	if playing:
-		playing = $json.is_animation_valid()
-	
-	if playing:
-		$ui/main/btn_play.text = 'pause'
-		$sasha._enable_ik( true )
-		$json/animplayer.play("json")
-	else:
-		$ui/main/btn_play.text = 'play'
-		$sasha._enable_ik( false )
-		$json/animplayer.stop()
+	change_play( !playing )
+
+func _on_animplayer_animation_finished( anim_name ):
+	change_play( true )

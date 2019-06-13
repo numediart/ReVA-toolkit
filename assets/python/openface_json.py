@@ -1,10 +1,10 @@
 import lavatar.lavatar as lavatar
 from openface_configuration import *
 
-CSV_PATH = "../openface/mouth_open.csv"
-WAV_PATH = ""
-VIDEO_PATH = "/home/frankiezafe/projects/avatar-numediart/openface_data/mouth_open/mouth_open.ogv"
-JSON_PATH = "../json/mouth_open.json"
+CSV_PATH = "/home/frankiezafe/projects/avatar-numediart/openface_data/sound_test/sound_test.csv"
+WAV_PATH = "/home/frankiezafe/projects/avatar-numediart/openface_data/sound_test/sound_test_ok.wav"
+VIDEO_PATH = "/home/frankiezafe/projects/avatar-numediart/openface_data/sound_test/openface_with_sound.ogv"
+JSON_PATH = "../json/sound_test.json"
 
 '''
 CSV_PATH = "../openface/laugh_1_300.csv"

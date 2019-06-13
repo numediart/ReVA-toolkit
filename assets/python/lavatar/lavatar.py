@@ -335,7 +335,7 @@ def generate_aabb( frame = None, center = None ):
 	return { 'center':barycenter, 'min':aabb_min, 'max':aabb_max, 'size':aabb_size }
 
 def generate_sound_ref():
-	return { 'path': None, 'codec': None }
+	return { 'path': None, 'bits_per_sample': 16, 'sample_rate': 44100, 'channels': 2 }
 
 def generate_video_ref():
 	return { 'path': None, 'width': None, 'height': None }
