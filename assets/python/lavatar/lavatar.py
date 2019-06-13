@@ -84,7 +84,7 @@ def get_optional_keys( usage = 'index' ):
 	elif usage == 'frame':
 		return [ ('pose_euler',None,list), ('gazes',None,list), ('au',None,list) ]
 	elif usage == 'animation':
-		return [('action_unit_count',0,int), ('gaze_count',-1,int), ('sound',None,dict), ('fields',None,list), ('aabb',None,dict), ('aabb_total',None,dict), ('scale',1.0,float)]
+		return [('action_unit_count',0,int), ('gaze_count',-1,int), ('sound',None,dict), ('video',None,dict), ('fields',None,list), ('aabb',None,dict), ('aabb_total',None,dict), ('scale',1.0,float)]
 	elif usage == 'animation_frame':
 		return [('pose_euler',None,list), ('au',None,list), ('gazes',None,list)]
 	elif usage == 'animation_frame_interpolation':
@@ -337,6 +337,9 @@ def generate_aabb( frame = None, center = None ):
 def generate_sound_ref():
 	return { 'path': None, 'codec': None }
 
+def generate_video_ref():
+	return { 'path': None, 'width': None, 'height': None }
+
 def generate_structure():
 	
 	out = {}
@@ -374,6 +377,7 @@ def pack_animation( frames, indices ):
 	animation['action_unit_count'] = len(indices['au'])
 	animation['gaze_count'] = len(indices['gazes'])
 	animation['sound'] = generate_sound_ref()
+	animation['video'] = generate_video_ref()
 	animation['fields'] = []
 	for k in indices.keys():
 		if k == 'valid' or k == 'all_indices':
@@ -543,11 +547,28 @@ def add_sound( anim, sound_path ):
 		return
 	
 	if not os.path.exists( sound_path ):
-		print( "lavatar::add_sound, file '%s' no found on the disk, check your path" % sound_path )
+		print( "lavatar::add_sound, file '%s' not found on the disk, check your path" % sound_path )
 		return
 	
 	abs_path = os.path.abspath(sound_path)
 	anim['sound']['path'] = abs_path
+
+def add_video( anim, video_path ):
+	
+	if not validate_animation( anim ):
+		print( "lavatar::add_video, animation is not valid" )
+		return
+	
+	if not 'video' in anim.keys():
+		print( "lavatar::add_video, no video slot in this animation, use optional params" )
+		return
+	
+	if not os.path.exists( video_path ):
+		print( "lavatar::add_video, file '%s' not found on the disk, check your path" % video_path )
+		return
+	
+	abs_path = os.path.abspath(video_path)
+	anim['video']['path'] = abs_path
 
 '''
 ## PLAYBACK ##

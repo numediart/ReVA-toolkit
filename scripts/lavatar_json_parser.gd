@@ -340,7 +340,7 @@ func load_data():
 
 func load_sound():
 	
-	if not 'sound' in animation:
+	if not 'sound' in animation or animation['sound']['path'] == null:
 		return
 	
 	var file = File.new()
@@ -355,6 +355,16 @@ func load_sound():
 	stream.mix_rate = 22050
 	stream.stereo = false
 	$soundplayer.stream = stream
+
+func load_video():
+	
+	if not 'video' in animation or animation['video']['path'] == null:
+		return
+	
+	var player = get_node( "../ui/vid" )
+	if player != null:
+		player.stream.set_file( animation['video']['path'] )
+		print( animation['video']['path'] )
 
 func load_debug():
 	
@@ -426,6 +436,7 @@ func load_animation():
 	load_structure()
 	load_data()
 	load_sound()
+	load_video()
 	load_debug()
 	load_animplayer()
 	load_frame()

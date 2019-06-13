@@ -3,6 +3,7 @@ from openface_configuration import *
 
 CSV_PATH = "../openface/mouth_open.csv"
 WAV_PATH = ""
+VIDEO_PATH = "/home/frankiezafe/projects/avatar-numediart/openface_data/mouth_open/mouth_open.ogv"
 JSON_PATH = "../json/mouth_open.json"
 
 '''
@@ -39,4 +40,5 @@ load_csv( CSV_PATH )
 animation = lavatar.pack_animation( frames, indices )
 lavatar.add_structure( animation, STRUCTURE )
 lavatar.add_sound( animation, WAV_PATH )
+lavatar.add_video( animation, VIDEO_PATH )
 lavatar.save_animation_json( animation, JSON_PATH )

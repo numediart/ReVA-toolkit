@@ -16,8 +16,10 @@ _global_script_class_icons={
 [application]
 
 config/name="Laughing avatar"
+run/main_scene="res://scenes/dev_gd.tscn"
 config/icon="res://icon.png"
 
 [rendering]
 
+quality/filters/msaa=2
 environment/default_environment="res://default_env.tres"
