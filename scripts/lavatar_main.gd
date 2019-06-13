@@ -1,5 +1,7 @@
 extends Spatial
 
+var playing = false
+
 func calibration_enable( b ):
 	
 	$json.visible = b
@@ -40,6 +42,18 @@ func _on_calibration_pressed():
 func _on_calib_validate_pressed():
 	calibration_enable( false )
 
-
-func _on_rotx_value_changed(value):
-	pass # Replace with function body.
+func _on_play_pressed():
+	
+	playing = !playing
+	
+	if playing:
+		playing = $json.is_animation_valid()
+	
+	if playing:
+		$ui/main/btn_play.text = 'pause'
+		$sasha._enable_ik( true )
+		$json/animplayer.play("json")
+	else:
+		$ui/main/btn_play.text = 'play'
+		$sasha._enable_ik( false )
+		$json/animplayer.stop()

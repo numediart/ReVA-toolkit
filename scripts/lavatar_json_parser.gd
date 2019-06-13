@@ -547,6 +547,10 @@ func _process(delta):
 		load_frame()
 		prev_playhead = playhead
 
+func _on_animplayer_animation_finished(anim_name):
+	if anim_name == 'json':
+		$animplayer.play( 'json' )
+
 ############# GETTERS #############
 
 func get_center():
@@ -602,3 +606,6 @@ func get_video():
 		return null
 	
 	return  animation['video']['path']
+
+func is_animation_valid():
+	return len(animation) > 0

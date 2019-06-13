@@ -152,12 +152,35 @@ __meta__ = {
 
 [node name="main" type="Node2D" parent="ui"]
 editor/display_folded = true
-visible = false
 
-[node name="btn_load" type="Button" parent="ui/main"]
+[node name="btn_play" type="Button" parent="ui/main"]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 103.0
+margin_bottom = 42.0
+focus_mode = 0
+theme = ExtResource( 2 )
+toggle_mode = true
+enabled_focus_mode = 0
+text = "play"
+flat = true
+
+[node name="btn_calibration" type="Button" parent="ui/main"]
 margin_left = 120.0
 margin_top = 10.0
-margin_right = 210.0
+margin_right = 203.0
+margin_bottom = 42.0
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "calibration"
+flat = true
+
+[node name="btn_load" type="Button" parent="ui/main"]
+editor/display_folded = true
+margin_left = 220.0
+margin_top = 10.0
+margin_right = 310.0
 margin_bottom = 40.0
 focus_mode = 0
 theme = ExtResource( 2 )
@@ -173,17 +196,6 @@ margin_bottom = 26.0
 theme = ExtResource( 2 )
 text = "res://assets/json/mouth_open.json"
 
-[node name="btn_calibration" type="Button" parent="ui/main"]
-margin_left = 20.0
-margin_top = 10.0
-margin_right = 103.0
-margin_bottom = 42.0
-focus_mode = 0
-theme = ExtResource( 2 )
-enabled_focus_mode = 0
-text = "calibration"
-flat = true
-
 [node name="json_load" type="FileDialog" parent="ui"]
 margin_left = -100.0
 margin_right = 224.0
@@ -197,6 +209,8 @@ mode = 0
 show_hidden_files = true
 
 [node name="calib" type="Node2D" parent="ui"]
+editor/display_folded = true
+visible = false
 script = ExtResource( 3 )
 
 [node name="btn_validate" type="Button" parent="ui/calib"]
@@ -579,10 +593,10 @@ visible = false
 
 [node name="json" type="Spatial" parent="."]
 editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1.09821, -0.0570413, 0, 0.0627454, 0.998372, 0.0124131, 1.69486, 1.27031 )
+transform = Transform( 1, 0, 0, 0, 1.09821, -0.0570413, 0, 0.0627454, 0.998372, 0.00945387, 1.70156, 1.26954 )
 script = ExtResource( 6 )
 json_path = "res://assets/json/mouth_open.json"
-playhead = 11.633
+playhead = 10.6077
 center_offset = false
 brow_rotation = Vector3( 0, 0.02, 0 )
 brow_translation = Vector3( -0.07, 0, 0.1 )
@@ -613,7 +627,7 @@ material/0 = null
 
 [node name="axis" type="Spatial" parent="json"]
 editor/display_folded = true
-transform = Transform( 0.996465, 0.0818642, 0.0188902, -0.0834215, 0.990774, 0.106796, -0.00997318, -0.107994, 0.9941, 0, 0, 0 )
+transform = Transform( 0.997451, 0.0710235, 0.0069399, -0.0713209, 0.988854, 0.130688, 0.00241942, -0.13085, 0.991398, 0, 0, 0 )
 
 [node name="x" type="MeshInstance" parent="json/axis"]
 transform = Transform( 0.2, 0, 0, 0, 0.004, 0, 0, 0, 0.004, 0.1, 0, 0 )
@@ -873,12 +887,12 @@ bones/47/name = "oris06"
 bones/47/parent = 42
 bones/47/rest = Transform( 1, -6.29705e-07, 7.52679e-06, -7.55158e-06, -0.0634753, 0.997983, -1.5067e-07, -0.997983, -0.0634754, -1.8602e-10, -2.46316e-05, -1.52248 )
 bones/47/enabled = true
-bones/47/bound_children = [ NodePath("att_lip_upperC") ]
+bones/47/bound_children = [  ]
 bones/48/name = "oris05"
 bones/48/parent = 47
 bones/48/rest = Transform( 1, -6.46289e-10, 1.39891e-08, -6.52526e-10, 0.995699, 0.0926465, -1.39888e-08, -0.0926464, 0.995699, 3.07823e-13, 1.98185e-06, -0.0427275 )
 bones/48/enabled = true
-bones/48/bound_children = [  ]
+bones/48/bound_children = [ NodePath("att_lip_upperC") ]
 bones/49/name = "special03"
 bones/49/parent = 14
 bones/49/rest = Transform( -1, 3.25047e-06, -2.99742e-11, -3.78949e-08, -0.0116676, -0.999932, -3.25025e-06, -0.999932, 0.0116675, 0, 0.152121, -0.0122941 )
@@ -1031,54 +1045,59 @@ mask_offset = Vector3( 0, 0.93, -0.06 )
 editor/display_folded = true
 
 [node name="lip_corner_left" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.298825, -0.842581, 0.448066, 0.25509, 0.381908, 0.888299, -0.919583, 0.379743, 0.10081, 0.27783, 1.38945, 1.16705 )
+transform = Transform( -0.294725, -0.84271, 0.450532, 0.249329, 0.387325, 0.887589, -0.922482, 0.373926, 0.0959571, 0.270154, 1.38599, 1.17296 )
 visible = false
 
 [node name="lip_corner_right" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.282612, 0.836769, -0.468985, -0.271711, 0.399061, 0.875742, 0.919947, 0.374925, 0.114579, -0.267182, 1.39411, 1.18088 )
+transform = Transform( -0.286759, 0.836693, -0.466598, -0.264108, 0.399135, 0.878031, 0.920877, 0.375017, 0.106521, -0.262415, 1.39012, 1.19068 )
 visible = false
 
 [node name="lip_lowerL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.978241, -0.0379582, -0.203973, 0.169471, 0.420948, -0.891113, 0.119687, -0.906291, -0.405354, 0.108802, 1.21154, 1.14753 )
+transform = Transform( -0.978117, -0.0333806, -0.205363, 0.17343, 0.414453, -0.893393, 0.114936, -0.909459, -0.399594, 0.103165, 1.21563, 1.16953 )
 visible = false
 
 [node name="lip_lowerC" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.999794, -0.0181657, -0.00909712, -0.0136896, 0.93323, -0.359018, 0.0150116, -0.358821, -0.933285, 0.00664475, 1.21423, 1.11886 )
+transform = Transform( -0.999879, -0.0139105, -0.0069091, -0.0104198, 0.930645, -0.365776, 0.011518, -0.365661, -0.930677, 0.0067252, 1.21915, 1.14246 )
 visible = false
 
 [node name="lip_lowerR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.976501, -0.000283437, 0.21551, -0.195654, 0.420428, -0.88598, -0.0903549, -0.907327, -0.410601, -0.0953468, 1.20884, 1.15761 )
+transform = Transform( -0.976791, 0.00429573, 0.21415, -0.193219, 0.413807, -0.889624, -0.0924379, -0.910355, -0.40337, -0.0899184, 1.214, 1.18252 )
 visible = false
 
 [node name="lip_upperL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.165312, -0.791905, -0.58784, 0.550447, -0.568654, 0.611262, -0.818341, -0.222527, 0.529907, 0.146274, 1.40006, 1.25163 )
+transform = Transform( -0.160634, -0.792914, -0.587778, 0.544991, -0.567754, 0.616961, -0.822911, -0.22123, 0.523332, 0.13918, 1.40507, 1.26092 )
 visible = false
 
 [node name="lip_upperC" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.999794, 0.0165912, -0.0117258, -0.0136898, -0.123696, 0.992225, 0.0150118, 0.992181, 0.123898, 0.0141252, 1.44715, 1.29552 )
-visible = false
+transform = Transform( -0.999879, 0.0134344, -0.00779489, -0.0104199, -0.208027, 0.978067, 0.0115182, 0.97803, 0.208142, 0.0121989, 1.40954, 1.29901 )
+
+[node name="lip_upperC2" type="Position3D" parent="sasha/ctrls"]
+transform = Transform( -1, 1.50995e-07, -3.88152e-13, -3.45141e-08, -0.228636, 0.973512, 1.46997e-07, 0.973512, 0.228636, 0.0294126, 1.40851, 1.35191 )
+
+[node name="lip_upperC3" type="Position3D" parent="sasha/ctrls"]
+transform = Transform( -1, 1.50995e-07, -3.88152e-13, -3.45141e-08, -0.228636, 0.973512, 1.46997e-07, 0.973512, 0.228636, 0.0294126, 1.40851, 1.35191 )
 
 [node name="lip_upperR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.107557, 0.794197, 0.598065, -0.57668, -0.539855, 0.613187, 0.809859, -0.278941, 0.516064, -0.108982, 1.40109, 1.27084 )
+transform = Transform( -0.112285, 0.793464, 0.59817, -0.570423, -0.544379, 0.615036, 0.81364, -0.272152, 0.513737, -0.112878, 1.40819, 1.27177 )
 visible = false
 
 [node name="browL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( 0.254588, 0.229166, 0.939503, 0.834719, -0.542623, -0.0938359, 0.488291, 0.808112, -0.329433, 0.322629, 2.20367, 1.204 )
+transform = Transform( 0.255502, 0.224549, 0.940369, 0.837445, -0.537444, -0.099202, 0.48312, 0.812855, -0.325364, 0.317245, 2.24468, 1.19581 )
 
 [node name="browR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( 0.26257, -0.189866, -0.94605, -0.827639, -0.54836, -0.119654, -0.496058, 0.814403, -0.301124, -0.325248, 2.18218, 1.20858 )
+transform = Transform( 0.2617, -0.194519, -0.945345, -0.832056, -0.541811, -0.118853, -0.48908, 0.817682, -0.303644, -0.333285, 2.23037, 1.19171 )
 
 [node name="lid_upperL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -1, -4.61005e-08, -1.67638e-08, -3.81842e-08, 1, 5.36442e-07, -6.33299e-08, 2.08616e-07, -1, 0.307291, 1.9325, 1.24274 )
+transform = Transform( -1, -4.61005e-08, -1.67638e-08, -3.81842e-08, 1, 5.36442e-07, -6.33299e-08, 2.08616e-07, -1, 0.306506, 1.93298, 1.22649 )
 
 [node name="lid_lowerL" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.999999, -2.42144e-08, 3.65078e-07, -1.39698e-08, 1, 1.43424e-06, -9.81614e-07, 9.574e-07, -1, 0.304479, 1.85001, 1.25575 )
+transform = Transform( -0.999999, -2.42144e-08, 3.65078e-07, -1.39698e-08, 1, 1.43424e-06, -9.81614e-07, 9.574e-07, -1, 0.307319, 1.83521, 1.24245 )
 
 [node name="lid_upperR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.999999, -7.77654e-08, -3.27826e-07, -2.57511e-07, 1, 9.27597e-07, 4.56348e-07, 7.78586e-07, -1, -0.318434, 1.91203, 1.2754 )
+transform = Transform( -0.999999, -7.77654e-08, -3.27826e-07, -2.57511e-07, 1, 9.27597e-07, 4.56348e-07, 7.78586e-07, -1, -0.319199, 1.91915, 1.26091 )
 
 [node name="lid_lowerR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -1, 6.70552e-08, -4.58211e-07, -1.44355e-07, 1, 1.22562e-06, 1.38767e-06, 1.07661e-06, -1, -0.326114, 1.82653, 1.2891 )
+transform = Transform( -1, 6.70552e-08, -4.58211e-07, -1.44355e-07, 1, 1.22562e-06, 1.38767e-06, 1.07661e-06, -1, -0.326475, 1.81289, 1.27251 )
 
 [node name="ik_lipL" type="SkeletonIK" parent="sasha"]
 root_bone = "levator03.L"
@@ -1090,15 +1109,15 @@ root_bone = "levator03.R"
 tip_bone = "levator05.R"
 target_node = NodePath("../ctrls/lip_corner_right")
 
+[node name="ik_lip_upperC" type="SkeletonIK" parent="sasha"]
+root_bone = "special01"
+tip_bone = "oris05"
+target_node = NodePath("../ctrls/lip_upperC")
+
 [node name="ik_lip_lowerC" type="SkeletonIK" parent="sasha"]
 root_bone = "jaw"
 tip_bone = "oris02"
 target_node = NodePath("../ctrls/lip_lowerC")
-
-[node name="ik_lip_upperC" type="SkeletonIK" parent="sasha"]
-root_bone = "special01"
-tip_bone = "oris06"
-target_node = NodePath("../ctrls/lip_upperC")
 
 [node name="ik_browL" type="SkeletonIK" parent="sasha"]
 root_bone = "temporalis01.L"
@@ -1132,7 +1151,7 @@ target_node = NodePath("../ctrls/lid_lowerR")
 
 [node name="att_head" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.999794, 0.0142798, 0.0144515, 0.0136897, 0.0520739, -0.99855, -0.0150116, 0.998541, 0.0518677, 0, 1.58652, 0.344782 )
+transform = Transform( 0.999879, 0.0108805, 0.011084, 0.0104199, 0.0593001, -0.998186, -0.0115181, 0.998181, 0.0591795, 0, 1.58652, 0.344782 )
 visible = false
 bone_name = "head"
 
@@ -1166,7 +1185,7 @@ material/0 = null
 
 [node name="att_jaw" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.999794, -0.00586285, -0.0194521, 0.0136897, -0.513044, 0.858253, -0.0150116, -0.858342, -0.512859, 0.00199459, 1.60672, 0.496043 )
+transform = Transform( 0.999879, -0.00443328, -0.0148858, 0.0104199, -0.519261, 0.854552, -0.0115181, -0.854603, -0.519154, 0.00151889, 1.60781, 0.495898 )
 visible = false
 bone_name = "jaw"
 
@@ -1199,7 +1218,7 @@ material/0 = null
 
 [node name="att_browL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.254588, 0.229166, 0.939503, 0.834719, -0.542623, -0.093836, 0.488291, 0.808112, -0.329433, 0.321303, 2.17745, 1.23383 )
+transform = Transform( 0.255502, 0.224549, 0.94037, 0.837445, -0.537444, -0.099202, 0.48312, 0.812855, -0.325364, 0.320008, 2.18289, 1.23065 )
 visible = false
 bone_name = "oculi01.L"
 
@@ -1232,7 +1251,7 @@ material/0 = null
 
 [node name="att_browR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( 0.26257, -0.189866, -0.946049, -0.827639, -0.54836, -0.119654, -0.496058, 0.814403, -0.301124, -0.310526, 2.16879, 1.24332 )
+transform = Transform( 0.2617, -0.194519, -0.945345, -0.832056, -0.541811, -0.118853, -0.48908, 0.817682, -0.303644, -0.311875, 2.1763, 1.23794 )
 visible = false
 bone_name = "oculi01.R"
 
@@ -1265,7 +1284,7 @@ material/0 = null
 
 [node name="att_eyeL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.543215, -0.821642, -0.172694, -0.839321, 0.536673, 0.0867349, 0.0214154, 0.192061, -0.98115, 0.292649, 1.9526, 0.911218 )
+transform = Transform( -0.532796, -0.83835, -0.115323, -0.845592, 0.532766, 0.0336749, 0.0332086, 0.115457, -0.992758, 0.29179, 1.95579, 0.909589 )
 visible = false
 bone_name = "eye.L"
 
@@ -1298,7 +1317,7 @@ material/0 = null
 
 [node name="att_eyeR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.532226, -0.841469, -0.0930789, -0.830432, 0.540282, -0.135936, 0.164676, 0.00494664, -0.986336, -0.27793, 1.94478, 0.919785 )
+transform = Transform( -0.535462, -0.840273, -0.0849759, -0.83606, 0.541622, -0.0874598, 0.119516, 0.0242133, -0.992538, -0.278838, 1.94984, 0.916162 )
 visible = false
 bone_name = "eye.R"
 
@@ -1330,7 +1349,7 @@ material/0 = null
 
 [node name="att_lipL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.298825, -0.842581, 0.448066, 0.25509, 0.381908, 0.888299, -0.919583, 0.379743, 0.10081, 0.268845, 1.40371, 1.17792 )
+transform = Transform( -0.294725, -0.84271, 0.450532, 0.249329, 0.387325, 0.887589, -0.922482, 0.373926, 0.0959571, 0.265285, 1.40893, 1.18019 )
 visible = false
 bone_name = "levator05.L"
 
@@ -1363,7 +1382,7 @@ material/0 = null
 
 [node name="att_lipR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.282612, 0.836769, -0.468985, -0.271711, 0.399061, 0.875742, 0.919947, 0.374925, 0.114579, -0.23861, 1.39676, 1.18554 )
+transform = Transform( -0.286759, 0.836693, -0.466598, -0.264108, 0.399135, 0.878031, 0.920877, 0.375017, 0.106521, -0.242214, 1.40364, 1.18604 )
 visible = false
 bone_name = "levator05.R"
 
@@ -1396,7 +1415,7 @@ material/0 = null
 
 [node name="att_lip_lowerL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.978241, -0.0379582, -0.203973, 0.169471, 0.420948, -0.891113, 0.119687, -0.906291, -0.405354, 0.111908, 1.21513, 1.16179 )
+transform = Transform( -0.978117, -0.0333807, -0.205363, 0.17343, 0.414453, -0.893393, 0.114936, -0.909459, -0.399594, 0.107807, 1.22074, 1.16487 )
 visible = false
 bone_name = "oris07.L"
 
@@ -1429,7 +1448,7 @@ material/0 = null
 
 [node name="att_lip_lowerC" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999794, -0.0181657, -0.00909712, -0.0136896, 0.93323, -0.359018, 0.0150116, -0.358821, -0.933285, 0.016857, 1.215, 1.12867 )
+transform = Transform( -0.999879, -0.0139105, -0.0069091, -0.0104198, 0.930645, -0.365776, 0.011518, -0.365661, -0.930677, 0.0128741, 1.22066, 1.1314 )
 visible = false
 bone_name = "oris02"
 
@@ -1462,7 +1481,7 @@ material/0 = null
 
 [node name="att_lip_lowerR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.976501, -0.00028345, 0.21551, -0.195654, 0.420428, -0.88598, -0.0903549, -0.907327, -0.410601, -0.0770766, 1.20904, 1.16468 )
+transform = Transform( -0.976791, 0.00429571, 0.21415, -0.193219, 0.413807, -0.889624, -0.092438, -0.910355, -0.40337, -0.0812059, 1.21527, 1.16712 )
 visible = false
 bone_name = "oris07.R"
 
@@ -1495,7 +1514,7 @@ material/0 = null
 
 [node name="att_lip_upperL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.165312, -0.791906, -0.58784, 0.550447, -0.568654, 0.611262, -0.818341, -0.222527, 0.529907, 0.141742, 1.40589, 1.26739 )
+transform = Transform( -0.160634, -0.792914, -0.587778, 0.544991, -0.567754, 0.616961, -0.822911, -0.22123, 0.523332, 0.137871, 1.41217, 1.26919 )
 visible = false
 bone_name = "oris03.L"
 
@@ -1528,9 +1547,9 @@ material/0 = null
 
 [node name="att_lip_upperC" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999794, 0.0165912, -0.0117258, -0.0136898, -0.123696, 0.992225, 0.0150118, 0.992181, 0.123898, 0.0163798, 1.44967, 1.31089 )
+transform = Transform( -0.999879, 0.0134344, -0.00779489, -0.0104199, -0.208027, 0.978067, 0.0115182, 0.97803, 0.208142, 0.0128791, 1.41422, 1.30694 )
 visible = false
-bone_name = "oris06"
+bone_name = "oris05"
 
 [node name="dot" type="Spatial" parent="sasha/att_lip_upperC"]
 editor/display_folded = true
@@ -1561,7 +1580,7 @@ material/0 = null
 
 [node name="att_lip_upperR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.107557, 0.794198, 0.598065, -0.57668, -0.539855, 0.613187, 0.809859, -0.278941, 0.516064, -0.108982, 1.40109, 1.27084 )
+transform = Transform( -0.112285, 0.793464, 0.59817, -0.570424, -0.544379, 0.615036, 0.81364, -0.272152, 0.513737, -0.112878, 1.40819, 1.27177 )
 visible = false
 bone_name = "oris03.R"
 
@@ -1594,7 +1613,7 @@ material/0 = null
 
 [node name="att_lid_upperL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999793, -0.0138951, -0.0148217, -0.0136898, 0.99981, -0.0138687, 0.0150114, -0.0136633, -0.999794, 0.30987, 2.07098, 1.34258 )
+transform = Transform( -0.999879, -0.01066, -0.0112962, -0.0104199, 0.999723, -0.0211036, 0.011518, -0.0209837, -0.999714, 0.307848, 2.07726, 1.34014 )
 visible = false
 bone_name = "orbicularis03.L.end"
 
@@ -1627,7 +1646,7 @@ material/0 = null
 
 [node name="att_lid_lowerL" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999793, -0.0138951, -0.0148214, -0.0136898, 0.99981, -0.0138679, 0.0150105, -0.0136626, -0.999796, 0.315222, 1.76744, 1.33541 )
+transform = Transform( -0.999879, -0.01066, -0.0112959, -0.0104199, 0.999723, -0.0211028, 0.0115171, -0.0209829, -0.999715, 0.312258, 1.77365, 1.33519 )
 visible = false
 bone_name = "orbicularis04.L.end"
 
@@ -1660,7 +1679,7 @@ material/0 = null
 
 [node name="att_lid_upperR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999793, -0.0138952, -0.014822, -0.01369, 0.99981, -0.0138684, 0.0150121, -0.0136628, -0.999794, -0.282103, 2.0586, 1.35153 )
+transform = Transform( -0.999879, -0.0106601, -0.0112965, -0.0104201, 0.999723, -0.0211032, 0.0115185, -0.0209831, -0.999714, -0.28419, 2.06681, 1.34705 )
 visible = false
 bone_name = "orbicularis03.R.end"
 
@@ -1693,7 +1712,7 @@ material/0 = null
 
 [node name="att_lid_lowerR" type="BoneAttachment" parent="sasha"]
 editor/display_folded = true
-transform = Transform( -0.999793, -0.013895, -0.0148222, -0.0136899, 0.999811, -0.0138681, 0.015013, -0.0136625, -0.999794, -0.279416, 1.7593, 1.34433 )
+transform = Transform( -0.999879, -0.0106599, -0.0112967, -0.01042, 0.999723, -0.0211029, 0.0115195, -0.0209828, -0.999714, -0.282431, 1.76746, 1.34204 )
 visible = false
 bone_name = "orbicularis04.R.end"
 
@@ -1751,7 +1770,7 @@ mesh = SubResource( 25 )
 material/0 = null
 
 [node name="att_face_cam" type="BoneAttachment" parent="sasha"]
-transform = Transform( 0.999794, 0.0142798, 0.0144515, 0.0136897, 0.0520739, -0.99855, -0.0150116, 0.998541, 0.0518677, 0, 1.58652, 0.344782 )
+transform = Transform( 0.999879, 0.0108805, 0.011084, 0.0104199, 0.0593001, -0.998186, -0.0115181, 0.998181, 0.0591795, 0, 1.58652, 0.344782 )
 bone_name = "head"
 
 [node name="face_cam" type="Camera" parent="sasha/att_face_cam"]
@@ -1762,8 +1781,9 @@ size = 2.0
 [node name="env" type="WorldEnvironment" parent="."]
 environment = ExtResource( 12 )
 
-[connection signal="pressed" from="ui/main/btn_load" to="." method="_on_load_pressed"]
+[connection signal="pressed" from="ui/main/btn_play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="ui/main/btn_calibration" to="." method="_on_calibration_pressed"]
+[connection signal="pressed" from="ui/main/btn_load" to="." method="_on_load_pressed"]
 [connection signal="file_selected" from="ui/json_load" to="." method="_on_json_load_file_selected"]
 [connection signal="hide" from="ui/json_load" to="." method="_on_json_load_hide"]
 [connection signal="pressed" from="ui/calib/btn_validate" to="." method="_on_calib_validate_pressed"]
@@ -1786,3 +1806,4 @@ environment = ExtResource( 12 )
 [connection signal="value_changed" from="ui/calib/sliders/scale/x" to="ui/calib" method="_on_scalex_value_changed"]
 [connection signal="value_changed" from="ui/calib/sliders/scale/y" to="ui/calib" method="_on_scaley_value_changed"]
 [connection signal="value_changed" from="ui/calib/sliders/scale/z" to="ui/calib" method="_on_scalez_value_changed"]
+[connection signal="animation_finished" from="json/animplayer" to="json" method="_on_animplayer_animation_finished"]

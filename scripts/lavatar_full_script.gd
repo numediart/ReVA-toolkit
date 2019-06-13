@@ -4,6 +4,7 @@ extends Skeleton
 
 export (Vector3) var mask_offset = Vector3()
 export (bool) var enable_ik = false setget _enable_ik
+export (String) var disable_ik = ''
 
 enum POS_TYPE {
 	DELTA,
@@ -63,20 +64,16 @@ func prepare_iks():
 		'ctrl': get_node( "ctrls/lip_upperL" ),
 		'type': POS_TYPE.DELTA
 	}
-	iks[ 'lip_upper' ] = {
-		'bid': find_bone( 'oris06' ),
-		'ctrl': get_node( "ctrls/lip_upperC" ),
-		'type': POS_TYPE.DELTA
-	}
 	iks[ 'lip_upper_right' ] = {
 		'bid': find_bone( 'oris03.R' ),
 		'ctrl': get_node( "ctrls/lip_upperR" ),
 		'type': POS_TYPE.DELTA
 	}
-#	iks[ 'lid_upper_left' ] = {
-#		'bid': find_bone( 'orbicularis03.L' ),
-#		'ctrl': get_node( "ctrls/lid_upperL" )
-#	}
+	iks[ 'lip_upper' ] = {
+		'bid': find_bone( 'oris05' ),
+		'ctrl': get_node( "ctrls/lip_upperC" ),
+		'type': POS_TYPE.DELTA
+	}
 	iks[ 'brow_left' ] = {
 		'bid': find_bone( 'oculi01.L' ),
 		'ctrl': get_node( "ctrls/browL" ),
