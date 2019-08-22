@@ -1,0 +1,1870 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://assets/envs/environment_sky.tres" type="Environment" id=1]
+[ext_resource path="res://scripts/joan.gd" type="Script" id=2]
+[ext_resource path="res://scripts/bone_configuration.gd" type="Script" id=3]
+[ext_resource path="res://models/joan/eyebrow.mesh" type="ArrayMesh" id=4]
+[ext_resource path="res://models/joan/eyes.mesh" type="ArrayMesh" id=5]
+[ext_resource path="res://materials/eyes.material" type="Material" id=6]
+[ext_resource path="res://models/joan/head.mesh" type="ArrayMesh" id=7]
+[ext_resource path="res://textures/joan_normal_map.png" type="Texture" id=8]
+[ext_resource path="res://models/joan/teeth_top.mesh" type="ArrayMesh" id=9]
+[ext_resource path="res://models/joan/teeth_bottom.mesh" type="ArrayMesh" id=10]
+
+[sub_resource type="SpatialMaterial" id=1]
+
+flags_unshaded = true
+albedo_color = Color( 1, 0, 1, 1 )
+
+[sub_resource type="SphereMesh" id=2]
+
+radius = 2.0
+height = 4.0
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SpatialMaterial" id=3]
+
+flags_unshaded = true
+albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="CubeMesh" id=4]
+
+size = Vector3( 1, 1, 1 )
+
+[sub_resource type="SpatialMaterial" id=5]
+
+flags_unshaded = true
+albedo_color = Color( 0, 1, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=6]
+
+flags_unshaded = true
+albedo_color = Color( 0, 0, 1, 1 )
+
+[sub_resource type="SpatialMaterial" id=7]
+
+normal_enabled = true
+normal_scale = 1.0
+normal_texture = ExtResource( 8 )
+
+[sub_resource type="SpatialMaterial" id=8]
+
+albedo_color = Color( 0.282353, 0, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=9]
+
+
+[sub_resource type="SpatialMaterial" id=10]
+
+
+[node name="dev" type="Spatial"]
+transform = Transform( 0.985511, 0, 0, 0, 0.985511, 0, 0, 0, 0.985511, 0, 0, 0 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 21.0 ],
+"_edit_vertical_guides_": [ 178.108 ]
+}
+
+[node name="cam" type="Camera" parent="."]
+transform = Transform( 0.927469, 0.00873863, 0.411516, 0, 1.01447, -0.0215426, -0.411609, 0.0196906, 0.92726, 1.77573, 2.85806, 7.53007 )
+fov = 35.0
+
+[node name="head" type="Position3D" parent="."]
+transform = Transform( 0.368391, 0, 0, 0, 0.368391, 0, 0, 0, 0.368391, -0.469933, 2.43727, 2.97035 )
+
+[node name="gaze" type="Position3D" parent="head"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.03231, -0.190921, 1.75781 )
+
+[node name="spot" type="SpotLight" parent="."]
+transform = Transform( 0.922934, -0.19412, 0.332431, -0.0210635, 0.836792, 0.547116, -0.384382, -0.511954, 0.768215, 5.33321, 7.04964, 11.4937 )
+shadow_enabled = true
+spot_range = 24.5505
+spot_angle = 28.683
+
+[node name="spot_back" type="SpotLight" parent="."]
+transform = Transform( 0.324644, -0.0167533, -0.945688, 0, 0.999843, -0.0177127, 0.945836, 0.00575031, 0.324593, -9.19989, 0.881972, 3.52062 )
+light_energy = 0.5
+shadow_enabled = true
+spot_range = 18.2413
+spot_angle = 37.4082
+
+[node name="env" type="WorldEnvironment" parent="."]
+environment = ExtResource( 1 )
+
+[node name="joan" type="Skeleton" parent="."]
+transform = Transform( 0.368388, 0, 0, 0, 0.368388, 0, 0, 0, 0.368388, 0, -0.315706, 0.21966 )
+bones/0/name = "torso"
+bones/0/parent = -1
+bones/0/rest = Transform( 1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -1.072 )
+bones/0/enabled = true
+bones/0/bound_children = [  ]
+bones/1/name = "neck01"
+bones/1/parent = 0
+bones/1/rest = Transform( 1, 2.41846e-07, 2.5368e-09, -2.1491e-07, 0.893335, -0.449392, -1.1095e-07, 0.449392, 0.893335, 0, 0, -2.04957 )
+bones/1/enabled = true
+bones/1/bound_children = [  ]
+bones/2/name = "neck02"
+bones/2/parent = 1
+bones/2/rest = Transform( 1, -7.14727e-07, -3.3012e-08, 7.12839e-07, 0.991268, 0.131864, -6.1523e-08, -0.131864, 0.991268, -4.21885e-14, 5.96046e-08, -1.5603 )
+bones/2/enabled = true
+bones/2/bound_children = [ NodePath("att_neck02") ]
+bones/3/name = "head"
+bones/3/parent = 2
+bones/3/rest = Transform( 1, 6.8706e-07, 1.52728e-07, -6.99281e-07, 0.94523, 0.326404, 7.98963e-08, -0.326404, 0.94523, -1.24345e-14, 2.98023e-08, -2.27598 )
+bones/3/enabled = true
+bones/3/bound_children = [ NodePath("att_head"), NodePath("att_face_cam") ]
+bones/4/name = "jaw"
+bones/4/parent = 3
+bones/4/rest = Transform( 1, -3.03645e-07, 1.60541e-07, -1.20622e-07, -0.748095, -0.663592, 3.21596e-07, 0.663592, -0.748095, -8.98462e-08, 0.347717, -0.0280942 )
+bones/4/enabled = true
+bones/4/bound_children = [ NodePath("att_jaw") ]
+bones/5/name = "lower_lip"
+bones/5/parent = 4
+bones/5/rest = Transform( 1, 3.3912e-06, 3.79873e-07, -2.37367e-06, 0.611299, 0.7914, 2.45158e-06, -0.7914, 0.611299, -2.70783e-07, -0.564188, -2.21295 )
+bones/5/enabled = true
+bones/5/bound_children = [ NodePath("att_lowerlip") ]
+bones/6/name = "chin"
+bones/6/parent = 4
+bones/6/rest = Transform( 1, 6.91159e-07, 1.59036e-07, -7.04658e-07, 0.942872, 0.333154, 8.0312e-08, -0.333154, 0.942872, -8.52651e-14, 1.15463e-14, -2.18893 )
+bones/6/enabled = true
+bones/6/bound_children = [ NodePath("att_chin") ]
+bones/7/name = "commissureL"
+bones/7/parent = 4
+bones/7/rest = Transform( 0.93902, 0.0125493, -0.343634, 0.270611, 0.589609, 0.761006, 0.21216, -0.807591, 0.550259, 0.608473, -0.518059, -1.91809 )
+bones/7/enabled = true
+bones/7/bound_children = [ NodePath("att_commissureL") ]
+bones/8/name = "lower_lipL"
+bones/8/parent = 4
+bones/8/rest = Transform( 0.981405, 0.0150022, -0.191361, 0.139202, 0.6308, 0.763357, 0.132163, -0.7758, 0.616982, 0.249492, -0.491258, -2.05769 )
+bones/8/enabled = true
+bones/8/bound_children = [ NodePath("att_lowerlipL") ]
+bones/9/name = "commissureR"
+bones/9/parent = 4
+bones/9/rest = Transform( 0.939019, 0.0125496, 0.343635, -0.286271, 0.582167, 0.761006, -0.190503, -0.812972, 0.550259, -0.608474, -0.518058, -1.91809 )
+bones/9/enabled = true
+bones/9/bound_children = [ NodePath("att_commissureR") ]
+bones/10/name = "lower_lipR"
+bones/10/parent = 4
+bones/10/rest = Transform( 0.981405, 0.0150017, 0.191362, -0.158418, 0.626251, 0.763357, -0.108389, -0.779477, 0.616982, -0.249492, -0.491258, -2.05769 )
+bones/10/enabled = true
+bones/10/bound_children = [ NodePath("att_lowerlipR") ]
+bones/11/name = "tongue01"
+bones/11/parent = 4
+bones/11/rest = Transform( 1, 5.39864e-06, 4.59675e-07, -2.07496e-06, 0.303211, 0.952923, 5.00511e-06, -0.952923, 0.303211, 2.66081e-07, 0.562089, -1.27228 )
+bones/11/enabled = true
+bones/11/bound_children = [  ]
+bones/12/name = "tongue02"
+bones/12/parent = 11
+bones/12/rest = Transform( -1, 5.00112e-06, 3.22716e-06, -5.92803e-06, -0.788305, -0.615284, -5.33128e-07, -0.615284, 0.788306, 1.15996e-12, -1.40332e-13, -0.257837 )
+bones/12/enabled = true
+bones/12/bound_children = [ NodePath("att_tongue02") ]
+bones/13/name = "tongue03"
+bones/13/parent = 12
+bones/13/rest = Transform( 1, 5.22601e-07, -1.43767e-07, -5.3927e-07, 0.985962, -0.166967, 5.44913e-08, 0.166967, 0.985962, -1.01252e-13, -3.27826e-07, -0.451025 )
+bones/13/enabled = true
+bones/13/bound_children = [ NodePath("att_tongue03") ]
+bones/14/name = "upper_lipL"
+bones/14/parent = 3
+bones/14/rest = Transform( 0.975725, 0.0229637, -0.217791, -0.218938, 0.0789635, -0.972538, -0.00513561, 0.996613, 0.0820742, 0.346591, 2.28508, 0.83001 )
+bones/14/enabled = true
+bones/14/bound_children = [ NodePath("att_upperlipL") ]
+bones/15/name = "upper_lip"
+bones/15/parent = 3
+bones/15/rest = Transform( 1, -1.45304e-06, 2.3759e-07, 3.44178e-07, 0.0738003, -0.997273, 1.43154e-06, 0.997273, 0.0738005, -5.63298e-07, 2.32114, 0.831481 )
+bones/15/enabled = true
+bones/15/bound_children = [ NodePath("att_upperlip") ]
+bones/16/name = "nose_tip"
+bones/16/parent = 3
+bones/16/rest = Transform( 1, 1.40725e-06, 2.37527e-07, 1.28608e-07, 0.0768991, -0.997039, -1.42135e-06, 0.997039, 0.0768991, -6.20687e-07, 2.55717, 0.193405 )
+bones/16/enabled = true
+bones/16/bound_children = [ NodePath("att_nose_tip") ]
+bones/17/name = "lid_internalL"
+bones/17/parent = 3
+bones/17/rest = Transform( 0.966486, 0.022741, -0.255712, -0.256714, 0.0780761, -0.963329, -0.00194206, 0.996688, 0.0812973, 0.414338, 1.61794, -0.536397 )
+bones/17/enabled = true
+bones/17/bound_children = [ NodePath("att_lid_internalL") ]
+bones/18/name = "lid_externalL"
+bones/18/parent = 3
+bones/18/rest = Transform( 0.831617, 0.0256382, -0.554757, -0.55487, 0.0798708, -0.828095, 0.0230781, 0.996475, 0.0806479, 1.37616, 1.40495, -0.61419 )
+bones/18/enabled = true
+bones/18/bound_children = [ NodePath("att_lid_externalL") ]
+bones/19/name = "upper_lidL"
+bones/19/parent = 3
+bones/19/rest = Transform( 1, -1.03198e-07, 2.57021e-07, 2.76365e-07, 0.432845, -0.901468, -1.82205e-08, 0.901468, 0.432845, 0.960427, 1.35176, -0.601392 )
+bones/19/enabled = true
+bones/19/bound_children = [ NodePath("att_upper_lidL") ]
+bones/20/name = "eyeL"
+bones/20/parent = 3
+bones/20/rest = Transform( 1, 8.71035e-08, 2.86021e-07, 2.85904e-07, 0.00133884, -0.999999, -8.74864e-08, 0.999999, 0.00133877, 0.960427, 1.35176, -0.601392 )
+bones/20/enabled = true
+bones/20/bound_children = [ NodePath("att_eyeL") ]
+bones/21/name = "lower_lidL"
+bones/21/parent = 3
+bones/21/rest = Transform( 1, 3.39492e-07, 2.57021e-07, 3.76704e-07, -0.423934, -0.905693, -1.98516e-07, 0.905693, -0.423934, 0.960427, 1.37706, -0.58955 )
+bones/21/enabled = true
+bones/21/bound_children = [ NodePath("att_lower_lidL") ]
+bones/22/name = "eyebrow01L"
+bones/22/parent = 3
+bones/22/rest = Transform( 0.985123, 0.0231875, -0.170277, -0.171605, 0.0800773, -0.981906, -0.0091327, 0.996519, 0.082865, 0.422236, 1.99461, -1.0236 )
+bones/22/enabled = true
+bones/22/bound_children = [ NodePath("att_eyebrow01L") ]
+bones/23/name = "eyebrow03L"
+bones/23/parent = 3
+bones/23/rest = Transform( 0.822812, 0.0193543, -0.567984, -0.567793, 0.0707606, -0.820124, 0.024318, 0.997306, 0.0692118, 1.34922, 1.43736, -0.954609 )
+bones/23/enabled = true
+bones/23/bound_children = [ NodePath("att_eyebrow03L") ]
+bones/24/name = "eyebrow02L"
+bones/24/parent = 3
+bones/24/rest = Transform( 0.958318, 0.0225436, -0.284814, -0.285705, 0.0773949, -0.955187, 0.000509787, 0.996746, 0.0806098, 0.891205, 1.89643, -1.22344 )
+bones/24/enabled = true
+bones/24/bound_children = [ NodePath("att_eyebrow02L") ]
+bones/25/name = "muscle_lip01L"
+bones/25/parent = 3
+bones/25/rest = Transform( 0.974136, 0.0229247, -0.224798, -0.225918, 0.0787999, -0.970954, -0.00454471, 0.996627, 0.081941, 0.479871, 2.1172, 0.285783 )
+bones/25/enabled = true
+bones/25/bound_children = [ NodePath("att_muscle_lip01L") ]
+bones/26/name = "muscle_lip02L"
+bones/26/parent = 3
+bones/26/rest = Transform( 0.940245, 0.0221272, -0.339779, -0.34046, 0.0761038, -0.937174, 0.00512142, 0.996854, 0.0790897, 0.713845, 2.06104, 0.651907 )
+bones/26/enabled = true
+bones/26/bound_children = [ NodePath("att_muscle_lip02L") ]
+bones/27/name = "cheekL"
+bones/27/parent = 3
+bones/27/rest = Transform( 0.6227, -0.025444, -0.782047, -0.781339, 0.0332662, -0.623219, 0.0418728, 0.999123, 0.000834316, 1.13772, 1.48091, 0.803832 )
+bones/27/enabled = true
+bones/27/bound_children = [ NodePath("att_cheekL") ]
+bones/28/name = "forehead"
+bones/28/parent = 3
+bones/28/rest = Transform( 1, 2.05803e-06, 2.38233e-07, 2.35477e-07, 0.00133872, -0.999999, -2.05834e-06, 0.999999, 0.00133886, -5.24232e-07, 2.15427, -1.62652 )
+bones/28/enabled = true
+bones/28/bound_children = [ NodePath("att_forehead") ]
+bones/29/name = "foreheadL"
+bones/29/parent = 3
+bones/29/rest = Transform( 0.900481, 1.7765e-06, -0.434896, -0.434896, 0.00133801, -0.90048, 0.000580206, 0.999999, 0.00120567, 1.07548, 1.80841, -1.75569 )
+bones/29/enabled = true
+bones/29/bound_children = [ NodePath("att_foreheadL") ]
+bones/30/name = "nostrilL"
+bones/30/parent = 3
+bones/30/rest = Transform( 0.765027, 6.10948e-07, -0.643998, -0.643998, 0.00133905, -0.765026, 0.000861868, 0.999999, 0.00102472, 0.23164, 2.41404, 0.264454 )
+bones/30/enabled = true
+bones/30/bound_children = [ NodePath("att_nostrilL") ]
+bones/31/name = "upper_lipR"
+bones/31/parent = 3
+bones/31/rest = Transform( 0.975725, 0.0229636, 0.217791, 0.214981, 0.0891757, -0.972538, -0.0417546, 0.995751, 0.0820742, -0.346592, 2.28508, 0.83001 )
+bones/31/enabled = true
+bones/31/bound_children = [ NodePath("att_upperlipR") ]
+bones/32/name = "lid_internalR"
+bones/32/parent = 3
+bones/32/rest = Transform( 0.966485, 0.0227396, 0.255712, 0.252758, 0.0900632, -0.963329, -0.044936, 0.995676, 0.0812972, -0.414338, 1.61794, -0.536397 )
+bones/32/enabled = true
+bones/32/bound_children = [ NodePath("att_lid_internalR") ]
+bones/33/name = "lid_externalR"
+bones/33/parent = 3
+bones/33/rest = Transform( 0.831617, 0.0256378, 0.554757, 0.548896, 0.113899, -0.828094, -0.0844167, 0.993161, 0.0806479, -1.37616, 1.40495, -0.61419 )
+bones/33/enabled = true
+bones/33/bound_children = [ NodePath("att_lid_externalR") ]
+bones/34/name = "upper_lidR"
+bones/34/parent = 3
+bones/34/rest = Transform( 1, 8.50475e-07, 2.57021e-07, -1.36428e-07, 0.432845, -0.901468, -8.77926e-07, 0.901468, 0.432845, -0.960428, 1.35176, -0.601392 )
+bones/34/enabled = true
+bones/34/bound_children = [ NodePath("att_upper_lidR") ]
+bones/35/name = "eyeR"
+bones/35/parent = 3
+bones/35/rest = Transform( 1, 8.71035e-08, 2.86021e-07, 2.85904e-07, 0.00133884, -0.999999, -8.74864e-08, 0.999999, 0.00133877, -0.960428, 1.35176, -0.601392 )
+bones/35/enabled = true
+bones/35/bound_children = [ NodePath("att_eyeR") ]
+bones/36/name = "lower_lidR"
+bones/36/parent = 3
+bones/36/rest = Transform( 1, 3.39492e-07, 2.57021e-07, 3.76704e-07, -0.423934, -0.905693, -1.98516e-07, 0.905693, -0.423934, -0.960427, 1.37706, -0.58955 )
+bones/36/enabled = true
+bones/36/bound_children = [ NodePath("att_lower_lidR") ]
+bones/37/name = "eyebrow01R"
+bones/37/parent = 3
+bones/37/rest = Transform( 0.985123, 0.0231872, 0.170277, 0.167648, 0.0880625, -0.981906, -0.0377626, 0.995845, 0.0828649, -0.422237, 1.99461, -1.0236 )
+bones/37/enabled = true
+bones/37/bound_children = [ NodePath("att_eyebrow01R") ]
+bones/38/name = "eyebrow03R"
+bones/38/parent = 3
+bones/38/rest = Transform( 0.822811, 0.0193546, 0.567985, 0.563839, 0.0973791, -0.820124, -0.071183, 0.995059, 0.0692118, -1.34922, 1.43736, -0.954609 )
+bones/38/enabled = true
+bones/38/bound_children = [ NodePath("att_eyebrow03R") ]
+bones/39/name = "eyebrow02R"
+bones/39/parent = 3
+bones/39/rest = Transform( 0.958317, 0.0225445, 0.284815, 0.281749, 0.090744, -0.955187, -0.0473795, 0.995619, 0.0806098, -0.891206, 1.89643, -1.22344 )
+bones/39/enabled = true
+bones/39/bound_children = [ NodePath("att_eyebrow02R") ]
+bones/40/name = "muscle_lip01R"
+bones/40/parent = 3
+bones/40/rest = Transform( 0.974135, 0.0229257, 0.224799, 0.221962, 0.0893404, -0.970954, -0.0423435, 0.995737, 0.0819411, -0.479872, 2.1172, 0.285783 )
+bones/40/enabled = true
+bones/40/bound_children = [ NodePath("att_muscle_lip01R") ]
+bones/41/name = "muscle_lip02R"
+bones/41/parent = 3
+bones/41/rest = Transform( 0.940245, 0.0221273, 0.339779, 0.336504, 0.0920352, -0.937174, -0.0520088, 0.99551, 0.0790897, -0.713846, 2.06104, 0.651907 )
+bones/41/enabled = true
+bones/41/bound_children = [ NodePath("att_muscle_lip02R") ]
+bones/42/name = "cheekR"
+bones/42/parent = 3
+bones/42/rest = Transform( 0.622699, -0.0254443, 0.782047, 0.781449, -0.030591, -0.623219, 0.0397811, 0.999208, 0.000834405, -1.13772, 1.48091, 0.803832 )
+bones/42/enabled = true
+bones/42/bound_children = [ NodePath("att_cheekR") ]
+bones/43/name = "foreheadR"
+bones/43/parent = 3
+bones/43/rest = Transform( 0.900481, 1.84402e-06, 0.434896, 0.434896, 0.00133981, -0.90048, -0.000584319, 0.999999, 0.00120564, -1.07548, 1.80841, -1.75569 )
+bones/43/enabled = true
+bones/43/bound_children = [ NodePath("att_foreheadR") ]
+bones/44/name = "nostrilR"
+bones/44/parent = 3
+bones/44/rest = Transform( 0.765026, -4.4331e-07, 0.643999, 0.643998, 0.00133923, -0.765026, -0.000862032, 0.999999, 0.00102472, -0.231641, 2.41404, 0.264454 )
+bones/44/enabled = true
+bones/44/bound_children = [ NodePath("att_nostrilR") ]
+bones/45/name = "collarboneL"
+bones/45/parent = 0
+bones/45/rest = Transform( 0.43723, -0.298852, -0.848243, 0.888597, -0.00185585, 0.458684, -0.138653, -0.954298, 0.264748, 0.281464, 2.34259, -0.818413 )
+bones/45/enabled = true
+bones/45/bound_children = [  ]
+bones/46/name = "collarboneR"
+bones/46/parent = 0
+bones/46/rest = Transform( 0.438548, 0.296915, 0.848243, -0.888597, 0.0020754, 0.458684, 0.13443, -0.954902, 0.264748, -0.281464, 2.34259, -0.818413 )
+bones/46/enabled = true
+bones/46/bound_children = [  ]
+script = ExtResource( 2 )
+
+[node name="debug" type="Spatial" parent="joan"]
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4854, 11.6505, -5.5264 )
+
+[node name="sphere" type="MeshInstance" parent="joan/debug"]
+transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/debug"]
+transform = Transform( 10, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 5, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/debug"]
+transform = Transform( 0.03, 0, 0, 0, 10, 0, 0, 0, 0.03, 0, 5, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/debug"]
+transform = Transform( 0.03, 0, 0, 0, 0.03, 0, 0, 0, 10, 0.003, 0, 5 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_neck02" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 1, -4.75327e-07, 1.39343e-09, -1.54433e-07, -0.327669, -0.944793, 4.49542e-07, 0.944793, -0.327669, -3.9582e-09, 3.44344, -0.370814 )
+visible = false
+bone_name = "neck02"
+script = ExtResource( 3 )
+rot_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_neck02"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_neck02/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_neck02/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_neck02/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_neck02/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_head" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, -0.171303, -0.0449006, -0.000220463, 0.252361, -0.967633, 0.17709, 0.95235, 0.248335, -7.12989e-09, 5.59377, 0.374955 )
+visible = false
+bone_name = "head"
+script = ExtResource( 3 )
+rot_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_head"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_head/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_head/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_head/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_head/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_jaw" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, 0.0983551, 0.147266, -0.000220804, -0.830904, 0.556417, 0.17709, -0.547655, -0.81775, -0.0583037, 5.70871, 0.699127 )
+visible = false
+bone_name = "jaw"
+script = ExtResource( 3 )
+rot_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_jaw"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_jaw/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_jaw/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_jaw/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_jaw/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_chin" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, 0.0436749, 0.17162, -0.000220174, -0.968809, 0.247811, 0.17709, -0.243932, -0.953487, -0.380658, 4.49075, 2.48912 )
+visible = false
+bone_name = "chin"
+script = ExtResource( 3 )
+rot_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_chin"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_chin/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_chin/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_chin/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_chin/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_lowerlip" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, -0.0564182, 0.167862, -0.000217468, -0.948279, -0.317441, 0.177089, 0.312387, -0.933304, -0.439686, 4.94617, 2.81775 )
+visible = false
+bone_name = "lower_lip"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_lowerlip"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_lowerlip/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_lowerlip/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_lowerlip/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_lowerlip/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_lowerlipL" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.999048, -0.0374411, -0.0223962, -0.0423425, -0.955806, -0.290935, -0.010514, 0.291606, -0.956481, -0.1641, 4.97191, 2.69502 )
+visible = false
+bone_name = "lower_lipL"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_lowerlipL"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_lowerlipL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_lowerlipL/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_lowerlipL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_lowerlipL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_lowerlipR" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.93435, -0.0384305, 0.354278, 0.071104, -0.954072, -0.29102, 0.34919, 0.297104, -0.888705, -0.655197, 4.97202, 2.60666 )
+visible = false
+bone_name = "lower_lipR"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_lowerlipR"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_lowerlipR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_lowerlipR/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_lowerlipR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_lowerlipR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_commissureL" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.982038, -0.0485883, -0.18232, -0.10701, -0.939268, -0.326074, -0.155404, 0.339727, -0.927597, 0.20713, 5.07177, 2.65912 )
+visible = false
+bone_name = "commissureL"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_commissureL"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_commissureL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_commissureL/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_commissureL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_commissureL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_commissureR" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.867967, -0.0501124, 0.494087, 0.131657, -0.936079, -0.326226, 0.478852, 0.348203, -0.805889, -0.990583, 5.07204, 2.44361 )
+visible = false
+bone_name = "commissureR"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_commissureR"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_commissureR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_commissureR/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_commissureR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_commissureR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_upperlip" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, -0.0574218, 0.167523, -0.000221761, -0.94637, -0.323085, 0.177091, 0.317941, -0.931425, -0.434953, 5.37497, 2.79198 )
+visible = false
+bone_name = "upper_lip"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_upperlip"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_upperlip/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_upperlip/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_upperlip/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_upperlip/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_upperlipL" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.998039, -0.0356745, -0.051435, -0.0504972, -0.944434, -0.324801, -0.0369898, 0.326761, -0.944383, -0.0875966, 5.36722, 2.81865 )
+visible = false
+bone_name = "upper_lipL"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_upperlipL"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_upperlipL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_upperlipL/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_upperlipL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_upperlipL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_upperlipR" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.925351, -0.0373852, 0.377263, 0.0944409, -0.941023, -0.324897, 0.367159, 0.336273, -0.867246, -0.769824, 5.36737, 2.69589 )
+visible = false
+bone_name = "upper_lipR"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_upperlipR"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_upperlipR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_upperlipR/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_upperlipR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_upperlipR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_muscle_lip01L" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.997644, -0.0356855, -0.0585966, -0.0528301, -0.944489, -0.324271, -0.0437718, 0.326602, -0.944148, 0.0967714, 5.85143, 2.54722 )
+visible = false
+bone_name = "muscle_lip01L"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_muscle_lip01L"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_muscle_lip01L/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_muscle_lip01L/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_muscle_lip01L/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_muscle_lip01L/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_muscle_lip02L" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.983476, -0.0360187, -0.177419, -0.0910819, -0.945388, -0.312961, -0.156457, 0.32395, -0.933048, 0.320229, 5.48294, 2.62609 )
+visible = false
+bone_name = "muscle_lip02L"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_muscle_lip02L"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_muscle_lip02L/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_muscle_lip02L/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_muscle_lip02L/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_muscle_lip02L/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_muscle_lip01R" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.922617, -0.0374501, 0.383894, 0.0967729, -0.940967, -0.32437, 0.37338, 0.336419, -0.864529, -0.847803, 5.85164, 2.37726 )
+visible = false
+bone_name = "muscle_lip01R"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_muscle_lip01R"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_muscle_lip01R/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_muscle_lip01R/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_muscle_lip01R/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_muscle_lip01R/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_muscle_lip02R" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.870075, -0.0386873, 0.491398, 0.135039, -0.940067, -0.313111, 0.474062, 0.338788, -0.812705, -1.0849, 5.48325, 2.37326 )
+visible = false
+bone_name = "muscle_lip02R"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_muscle_lip02R"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_muscle_lip02R/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_muscle_lip02R/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_muscle_lip02R/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_muscle_lip02R/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_nose_tip" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, -0.0579393, 0.167343, -0.000219055, -0.945362, -0.326024, 0.17709, 0.320835, -0.930433, -0.446736, 6.05196, 2.8583 )
+visible = false
+bone_name = "nose_tip"
+script = ExtResource( 3 )
+
+[node name="dot" type="Spatial" parent="joan/att_nose_tip"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_nose_tip/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_nose_tip/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_nose_tip/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_nose_tip/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_nostrilL" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.863216, -0.0451293, -0.502814, -0.163523, -0.967295, -0.193913, -0.477619, 0.24961, -0.842363, -0.197428, 5.94704, 2.78066 )
+visible = false
+bone_name = "nostrilL"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_nostrilL"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_nostrilL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_nostrilL/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_nostrilL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_nostrilL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_nostrilR" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.642654, -0.0451304, 0.764826, 0.163186, -0.967295, -0.194197, 0.748576, 0.24961, -0.614272, -0.653387, 5.94714, 2.69862 )
+visible = false
+bone_name = "nostrilR"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_nostrilR"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_nostrilR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_nostrilR/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_nostrilR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_nostrilR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_cheekL" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.744824, -0.0756017, -0.662964, -0.237835, -0.958384, -0.157911, -0.623435, 0.275292, -0.731808, 0.829961, 5.18943, 2.1864 )
+visible = false
+bone_name = "cheekL"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_cheekL"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_cheekL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_cheekL/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_cheekL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_cheekL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_cheekR" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.477206, -0.0646668, 0.876408, 0.158577, -0.974581, -0.158256, 0.864365, 0.214499, -0.454823, -1.40952, 5.18993, 1.78344 )
+visible = false
+bone_name = "cheekR"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_cheekR"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_cheekR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_cheekR/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_cheekR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_cheekR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_eyeL" type="BoneAttachment" parent="joan"]
+transform = Transform( 0.96652, -0.110379, -0.231636, 0.0208996, 0.933611, -0.357679, 0.255739, 0.340863, 0.904661, 0.740689, 6.51662, 1.68304 )
+bone_name = "eyeL"
+script = ExtResource( 3 )
+rot_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_eyeL"]
+
+[node name="sphere" type="MeshInstance" parent="joan/att_eyeL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_eyeL/dot"]
+transform = Transform( 2, 0, 0, 0, 0.003, 0, 0, 0, 0.003, 1, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_eyeL/dot"]
+transform = Transform( 0.003, 0, 0, 0, 2, 0, 0, 0, 0.003, 0, 1, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_eyeL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 100, 0.003, 0, 0 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_lower_lidL" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, 0.0319555, 0.174183, -0.000220176, -0.983363, 0.181651, 0.17709, -0.178818, -0.967814, 0.735823, 6.51155, 1.71007 )
+visible = false
+bone_name = "lower_lidL"
+script = ExtResource( 3 )
+rot_enabled = true
+rot_lock_y = true
+rot_lock_z = true
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_lower_lidL"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_lower_lidL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_lower_lidL/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_lower_lidL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_lower_lidL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_lid_internalL" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.995274, -0.035745, -0.0902993, -0.0631186, -0.94473, -0.321717, -0.0738088, 0.325895, -0.942521, 0.154715, 6.52102, 1.85597 )
+visible = false
+bone_name = "lid_internalL"
+script = ExtResource( 3 )
+
+[node name="dot" type="Spatial" parent="joan/att_lid_internalL"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_lid_internalL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_lid_internalL/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_lid_internalL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_lid_internalL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_lid_externalL" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.912488, -0.0331915, -0.407755, -0.162542, -0.944072, -0.286895, -0.375428, 0.328065, -0.86685, 1.14131, 6.54234, 1.80414 )
+visible = false
+bone_name = "lid_externalL"
+script = ExtResource( 3 )
+
+[node name="dot" type="Spatial" parent="joan/att_lid_externalL"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_lid_externalL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_lid_externalL/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_lid_externalL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_lid_externalL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_upper_lidL" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, -0.114624, 0.13499, -0.000220375, -0.763057, -0.646331, 0.17709, 0.636086, -0.751022, 0.740689, 6.51662, 1.68304 )
+visible = false
+bone_name = "upper_lidL"
+script = ExtResource( 3 )
+rot_enabled = true
+rot_lock_y = true
+rot_lock_z = true
+
+[node name="dot" type="Spatial" parent="joan/att_upper_lidL"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_upper_lidL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_upper_lidL/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_upper_lidL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_upper_lidL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_eyeR" type="BoneAttachment" parent="joan"]
+transform = Transform( 0.749649, -0.318505, -0.580156, 0.132361, 0.931027, -0.340103, 0.648466, 0.178168, 0.740101, -1.14981, 6.51704, 1.34288 )
+bone_name = "eyeR"
+script = ExtResource( 3 )
+rot_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_eyeR"]
+
+[node name="sphere" type="MeshInstance" parent="joan/att_eyeR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_eyeR/dot"]
+transform = Transform( 2, 0, 0, 0, 0.003, 0, 0, 0, 0.003, 1, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_eyeR/dot"]
+transform = Transform( 0.003, 0, 0, 0, 2, 0, 0, 0, 0.003, 0, 1, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_eyeR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 100, 0.003, 0, 0 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_lower_lidR" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, 0.0319555, 0.174183, -0.000220176, -0.983363, 0.181651, 0.17709, -0.178818, -0.967814, -1.15467, 6.51197, 1.36991 )
+visible = false
+bone_name = "lower_lidR"
+script = ExtResource( 3 )
+rot_enabled = true
+rot_lock_y = true
+rot_lock_z = true
+
+[node name="dot" type="Spatial" parent="joan/att_lower_lidR"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_lower_lidR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_lower_lidR/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_lower_lidR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_lower_lidR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_lid_internalR" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.909929, -0.0377544, 0.413042, 0.107055, -0.940726, -0.321829, 0.40071, 0.33706, -0.851953, -0.660863, 6.52121, 1.70922 )
+visible = false
+bone_name = "lid_internalR"
+script = ExtResource( 3 )
+
+[node name="dot" type="Spatial" parent="joan/att_lid_internalR"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_lid_internalR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_lid_internalR/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_lid_internalR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_lid_internalR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_lid_externalR" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.728236, -0.0388722, 0.684223, 0.220021, -0.932278, -0.287139, 0.649048, 0.359648, -0.670365, -1.5675, 6.54294, 1.31673 )
+visible = false
+bone_name = "lid_externalR"
+script = ExtResource( 3 )
+
+[node name="dot" type="Spatial" parent="joan/att_lid_externalR"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_lid_externalR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_lid_externalR/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_lid_externalR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_lid_externalR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_upper_lidR" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, -0.114623, 0.13499, -0.000219648, -0.763057, -0.646331, 0.17709, 0.636086, -0.751022, -1.14981, 6.51704, 1.34287 )
+visible = false
+bone_name = "upper_lidR"
+script = ExtResource( 3 )
+rot_enabled = true
+rot_lock_y = true
+rot_lock_z = true
+
+[node name="dot" type="Spatial" parent="joan/att_upper_lidR"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_upper_lidR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_upper_lidR/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_upper_lidR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_upper_lidR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_forehead" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.984195, -0.0451279, 0.171243, -0.000218412, -0.967295, -0.253657, 0.17709, 0.24961, -0.952016, -0.296002, 7.7113, 2.02265 )
+visible = false
+bone_name = "forehead"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_forehead"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_forehead/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_forehead/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_forehead/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_forehead/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_eyebrow01L" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.999359, -0.0356408, -0.00310269, -0.0346866, -0.944062, -0.327941, 0.00875944, 0.327838, -0.944694, 0.119839, 7.08751, 2.0951 )
+visible = false
+bone_name = "eyebrow01L"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_eyebrow01L"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_eyebrow01L/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_eyebrow01L/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_eyebrow01L/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_eyebrow01L/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_eyebrow02L" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.992091, -0.0358252, -0.120305, -0.0728055, -0.944958, -0.31899, -0.102256, 0.325226, -0.940091, 0.607188, 7.256, 2.03502 )
+visible = false
+bone_name = "eyebrow02L"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_eyebrow02L"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_eyebrow02L/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_eyebrow02L/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_eyebrow02L/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_eyebrow02L/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_eyebrow03L" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.90598, -0.0378528, -0.421625, -0.167001, -0.947174, -0.273814, -0.388987, 0.318482, -0.864441, 1.12453, 6.87992, 1.7457 )
+visible = false
+bone_name = "eyebrow03L"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_eyebrow03L"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_eyebrow03L/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_eyebrow03L/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_eyebrow03L/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_eyebrow03L/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_foreheadL" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.960722, -0.045128, -0.273821, -0.110511, -0.967295, -0.228317, -0.254563, 0.249609, -0.934288, 0.827527, 7.74877, 1.85165 )
+visible = false
+bone_name = "foreheadL"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_foreheadL"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_foreheadL/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_foreheadL/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_foreheadL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_foreheadL/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_eyebrow01R" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.94253, -0.0369787, 0.332069, 0.078631, -0.941394, -0.328016, 0.324737, 0.335276, -0.884385, -0.711286, 7.0877, 1.94555 )
+visible = false
+bone_name = "eyebrow01R"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_eyebrow01R"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_eyebrow01R/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_eyebrow01R/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_eyebrow01R/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_eyebrow01R/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_eyebrow02R" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.897033, -0.0380605, 0.440321, 0.116737, -0.940499, -0.319116, 0.426266, 0.337659, -0.839216, -1.14705, 7.2564, 1.71937 )
+visible = false
+bone_name = "eyebrow02R"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_eyebrow02R"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_eyebrow02R/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_eyebrow02R/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_eyebrow02R/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_eyebrow02R/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_eyebrow03R" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.716415, -0.0423114, 0.69639, 0.210989, -0.938282, -0.274064, 0.665006, 0.343274, -0.663273, -1.53126, 6.88052, 1.26783 )
+visible = false
+bone_name = "eyebrow03R"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_eyebrow03R"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_eyebrow03R/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_eyebrow03R/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_eyebrow03R/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_eyebrow03R/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_foreheadR" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( 0.811776, -0.0451282, 0.582223, 0.110118, -0.967294, -0.228509, 0.573494, 0.249611, -0.780257, -1.28944, 7.74925, 1.47074 )
+visible = false
+bone_name = "foreheadR"
+script = ExtResource( 3 )
+trans_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_foreheadR"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_foreheadR/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_foreheadR/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_foreheadR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_foreheadR/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_tongue02" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( -0.984195, 0.00197491, 0.177079, 0.000221264, 0.999951, -0.00992298, -0.17709, -0.00972626, -0.984147, -0.226061, 4.6944, 1.63019 )
+visible = false
+bone_name = "tongue02"
+script = ExtResource( 3 )
+rot_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_tongue02"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_tongue02/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_tongue02/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_tongue02/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_tongue02/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="att_tongue03" type="BoneAttachment" parent="joan"]
+editor/display_folded = true
+transform = Transform( -0.984195, 0.0315131, 0.174264, 0.000220724, 0.984256, -0.176742, -0.17709, -0.17391, -0.968708, -0.305928, 4.69888, 2.07407 )
+visible = false
+bone_name = "tongue03"
+script = ExtResource( 3 )
+rot_enabled = true
+
+[node name="dot" type="Spatial" parent="joan/att_tongue03"]
+editor/display_folded = true
+
+[node name="sphere" type="MeshInstance" parent="joan/att_tongue03/dot"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="x2" type="MeshInstance" parent="joan/att_tongue03/dot"]
+transform = Transform( 0.145822, 0, 0, 0, 0.00291644, 0, 0, 0, 0.00291644, 0.073, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="y2" type="MeshInstance" parent="joan/att_tongue03/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.145822, 0, 0, 0, 0.00291644, 0, 0.072, 0 )
+material_override = SubResource( 5 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="z2" type="MeshInstance" parent="joan/att_tongue03/dot"]
+transform = Transform( 0.00291645, 0, 0, 0, 0.00291644, 0, 0, 0, 0.145822, 0.003, 0, 0.072 )
+material_override = SubResource( 6 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="eyebrow" type="MeshInstance" parent="joan"]
+transform = Transform( 0.744577, 0, 0, 0, 0.744577, 0, 0, 0, 0.744577, 0, -4.76837e-07, -5.96046e-08 )
+visible = false
+mesh = ExtResource( 4 )
+material/0 = null
+
+[node name="eyes" type="MeshInstance" parent="joan"]
+transform = Transform( 0.744577, 0, 0, 0, 0.744577, 0, 0, 0, 0.744577, 0, 0, 0 )
+mesh = ExtResource( 5 )
+material/0 = ExtResource( 6 )
+
+[node name="head" type="MeshInstance" parent="joan"]
+transform = Transform( 0.744577, 0, 0, 0, 0.744577, 0, 0, 0, 0.744577, 0, 0, 0 )
+mesh = ExtResource( 7 )
+material/0 = SubResource( 7 )
+material/1 = SubResource( 8 )
+
+[node name="teeth_top" type="MeshInstance" parent="joan"]
+transform = Transform( -1.22741, 0.000296281, 0.00176081, -0.000707786, -0.987524, -0.140835, 0.00222938, -0.150399, 0.924727, -0.00218092, 4.64897, 1.79829 )
+visible = false
+mesh = ExtResource( 9 )
+material/0 = SubResource( 9 )
+
+[node name="teeth_bottom" type="MeshInstance" parent="joan"]
+transform = Transform( -1.22742, 0, 0, 0, -0.98153, -0.196589, 0, -0.194408, 0.992542, 0.000496048, 4.91183, 1.77366 )
+visible = false
+mesh = ExtResource( 10 )
+material/0 = SubResource( 10 )
+
+[node name="att_face_cam" type="BoneAttachment" parent="joan"]
+transform = Transform( 0.984195, -0.171303, -0.0449006, -0.000220463, 0.252361, -0.967633, 0.17709, 0.95235, 0.248335, -7.12989e-09, 5.59377, 0.374955 )
+visible = false
+bone_name = "head"
+script = ExtResource( 3 )
+active = false
+
+[node name="face_cam" type="Camera" parent="joan/att_face_cam"]
+transform = Transform( 2.75444, -1.19209e-07, 7.15256e-07, -1.78814e-07, -3.57628e-07, 2.75444, 0, -2.75444, -2.38419e-07, -5.96046e-08, 9.905, 4.76837e-07 )
+visible = false
+fov = 9.6
+size = 2.0
+

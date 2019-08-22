@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://scripts/lavatar_main.gd" type="Script" id=1]
 [ext_resource path="res://assets/themes/sharetech.theme" type="Theme" id=2]
@@ -12,7 +12,6 @@
 [ext_resource path="res://materials/hairs.material" type="Material" id=10]
 [ext_resource path="res://materials/tongue.material" type="Material" id=11]
 [ext_resource path="res://assets/envs/environment_sky.tres" type="Environment" id=12]
-[ext_resource path="res://models/Joan_mesh.tres" type="ArrayMesh" id=13]
 
 [sub_resource type="Animation" id=1]
 
@@ -153,6 +152,7 @@ __meta__ = {
 editor/display_folded = true
 
 [node name="main" type="Node2D" parent="ui"]
+editor/display_folded = true
 visible = false
 
 [node name="btn_play" type="Button" parent="ui/main"]
@@ -179,6 +179,7 @@ text = "calibration"
 flat = true
 
 [node name="btn_load" type="Button" parent="ui/main"]
+editor/display_folded = true
 margin_left = 200.0
 margin_top = 10.0
 margin_right = 290.0
@@ -698,8 +699,6 @@ mesh = SubResource( 5 )
 material/0 = null
 
 [node name="sasha" type="Skeleton" parent="."]
-editor/display_folded = true
-visible = false
 bones/0/name = "spine03"
 bones/0/parent = -1
 bones/0/rest = Transform( 1, 0, 0, 0, -0.13505, -0.990839, 0, 0.990839, -0.13505, 0, -2.79927, 0.0018694 )
@@ -774,12 +773,12 @@ bones/14/name = "head"
 bones/14/parent = 13
 bones/14/rest = Transform( 1, 0, 0, 0, 0.868287, 0.496062, 0, -0.496062, 0.868287, 0, -1.88351e-05, -0.311964 )
 bones/14/enabled = true
-bones/14/bound_children = [ NodePath("att_head"), NodePath("att_face_cam") ]
+bones/14/bound_children = [  ]
 bones/15/name = "jaw"
 bones/15/parent = 14
 bones/15/rest = Transform( 1, 0, 0, 0, -0.883889, -0.467696, 0, 0.467695, -0.88389, 0, 0.152121, -0.0122941 )
 bones/15/enabled = true
-bones/15/bound_children = [ NodePath("att_jaw") ]
+bones/15/bound_children = [  ]
 bones/16/name = "special04"
 bones/16/parent = 15
 bones/16/rest = Transform( -1, 1.50996e-07, 0, -7.64049e-09, -0.0506008, 0.998719, 1.50802e-07, 0.998719, 0.0506006, 0, -1.41859e-05, -0.64355 )
@@ -789,7 +788,7 @@ bones/17/name = "oris02"
 bones/17/parent = 16
 bones/17/rest = Transform( 1, -1.10234e-09, 1.82123e-08, -1.10238e-09, 0.992699, 0.120615, -1.82123e-08, -0.120615, 0.992699, -7.65965e-12, -5.07236e-05, -0.342549 )
 bones/17/enabled = true
-bones/17/bound_children = [ NodePath("att_lip_lowerC") ]
+bones/17/bound_children = [  ]
 bones/18/name = "oris01"
 bones/18/parent = 17
 bones/18/rest = Transform( -1, -1.16787e-07, -9.57105e-08, 1.50996e-07, -0.773446, -0.633862, -5.6247e-15, -0.633862, 0.773446, 2.30216e-12, 1.54376e-05, -0.100516 )
@@ -804,7 +803,7 @@ bones/20/name = "oris07.L"
 bones/20/parent = 19
 bones/20/rest = Transform( 0.257138, 0.237841, -0.936649, -0.389805, 0.912419, 0.124676, 0.884269, 0.333051, 0.32733, -1.74548e-05, -4.67747e-05, -0.100658 )
 bones/20/enabled = true
-bones/20/bound_children = [ NodePath("att_lip_lowerL") ]
+bones/20/bound_children = [  ]
 bones/21/name = "oris06.R"
 bones/21/parent = 16
 bones/21/rest = Transform( 0.027363, 0.344967, -0.938216, -0.766321, 0.609908, 0.201904, 0.641875, 0.713449, 0.281044, -7.65965e-12, -5.07236e-05, -0.342549 )
@@ -814,7 +813,7 @@ bones/22/name = "oris07.R"
 bones/22/parent = 21
 bones/22/rest = Transform( 0.226789, -0.223175, 0.948029, 0.396252, 0.910331, 0.119508, -0.889691, 0.348555, 0.294887, -3.24135e-05, -3.60869e-05, -0.100776 )
 bones/22/enabled = true
-bones/22/bound_children = [ NodePath("att_lip_lowerR") ]
+bones/22/bound_children = [  ]
 bones/23/name = "tongue00"
 bones/23/parent = 15
 bones/23/rest = Transform( -1, 1.50996e-07, 0, 1.47032e-07, 0.973751, -0.227622, -3.43699e-08, -0.227622, -0.97375, 0, -1.41859e-05, -0.64355 )
@@ -889,7 +888,7 @@ bones/37/name = "levator05.L"
 bones/37/parent = 36
 bones/37/rest = Transform( 0.976302, 0.169515, -0.134535, -0.216414, 0.764741, -0.606908, 4.27663e-06, 0.62164, 0.783303, -3.34233e-05, 2.09212e-05, -0.123062 )
 bones/37/enabled = true
-bones/37/bound_children = [ NodePath("att_lipL") ]
+bones/37/bound_children = [  ]
 bones/38/name = "levator02.R"
 bones/38/parent = 14
 bones/38/rest = Transform( -0.23089, 0.56502, 0.792112, 0.90743, 0.418806, -0.0342338, -0.351084, 0.710882, -0.609415, -0.02823, 0.878907, -0.164426 )
@@ -909,7 +908,7 @@ bones/41/name = "levator05.R"
 bones/41/parent = 40
 bones/41/rest = Transform( 0.977293, -0.164907, 0.133054, 0.211891, 0.760592, -0.61368, 1.22935e-07, 0.627938, 0.778263, 3.81172e-05, 3.05623e-05, -0.120483 )
 bones/41/enabled = true
-bones/41/bound_children = [ NodePath("att_lipR") ]
+bones/41/bound_children = [  ]
 bones/42/name = "special01"
 bones/42/parent = 14
 bones/42/rest = Transform( -1, 7.542e-06, -2.39879e-11, 8.47534e-07, 0.112372, -0.993666, -7.49423e-06, -0.993666, -0.112372, 0, -0.555023, 0.0158968 )
@@ -924,7 +923,7 @@ bones/44/name = "oris03.L"
 bones/44/parent = 43
 bones/44/rest = Transform( 0.99371, 0.0497245, -0.100344, -0.0903808, 0.885169, -0.456406, 0.066127, 0.462604, 0.884095, 1.2042e-05, -6.98976e-05, -0.13973 )
 bones/44/enabled = true
-bones/44/bound_children = [ NodePath("att_lip_upperL") ]
+bones/44/bound_children = [  ]
 bones/45/name = "oris04.R"
 bones/45/parent = 42
 bones/45/rest = Transform( 0.107818, -0.435254, -0.893829, -0.43371, -0.829597, 0.35166, -0.894579, 0.349748, -0.27822, -1.8602e-10, -2.46316e-05, -1.52248 )
@@ -934,7 +933,7 @@ bones/46/name = "oris03.R"
 bones/46/parent = 45
 bones/46/rest = Transform( 0.99422, -0.0484556, 0.0958052, 0.0857704, 0.895211, -0.437311, -0.0645757, 0.443, 0.894193, 1.84122e-06, -2.38828e-05, -0.140283 )
 bones/46/enabled = true
-bones/46/bound_children = [ NodePath("att_lip_upperR") ]
+bones/46/bound_children = [  ]
 bones/47/name = "oris06"
 bones/47/parent = 42
 bones/47/rest = Transform( 1, -6.29705e-07, 7.52679e-06, -7.55158e-06, -0.0634753, 0.997983, -1.5067e-07, -0.997983, -0.0634754, -1.8602e-10, -2.46316e-05, -1.52248 )
@@ -944,7 +943,7 @@ bones/48/name = "oris05"
 bones/48/parent = 47
 bones/48/rest = Transform( 1, -6.46289e-10, 1.39891e-08, -6.52526e-10, 0.995699, 0.0926465, -1.39888e-08, -0.0926464, 0.995699, 3.07823e-13, 1.98185e-06, -0.0427275 )
 bones/48/enabled = true
-bones/48/bound_children = [ NodePath("att_lip_upperC") ]
+bones/48/bound_children = [  ]
 bones/49/name = "special03"
 bones/49/parent = 14
 bones/49/rest = Transform( -1, 3.25047e-06, -2.99742e-11, -3.78949e-08, -0.0116676, -0.999932, -3.25025e-06, -0.999932, 0.0116675, 0, 0.152121, -0.0122941 )
@@ -974,7 +973,7 @@ bones/54/name = "eye.L"
 bones/54/parent = 53
 bones/54/rest = Transform( -0.933561, -0.00279129, 0.358409, 0.348119, -0.245076, 0.904849, 0.0853118, 0.9695, 0.229765, 0.0273998, 0.0721605, -0.971195 )
 bones/54/enabled = true
-bones/54/bound_children = [ NodePath("att_eyeL") ]
+bones/54/bound_children = [  ]
 bones/55/name = "orbicularis03.L"
 bones/55/parent = 53
 bones/55/rest = Transform( -0.901264, 0.263873, 0.343648, 0.346875, -0.0358135, 0.937227, 0.259616, 0.963892, -0.0592536, 2.57045e-06, -0.00106943, -0.985687 )
@@ -984,7 +983,7 @@ bones/56/name = "orbicularis03.L.end"
 bones/56/parent = 55
 bones/56/rest = Transform( 0.986211, 0.163658, 0.024579, -0.163658, 0.942399, 0.291719, 0.0245789, -0.291719, 0.956188, -2.79397e-08, -1.60187e-07, -0.370048 )
 bones/56/enabled = true
-bones/56/bound_children = [ NodePath("att_lid_upperL") ]
+bones/56/bound_children = [  ]
 bones/57/name = "orbicularis04.L"
 bones/57/parent = 53
 bones/57/rest = Transform( -0.933732, -0.177898, 0.310639, 0.34764, -0.65762, 0.668344, 0.0853852, 0.732044, 0.675885, -1.42143e-06, 2.29478e-06, -0.989831 )
@@ -994,7 +993,7 @@ bones/58/name = "orbicularis04.L.end"
 bones/58/parent = 57
 bones/58/rest = Transform( 0.99961, -0.00524435, -0.027418, -0.00878324, 0.873221, -0.487245, 0.0264973, 0.487296, 0.872835, 0, 1.28057e-07, -0.392433 )
 bones/58/enabled = true
-bones/58/bound_children = [ NodePath("att_lid_lowerL") ]
+bones/58/bound_children = [  ]
 bones/59/name = "special06.R"
 bones/59/parent = 14
 bones/59/rest = Transform( 0.924427, 0.0145907, 0.381079, 0.381358, -0.0353586, -0.923751, -3.7225e-06, 0.999268, -0.0382508, 0, 1.67638e-06, -1.31496 )
@@ -1009,7 +1008,7 @@ bones/61/name = "eye.R"
 bones/61/parent = 60
 bones/61/rest = Transform( -0.934364, 0.0125365, -0.3561, -0.34844, -0.241161, 0.905776, -0.0745221, 0.970404, 0.229701, -0.0302332, 0.0710223, -0.970509 )
 bones/61/enabled = true
-bones/61/bound_children = [ NodePath("att_eyeR") ]
+bones/61/bound_children = [  ]
 bones/62/name = "orbicularis03.R"
 bones/62/parent = 60
 bones/62/rest = Transform( -0.934485, -0.0907317, -0.344246, -0.348076, 0.0299617, 0.936987, -0.0747003, 0.995424, -0.0595803, 1.40816e-06, 2.36928e-06, -0.988846 )
@@ -1019,7 +1018,7 @@ bones/63/name = "orbicularis03.R.end"
 bones/63/parent = 62
 bones/63/rest = Transform( 0.999615, 0.00516459, 0.0272709, -0.0128938, 0.95649, 0.29148, -0.024579, -0.291719, 0.956188, -1.76951e-08, 2.7474e-08, -0.370048 )
 bones/63/enabled = true
-bones/63/bound_children = [ NodePath("att_lid_upperR") ]
+bones/63/bound_children = [  ]
 bones/64/name = "orbicularis04.R"
 bones/64/parent = 60
 bones/64/rest = Transform( -0.934537, 0.185262, -0.303841, -0.347963, -0.654661, 0.671074, -0.0745887, 0.732869, 0.676269, 1.40816e-06, 2.36928e-06, -0.988846 )
@@ -1029,7 +1028,7 @@ bones/65/name = "orbicularis04.R.end"
 bones/65/parent = 64
 bones/65/rest = Transform( 0.99961, 0.00524432, 0.0274186, 0.00878354, 0.873221, -0.487245, -0.0264978, 0.487296, 0.872835, 1.02445e-08, 4.65661e-08, -0.392432 )
 bones/65/enabled = true
-bones/65/bound_children = [ NodePath("att_lid_lowerR") ]
+bones/65/bound_children = [  ]
 bones/66/name = "temporalis01.L"
 bones/66/parent = 14
 bones/66/rest = Transform( -0.818099, -0.285407, 0.499256, -0.426549, -0.281122, -0.859666, 0.385706, -0.91625, 0.108246, 0.60394, 0.544264, -0.380575 )
@@ -1044,7 +1043,7 @@ bones/68/name = "oculi01.L"
 bones/68/parent = 67
 bones/68/rest = Transform( 0.767588, 0.295174, 0.56893, -0.336901, 0.940939, -0.033641, -0.545258, -0.165851, 0.821697, -1.89841e-05, -2.60975e-05, -0.337091 )
 bones/68/enabled = true
-bones/68/bound_children = [ NodePath("att_browL") ]
+bones/68/bound_children = [  ]
 bones/69/name = "temporalis01.R"
 bones/69/parent = 14
 bones/69/rest = Transform( -0.820636, 0.309773, -0.480206, 0.421274, -0.239844, -0.874645, -0.386116, -0.920063, 0.0663255, -0.60394, 0.544264, -0.380575 )
@@ -1059,7 +1058,7 @@ bones/71/name = "oculi01.R"
 bones/71/parent = 70
 bones/71/rest = Transform( 0.768947, -0.295373, -0.566988, 0.326679, 0.943881, -0.0486752, 0.549547, -0.147794, 0.822287, 1.89841e-05, -2.5928e-05, -0.343345 )
 bones/71/enabled = true
-bones/71/bound_children = [ NodePath("att_browR") ]
+bones/71/bound_children = [  ]
 bones/72/name = "temporalis02.L"
 bones/72/parent = 14
 bones/72/rest = Transform( -0.872514, 0.169351, 0.458301, -0.46989, -0.0338341, -0.882076, -0.133874, -0.984975, 0.109097, 0.60437, 0.506925, -0.183257 )
@@ -1095,11 +1094,9 @@ mask_offset = Vector3( 0, 0.93, -0.06 )
 enable_ik = true
 
 [node name="ctrls" type="Node" parent="sasha"]
-editor/display_folded = true
 
 [node name="lip_corner_left" type="Position3D" parent="sasha/ctrls"]
 transform = Transform( -0.280847, -0.845072, 0.45495, 0.29311, 0.375858, 0.8791, -0.913899, 0.380244, 0.142141, 0.252416, 1.37778, 1.13846 )
-visible = false
 
 [node name="lip_corner_right" type="Position3D" parent="sasha/ctrls"]
 transform = Transform( -0.300648, 0.83421, -0.462281, -0.303694, 0.375741, 0.875551, 0.904091, 0.403626, 0.140378, -0.27249, 1.37067, 1.14362 )
@@ -1165,7 +1162,7 @@ visible = false
 transform = Transform( -0.97788, -0.0439155, 0.204507, -2.04891e-08, 0.977712, 0.209952, -0.209169, 0.205308, -0.956084, 0.286656, 1.92764, 0.929565 )
 
 [node name="eyeR" type="Position3D" parent="sasha/ctrls"]
-transform = Transform( -0.994368, 0.0233136, -0.10339, -1.86265e-08, 0.975507, 0.219969, 0.105986, 0.21873, -0.970013, -0.284035, 1.92543, 0.928468 )
+transform = Transform( -0.994368, 0.0233136, -0.10339, -1.95578e-08, 0.975507, 0.219969, 0.105986, 0.21873, -0.970013, -0.284035, 1.92543, 0.928468 )
 
 [node name="ik_lipL" type="SkeletonIK" parent="sasha"]
 root_bone = "levator03.L"
@@ -1858,12 +1855,6 @@ size = 2.0
 
 [node name="env" type="WorldEnvironment" parent="."]
 environment = ExtResource( 12 )
-
-[node name="joan" type="MeshInstance" parent="."]
-transform = Transform( 0.272983, 0, 0, 0, 0.272983, 0, 0, 0, 0.272983, 0, 1.99057, 0.814522 )
-mesh = ExtResource( 13 )
-material/0 = null
-material/1 = null
 
 [connection signal="pressed" from="ui/main/btn_play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="ui/main/btn_calibration" to="." method="_on_calibration_pressed"]

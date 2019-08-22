@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Laughing avatar"
-run/main_scene="res://scenes/dev_gd.tscn"
+run/main_scene="res://scenes/joan_gd.tscn"
 config/icon="res://icon.png"
 
 [display]
