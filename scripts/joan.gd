@@ -78,11 +78,7 @@ func init_avatar():
 				'parent_pose_inverse': pt.inverse(),
 				# bone info
 				'bid': bone_by_name[c.bone_name],
-				'init': get_bone_pose( bone_by_name[c.bone_name] ),
-				'pose': t,
-				'pose_inverse': t.inverse(),
 				'pose_rot': Transform( q ),
-				'quat': q,
 				'origin': t.origin,
 				'scale': t.basis.get_scale(),
 				'rest_inverse': get_bone_rest( bone_by_name[c.bone_name] ).inverse(),
@@ -93,12 +89,15 @@ func init_avatar():
 				'trans_enabled': c.trans_enabled,
 				'trans_lock': [ c.trans_lock_x, c.trans_lock_y, c.trans_lock_z ],
 				'trans_mult': c.rot_mult,
+				'front_y': c.front_y,
 				# hierarchy related
-				'parent_updated': false,
 				'correction': Transform(),
 				'child_count': 0,
 				'children': []
 			}
+			
+			print( d['name'], ' > ', d['origin'] )
+			
 			register_in_hierarchy( d )
 			avatar_bones.append( d )
 			if c.bone_name in avatar_map:
@@ -107,10 +106,6 @@ func init_avatar():
 	
 	for a in avatar_bones:
 		a['child_count'] = len(a['children'])
-	
-	print( "############### avatar_bones ###############" )
-	for a in avatar_bones:
-		print(a['name'], " > " , a['children'])
 
 func _ready():
 	init_avatar()
@@ -122,15 +117,14 @@ func look_at( avatar_bone, global_pos ):
 	
 	# working in global space
 	var i = avatar_bone['bid']
-	var R = avatar_bone['quat']
 	var T = avatar_bone['origin']
 	var S = avatar_bone['scale']
 	
 	# expressing the global position in object space
 	var local_pos = to_local( global_pos )
 	# global pos to object space
-	var corrected_pos = avatar_bone['correction'].xform( local_pos )
-#	corrected_pos = to_local( corrected_pos )
+#	var corrected_pos = avatar_bone['correction'].xform( local_pos )
+	var corrected_pos = local_pos
 	
 	var b = Basis()
 	
@@ -138,7 +132,7 @@ func look_at( avatar_bone, global_pos ):
 	var y_vec = Vector3(0,1,0)
 	var z_vec = Vector3(0,0,1)
 	
-	if avatar_bone['child_count'] > 0:
+	if avatar_bone['front_y']:
 		# FORWARD is Y axis!
 		# up vector:
 		z_vec = avatar_bone['pose_rot'].xform( z_vec )
@@ -155,10 +149,10 @@ func look_at( avatar_bone, global_pos ):
 		y_vec = avatar_bone['pose_rot'].xform( y_vec )
 		z_vec = T - corrected_pos
 		z_vec = z_vec.normalized()
-		x_vec = y_vec.cross( z_vec ) * -1
+		x_vec = y_vec.cross( z_vec )
 		x_vec = x_vec.normalized()
 		y_vec = x_vec.cross( z_vec ) * -1
-		
+	
 	# new basis
 	b = Basis( x_vec, y_vec, z_vec ).scaled( S )
 	
@@ -169,38 +163,9 @@ func look_at( avatar_bone, global_pos ):
 	
 	# applying correction in all children:
 	if avatar_bone['child_count'] > 0:
-
-		# if target_pos was perfectly in front of the bone, generating a unit basis
-#		var diff = local_pos - avatar_bone['pose'].origin
-		# multiplying the front vector of the bone
-#		var front = avatar_bone['pose'].origin + avatar_bone['pose'].basis.y * diff.length()
-		
-#		get_node( "debug_clean" ).translation = local_pos
-#		get_node( "debug" ).translation = front
-		
-#		t = Transform( Basis(), ( global_transform.origin + to_global( front ) ) - global_pos )
-#		t = Transform()
-		
-#		t = Transform( avatar_bone['pose_inverse'].basis, Vector3() ) * Transform( b, Vector3() )
-#		t = avatar_bone['pose_inverse'] * t
-#		t = t.inverse()
-		
-		# getting the absolute rotation delta
-		t = Transform( Basis( x_vec, z_vec * -1, y_vec ), Vector3() )
-		get_node( "debug_01" ).translation = T + t.xform( Vector3(1,0,0) * 3 )
-		get_node( "debug_02" ).translation = T + t.xform( Vector3(0,1,0) * 3 )
-		get_node( "debug_03" ).translation = T + t.xform( Vector3(0,0,1) * 3 )
-			
-		# projection of origin
-		var diff = t.xform( T ) - T
-		# rotation inversion
-#		t = t.inverse()
-		# storage of translation
-		t.origin = diff
-		# good to go, pushing transform in children
-		
+		t.origin = Vector3()
 		for index in avatar_bone['children']:
-			avatar_bones[index]['correction'] *= t
+#			avatar_bones[index]['correction'] *= t
 			pass
 
 func _process(delta):
@@ -210,14 +175,17 @@ func _process(delta):
 		reload = false
 	
 	for ab in avatar_bones:
-		ab[ 'correction' ] = Transform()
+		ab['correction'] = Transform()
 	
 	elapsed_time += delta
 	
 	look_at( avatar_map['head'], get_node( "../head" ).global_transform.origin )
+#	look_at( avatar_map['jaw'], get_node( "../head" ).global_transform.origin )
+#	look_at( avatar_map['chin'], get_node( "../head" ).global_transform.origin )
+	look_at( avatar_map['eyeL'], get_node( "../head/gaze" ).global_transform.origin )
+	look_at( avatar_map['eyeR'], get_node( "../head/gaze" ).global_transform.origin )
+
 #	look_at( avatar_map['eyeL'], get_node( "../gaze" ).global_transform.origin )
 #	look_at( avatar_map['eyeR'], get_node( "../gaze" ).global_transform.origin )
 #	look_at( avatar_map['tongue02'], get_node( "../gaze" ).global_transform.origin )
 #	look_at( avatar_map['neck02'], get_node( "../gaze" ).global_transform.origin )
-	look_at( avatar_map['eyeL'], get_node( "../head/gaze" ).global_transform.origin )
-	look_at( avatar_map['eyeR'], get_node( "../head/gaze" ).global_transform.origin )

@@ -11,3 +11,4 @@ export(bool) var trans_lock_x = false
 export(bool) var trans_lock_y = false
 export(bool) var trans_lock_z = false
 export(Vector3) var trans_mult = Vector3(1,1,1)
+export(bool) var front_y = false
