@@ -1,0 +1,133 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/projection2d_solving.gd" type="Script" id=1]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+
+
+[node name="root" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="O" type="Polygon2D" parent="."]
+material = SubResource( 1 )
+position = Vector2( 551, 343 )
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="TC" type="Polygon2D" parent="O"]
+material = SubResource( 1 )
+position = Vector2( -33.2129, 74.4989 )
+rotation = 0.785398
+color = Color( 1, 0, 0.811765, 1 )
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="A_origin" type="Polygon2D" parent="O"]
+editor/display_folded = true
+material = SubResource( 1 )
+position = Vector2( 0, -130 )
+color = Color( 1, 1, 0.5, 0.5 )
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="B_origin" type="Polygon2D" parent="O/A_origin"]
+material = SubResource( 1 )
+position = Vector2( -60, 0 )
+color = Color( 1, 1, 0, 0.5 )
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="C_origin" type="Polygon2D" parent="O/A_origin/B_origin"]
+material = SubResource( 1 )
+position = Vector2( -40, -40 )
+color = Color( 1, 0.54, 0, 0.5 )
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="A" type="Polygon2D" parent="O"]
+material = SubResource( 1 )
+position = Vector2( 0, -130 )
+color = Color( 1, 1, 0.5, 1 )
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="B" type="Polygon2D" parent="O/A"]
+material = SubResource( 1 )
+position = Vector2( -60, 0 )
+color = Color( 1, 1, 0, 1 )
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="O" type="Polygon2D" parent="O/A/B"]
+material = SubResource( 1 )
+position = Vector2( 60, 130 )
+rotation = -2.98023e-08
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="T" type="Polygon2D" parent="O/A/B/O"]
+material = SubResource( 1 )
+position = Vector2( 80, -220 )
+rotation = 0.785398
+color = Color( 0, 0.976471, 1, 1 )
+polygon = PoolVector2Array( -10, 0, 10, 0, 10, 10, -10, 10 )
+
+[node name="T_origin" type="Polygon2D" parent="O/A/B/O"]
+material = SubResource( 1 )
+position = Vector2( 80, -220 )
+rotation = 2.39641
+color = Color( 0, 0.568627, 0.584314, 1 )
+polygon = PoolVector2Array( -5, 0, 5, 0, 5, 5, -5, 5 )
+
+[node name="C" type="Polygon2D" parent="O/A/B"]
+material = SubResource( 1 )
+position = Vector2( -40, -40 )
+color = Color( 1, 0.541176, 0, 1 )
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="O" type="Polygon2D" parent="O/A/B/C"]
+material = SubResource( 1 )
+position = Vector2( 100, 170 )
+rotation = -2.98023e-08
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="T" type="Polygon2D" parent="O/A/B/C/O"]
+material = SubResource( 1 )
+position = Vector2( 80, -220 )
+rotation = 0.785398
+color = Color( 0, 1, 0.392157, 1 )
+polygon = PoolVector2Array( -10, -10, 10, -10, 10, 0, -10, 0 )
+
+[node name="T_origin" type="Polygon2D" parent="O/A/B/C/O"]
+material = SubResource( 1 )
+position = Vector2( 80, -220 )
+rotation = 2.39641
+color = Color( 0, 0.584314, 0.294118, 1 )
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 0, -5, 0 )
+
+[node name="T" type="Polygon2D" parent="O"]
+material = SubResource( 1 )
+position = Vector2( 80, -220 )
+color = Color( 1, 0, 0, 1 )
+polygon = PoolVector2Array( -5, -5, 5, -5, 5, 5, -5, 5 )
+
+[node name="lbl_x" type="Label" parent="."]
+margin_left = 310.0
+margin_top = 270.0
+margin_right = 548.0
+margin_bottom = 284.0
+text = "0"
+
+[node name="lbl_y" type="Label" parent="."]
+margin_left = 310.0
+margin_top = 290.0
+margin_right = 548.0
+margin_bottom = 304.0
+text = "0"
+
+[node name="lbl_x2" type="Label" parent="."]
+margin_left = 310.0
+margin_top = 320.0
+margin_right = 548.0
+margin_bottom = 334.0
+text = "0"
+
+[node name="lbl_y2" type="Label" parent="."]
+margin_left = 310.0
+margin_top = 340.0
+margin_right = 548.0
+margin_bottom = 354.0
+text = "0"
+

@@ -52,6 +52,11 @@ func init_avatar():
 		
 		if c.is_class("BoneAttachment") and c.active:
 			
+			var bid = bone_by_name[c.bone_name]
+			
+			# resting bone pose (avoiding storing current transform)
+			set_bone_pose( bid, Transform() )
+			
 			var parentid = get_bone_parent( bone_by_name[c.bone_name] )
 			
 			var pt = Transform()
@@ -115,26 +120,15 @@ func look_at( avatar_bone, global_pos ):
 	if not avatar_bone['rot_enabled']:
 		return
 	
-	# updating parent matrices if required
-	if avatar_bone['parent_updated']:
-		avatar_bone['parent_updated'] = false
-	
 	# working in global space
 	var i = avatar_bone['bid']
 	var R = avatar_bone['quat']
 	var T = avatar_bone['origin']
 	var S = avatar_bone['scale']
 	
+	get_node( "debug_clean" ).translation = to_local( global_pos )
 	# global pos to object space
 	global_pos = avatar_bone['correction'].xform( to_local( global_pos ) )
-	
-	if avatar_bone['rot_lock'][0]:
-		global_pos.x = T.x
-	if avatar_bone['rot_lock'][1]:
-		global_pos.y = T.y
-	if avatar_bone['rot_lock'][2]:
-		global_pos.z = T.z
-	
 	get_node( "debug" ).translation = global_pos
 	
 	var b = Basis()
@@ -165,29 +159,28 @@ func look_at( avatar_bone, global_pos ):
 		y_vec = x_vec.cross( z_vec ) * -1
 		
 	# new basis
-	b = Basis( x_vec, y_vec, z_vec )
-#	if avatar_bone['rot_mult'].x != 0 or avatar_bone['rot_mult'].y != 0 or avatar_bone['rot_mult'].z != 0:
-#		var q = Quat()
-#		q.set_euler( b.get_euler() )
-#		q = R.inverse() * q
-#		b = Basis(R * q)
-	b = b.scaled( S )
+	b = Basis( x_vec, y_vec, z_vec ).scaled( S )
 	
-	# creation of the global transfrom
-	var t = avatar_bone['rest_inverse'] * avatar_bone['parent_pose_inverse'] * Transform( b, T )
-	# turning global transform to local
-	set_bone_pose( i, t )
+	# creation of the obect space transfrom
+	var t = Transform( b, T )
+	# turning global transform to parent space without rest
+	set_bone_pose( i, avatar_bone['rest_inverse'] * avatar_bone['parent_pose_inverse'] * t )
 	
 	# applying correction in all children:
 	if avatar_bone['child_count'] > 0:
-#		t = avatar_bone['rest_inverse'] * avatar_bone['parent_pose_inverse'] * t
-#		t = t.inverse()
-		var loc = Transform( b, Vector3() )
+		# getting the absolute rotation delta
+		t = Transform( avatar_bone['pose_inverse'].basis, Vector3() ) * Transform( b, Vector3() )
+#		t = Transform()
+		# projection of origin
+		var origin = t.xform( T ) - T
+		# rotation inversion
+		t = t.inverse()
+		# storage of translation
+		t.origin = origin
+		# good to go, pushing transform in children
 		for index in avatar_bone['children']:
-			var diff = avatar_bones[index]['origin'] - T
-			diff = loc.xform( diff * -1 )
-			avatar_bones[index]['correction'].basis *= loc.basis.inverse()
-			avatar_bones[index]['correction'].origin += diff
+#			avatar_bones[index]['correction'] *= t
+			pass
 
 func _process(delta):
 	
@@ -197,10 +190,6 @@ func _process(delta):
 	
 	for ab in avatar_bones:
 		ab[ 'correction' ] = Transform()
-#		set_bone_pose( ab[ 'bid' ], Transform() )
-#		if ab[ 'pid' ] != null:
-#			var t = get_bone_global_pose( ab[ 'pid' ] )
-#			ab[ 'parent_pose_inverse' ] = t.inverse()
 	
 	elapsed_time += delta
 	
