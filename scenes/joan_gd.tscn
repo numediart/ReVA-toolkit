@@ -98,7 +98,7 @@ fov = 35.0
 far = 20.0
 
 [node name="spot" type="SpotLight" parent="."]
-transform = Transform( 0.327921, -0.540751, 0.793522, 0.729391, 0.685647, 0.16582, -0.624561, 0.516814, 0.610285, 4.30096, 1.77451, 3.16774 )
+transform = Transform( 0.446236, -0.85602, 0.312607, 0.47324, 0.515129, 0.735055, -0.778805, -0.177461, 0.625772, 2.8108, 7.31067, 6.43942 )
 light_energy = 0.75
 shadow_enabled = true
 shadow_bias = 0.1
@@ -107,7 +107,7 @@ spot_attenuation = 1.13412e-06
 spot_angle = 28.683
 
 [node name="spot_back" type="SpotLight" parent="."]
-transform = Transform( 0.324644, -0.0167533, -0.945688, 0, 0.999843, -0.0177127, 0.945836, 0.00575031, 0.324593, -9.19989, 0.881972, 3.52062 )
+transform = Transform( 0.727204, -0.0169996, -0.707464, 0.00811529, 1.01454, -0.0160367, 0.707622, 0.00583486, 0.727226, -7.89836, 0.881972, 7.31258 )
 light_energy = 0.5
 shadow_enabled = true
 shadow_bias = 0.1
@@ -118,15 +118,15 @@ spot_angle = 37.4082
 environment = ExtResource( 1 )
 
 [node name="head" type="Position3D" parent="."]
-transform = Transform( 0.600002, -4.58703e-17, -8.60074e-17, 4.58703e-17, 0.600002, 6.57527e-33, 8.60074e-17, -1.31505e-32, 0.600002, 0.719875, 1.16882, 1.7575 )
+transform = Transform( 0.600002, -4.58703e-17, -8.60074e-17, 4.58703e-17, 0.600002, 6.57527e-33, 8.60074e-17, -1.31505e-32, 0.600002, -0.130727, 1.82031, 1.7575 )
 
 [node name="jaw" type="Position3D" parent="."]
-transform = Transform( 0.600002, -4.58703e-17, -8.60074e-17, 4.58703e-17, 0.600002, 6.57528e-33, 8.60074e-17, -1.31505e-32, 0.600002, 0.244118, 0.642564, 1.0167 )
+transform = Transform( 0.600002, -4.58703e-17, -8.60074e-17, 4.58703e-17, 0.600002, 6.57528e-33, 8.60074e-17, -1.31505e-32, 0.600002, 0.359439, 1.06741, 0.958812 )
 visible = false
 
 [node name="gaze" type="Position3D" parent="."]
 editor/display_folded = true
-transform = Transform( 1, -7.64505e-17, -1.43345e-16, 7.64505e-17, 1, 1.09589e-32, 1.43345e-16, -2.19178e-32, 1, 1.21178, 1.78518, 2.30139 )
+transform = Transform( 1, -7.64505e-17, -1.43345e-16, 7.64505e-17, 1, 1.09589e-32, 1.43345e-16, -2.19179e-32, 1, 0.242126, 2.08148, 2.48843 )
 
 [node name="left" type="Position3D" parent="gaze"]
 transform = Transform( 0.1, 0, 1.32349e-24, 0, 0.1, 5.26367e-40, -1.32349e-24, -5.26367e-40, 0.1, 0.3, 0, 0 )
@@ -135,13 +135,14 @@ transform = Transform( 0.1, 0, 1.32349e-24, 0, 0.1, 5.26367e-40, -1.32349e-24, -
 transform = Transform( 0.1, 0, 1.32349e-24, 0, 0.1, 2.20406e-40, -1.32349e-24, -2.20406e-40, 0.1, -0.3, 0, 0 )
 
 [node name="collarbones" type="Position3D" parent="."]
-transform = Transform( 0.600002, -4.58703e-17, -8.60074e-17, 4.58703e-17, 0.600002, 6.57527e-33, 8.60074e-17, -1.31505e-32, 0.600002, 0.0574905, -0.00455404, 0.236563 )
+transform = Transform( 0.600002, -4.58703e-17, -8.60074e-17, 4.58703e-17, 0.600002, 6.57527e-33, 8.60074e-17, -1.31505e-32, 0.600002, 0.0574905, -0.0766626, 0.120817 )
+visible = false
 
 [node name="left" type="Position3D" parent="collarbones"]
-transform = Transform( 1, -1.32349e-23, 0, 1.32349e-23, 1, 1.46937e-38, 0, 1.46937e-39, 1, 2.04628, 0.468046, 0 )
+transform = Transform( 1, -1.32349e-23, 0, 1.32349e-23, 1, 7.34684e-39, 0, 2.93874e-39, 1, 2.04628, 0.456823, 0 )
 
 [node name="right" type="Position3D" parent="collarbones"]
-transform = Transform( 1, -1.32349e-23, 0, 1.32349e-23, 1, 1.76324e-38, 0, 1.46937e-39, 1, -2.015, 0.342, 0 )
+transform = Transform( 1, -1.32349e-23, 0, 1.32349e-23, 1, 8.81621e-39, 0, 2.93874e-39, 1, -2.015, 0.58354, 0 )
 
 [node name="joan" type="Skeleton" parent="."]
 transform = Transform( 0.368388, 0, 0, 0, 0.368388, 0, 0, 0, 0.368388, 0, -0.315706, 0.21966 )
@@ -381,7 +382,6 @@ bones/46/rest = Transform( 0.438548, 0.296915, 0.848243, -0.888597, 0.0020754, 0
 bones/46/enabled = true
 bones/46/bound_children = [ NodePath("att_collarboneR") ]
 script = ExtResource( 2 )
-lid_rotX = 0.237
 
 [node name="debug_01" type="Spatial" parent="joan"]
 editor/display_folded = true
@@ -428,7 +428,7 @@ material/0 = null
 
 [node name="att_collarboneL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.331915, -0.246595, -0.910505, 0.105767, 0.96887, -0.223846, 0.93736, -0.0220038, 0.347663, 0.281464, 0.818413, 1.27059 )
+transform = Transform( 0.43723, -0.298852, -0.848243, 0.138653, 0.954298, -0.264748, 0.888597, -0.00185585, 0.458684, 0.281464, 0.818413, 1.27059 )
 bone_name = "collarboneL"
 script = ExtResource( 3 )
 rot_enabled = true
@@ -462,7 +462,7 @@ material/0 = null
 
 [node name="att_collarboneR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.373083, 0.214724, 0.902608, -0.114005, 0.976089, -0.185082, -0.920767, -0.0338504, 0.38864, -0.281464, 0.818413, 1.27059 )
+transform = Transform( 0.438548, 0.296915, 0.848243, -0.13443, 0.954902, -0.264748, -0.888597, 0.0020754, 0.458684, -0.281464, 0.818413, 1.27059 )
 bone_name = "collarboneR"
 script = ExtResource( 3 )
 rot_enabled = true
@@ -530,7 +530,7 @@ material/0 = null
 
 [node name="att_head" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889376, 0.429491, -0.156676, 0.000569135, -0.343743, -0.939064, -0.457176, 0.835092, -0.305961, -7.12989e-09, 5.59377, 0.374955 )
+transform = Transform( 0.995666, -0.0928577, -0.00509187, -0.000115776, 0.0535152, -0.998567, 0.0929972, 0.994241, 0.0532726, -7.12989e-09, 5.59377, 0.374955 )
 bone_name = "head"
 script = ExtResource( 3 )
 rot_enabled = true
@@ -565,7 +565,7 @@ material/0 = null
 
 [node name="att_jaw" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889376, -0.425269, -0.167799, 0.000568874, -0.366003, 0.930614, -0.457176, -0.827762, -0.325272, 0.153743, 5.50063, 0.673927 )
+transform = Transform( 0.995666, 0.0660872, 0.065429, -0.000116104, -0.702676, 0.711511, 0.0929971, -0.708435, -0.699623, -0.0321453, 5.64044, 0.719173 )
 bone_name = "jaw"
 script = ExtResource( 3 )
 rot_enabled = true
@@ -599,7 +599,7 @@ material/0 = null
 
 [node name="att_chin" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889376, -0.345071, -0.299892, 0.000569207, -0.655132, 0.755515, -0.457175, -0.672108, -0.582462, 0.521042, 3.46358, 1.38593 )
+transform = Transform( 0.995666, 0.0405145, 0.0837085, -0.000115552, -0.899576, 0.436765, 0.0929975, -0.434881, -0.895673, -0.175365, 4.08299, 2.2506 )
 visible = false
 bone_name = "chin"
 script = ExtResource( 3 )
@@ -634,7 +634,7 @@ material/0 = null
 
 [node name="att_lower_lip" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889377, -0.127168, -0.439133, 0.000572025, -0.960225, 0.279229, -0.457175, -0.248591, -0.853929, 0.765004, 3.64772, 1.86075 )
+transform = Transform( 0.995666, -0.0113781, 0.0922984, -0.000112692, -0.992635, -0.121152, 0.0929971, 0.120616, -0.988334, -0.214222, 4.46234, 2.66709 )
 visible = false
 bone_name = "lower_lip"
 script = ExtResource( 3 )
@@ -669,7 +669,7 @@ material/0 = null
 
 [node name="att_lower_lipL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.791463, -0.124739, -0.598353, 0.0726027, -0.952837, 0.294672, -0.60689, -0.276664, -0.745079, 0.929829, 3.76566, 1.63582 )
+transform = Transform( 0.994999, 0.00586515, -0.0997151, -0.00389239, -0.99524, -0.0973808, -0.099812, 0.0972818, -0.99024, 0.0491671, 4.52153, 2.53001 )
 visible = false
 bone_name = "lower_lipL"
 script = ExtResource( 3 )
@@ -704,7 +704,7 @@ material/0 = null
 
 [node name="att_lower_lipR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.958396, -0.122188, -0.257968, -0.0423286, -0.954594, 0.29489, -0.282286, -0.271703, -0.920051, 0.486045, 3.76537, 1.86394 )
+transform = Transform( 0.959591, 0.00532343, 0.281349, 0.0340826, -0.99466, -0.0974253, 0.279328, 0.103077, -0.954648, -0.447655, 4.52159, 2.4836 )
 visible = false
 bone_name = "lower_lipR"
 script = ExtResource( 3 )
@@ -739,7 +739,7 @@ material/0 = null
 
 [node name="att_commissureL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.684459, -0.104069, -0.721585, 0.0989289, -0.967347, 0.233353, -0.722308, -0.231106, -0.651814, 1.23707, 3.90559, 1.44848 )
+transform = Transform( 0.966716, -0.00137937, -0.255849, -0.0393066, -0.988915, -0.143185, -0.252816, 0.148477, -0.956054, 0.413955, 4.63965, 2.48471 )
 visible = false
 bone_name = "commissureL"
 script = ExtResource( 3 )
@@ -774,7 +774,7 @@ material/0 = null
 
 [node name="att_commissureR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.988849, -0.100001, -0.110344, -0.0719746, -0.969631, 0.233744, -0.130367, -0.223196, -0.966017, 0.154747, 3.90489, 2.00484 )
+transform = Transform( 0.903566, -0.00222297, 0.428441, 0.0655017, -0.987515, -0.143265, 0.423411, 0.157513, -0.89214, -0.797718, 4.63979, 2.37154 )
 visible = false
 bone_name = "commissureR"
 script = ExtResource( 3 )
@@ -809,7 +809,7 @@ material/0 = null
 
 [node name="att_upper_lip" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889376, -0.124553, -0.439882, 0.000567672, -0.961872, 0.273502, -0.457176, -0.243496, -0.855395, 0.866636, 4.01508, 2.05892 )
+transform = Transform( 0.995666, -0.0119324, 0.092229, -0.000117188, -0.991895, -0.127064, 0.0929976, 0.126502, -0.987598, -0.21977, 4.8877, 2.72702 )
 visible = false
 bone_name = "upper_lip"
 script = ExtResource( 3 )
@@ -844,7 +844,7 @@ material/0 = null
 
 [node name="att_upper_lipL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.774559, -0.101807, -0.624254, 0.0806364, -0.963014, 0.257106, -0.62734, -0.249482, -0.737702, 1.15963, 4.02906, 1.8708 )
+transform = Transform( 0.991853, 0.0104572, -0.126957, -0.00670123, -0.990962, -0.133977, -0.127211, 0.133736, -0.982818, 0.128675, 4.8872, 2.72332 )
 visible = false
 bone_name = "upper_lipL"
 script = ExtResource( 3 )
@@ -879,7 +879,7 @@ material/0 = null
 
 [node name="att_upper_lipR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.966661, -0.0972864, -0.236857, -0.0341326, -0.965714, 0.257354, -0.253774, -0.24069, -0.936839, 0.543129, 4.02866, 2.18771 )
+transform = Transform( 0.951747, 0.0095132, 0.306737, 0.0530866, -0.989555, -0.134027, 0.302258, 0.143844, -0.94231, -0.561504, 4.88728, 2.65886 )
 visible = false
 bone_name = "upper_lipR"
 script = ExtResource( 3 )
@@ -914,7 +914,7 @@ material/0 = null
 
 [node name="att_muscle_lip01L" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.770056, -0.101915, -0.629784, 0.0824799, -0.96297, 0.256683, -0.632623, -0.249605, -0.733135, 1.29133, 4.5979, 1.83619 )
+transform = Transform( 0.990916, 0.0104335, -0.13408, -0.00766464, -0.990985, -0.133758, -0.134267, 0.133571, -0.981902, 0.279738, 5.42165, 2.53981 )
 visible = false
 bone_name = "muscle_lip01L"
 script = ExtResource( 3 )
@@ -949,7 +949,7 @@ material/0 = null
 
 [node name="att_muscle_lip02L" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.689205, -0.103817, -0.717091, 0.112757, -0.962257, 0.247683, -0.71574, -0.251561, -0.651486, 1.41794, 4.27353, 1.5703 )
+transform = Transform( 0.967759, 0.00988863, -0.251685, -0.0234427, -0.991356, -0.12909, -0.250786, 0.130828, -0.959162, 0.516049, 5.05301, 2.52524 )
 visible = false
 bone_name = "muscle_lip02L"
 script = ExtResource( 3 )
@@ -984,7 +984,7 @@ material/0 = null
 
 [node name="att_muscle_lip01R" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.968337, -0.0972472, -0.229923, -0.0359802, -0.965758, 0.256939, -0.247037, -0.240531, -0.938679, 0.437757, 4.59736, 2.27496 )
+transform = Transform( 0.949518, 0.00946024, 0.313568, 0.0540484, -0.989532, -0.133811, 0.30902, 0.144003, -0.940091, -0.675846, 5.42176, 2.45056 )
 visible = false
 bone_name = "muscle_lip01R"
 script = ExtResource( 3 )
@@ -1019,7 +1019,7 @@ material/0 = null
 
 [node name="att_muscle_lip02R" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.988905, -0.0967643, -0.112708, -0.0662962, -0.966471, 0.24807, -0.132933, -0.237846, -0.962164, 0.148183, 4.27272, 2.22301 )
+transform = Transform( 0.905188, 0.00841622, 0.424928, 0.0698335, -0.989161, -0.129169, 0.419235, 0.146596, -0.895965, -0.905455, 5.05318, 2.39247 )
 visible = false
 bone_name = "muscle_lip02R"
 script = ExtResource( 3 )
@@ -1054,7 +1054,7 @@ material/0 = null
 
 [node name="att_nose_tip" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889377, -0.123183, -0.440267, 0.000570426, -0.962717, 0.270512, -0.457175, -0.240838, -0.856148, 1.06798, 4.53314, 2.45125 )
+transform = Transform( 0.995666, -0.0122161, 0.0921915, -0.00011435, -0.991495, -0.130146, 0.0929972, 0.129571, -0.9872, -0.238438, 5.53749, 2.9277 )
 visible = false
 bone_name = "nose_tip"
 script = ExtResource( 3 )
@@ -1088,7 +1088,7 @@ material/0 = null
 
 [node name="att_nostrilL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.40367, -0.1561, -0.901489, 0.220996, -0.939523, 0.261644, -0.887813, -0.304843, -0.34476, 1.20139, 4.51576, 2.20409 )
+transform = Transform( 0.821507, -0.0052156, -0.570174, -0.0354129, -0.998495, -0.0418892, -0.569098, 0.0546039, -0.820455, 0.00512733, 5.45886, 2.81072 )
 visible = false
 bone_name = "nostrilL"
 script = ExtResource( 3 )
@@ -1123,7 +1123,7 @@ material/0 = null
 
 [node name="att_nostrilR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.957122, -0.156101, 0.244025, -0.220125, -0.939523, 0.262377, 0.18831, -0.304842, -0.933601, 0.789359, 4.51549, 2.41589 )
+transform = Transform( 0.701915, -0.00521667, 0.712241, 0.0352359, -0.998495, -0.0420384, 0.711388, 0.054604, -0.700675, -0.456146, 5.45891, 2.76764 )
 visible = false
 bone_name = "nostrilR"
 script = ExtResource( 3 )
@@ -1158,7 +1158,7 @@ material/0 = null
 
 [node name="att_cheekL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.211676, -0.16488, -0.963332, 0.229613, -0.94969, 0.212999, -0.949985, -0.26628, -0.163168, 1.52196, 4.33052, 0.845572 )
+transform = Transform( 0.692342, -0.0335102, -0.720791, -0.0836984, -0.995908, -0.0340943, -0.716699, 0.0839343, -0.692313, 0.991183, 4.87021, 1.99596 )
 visible = false
 bone_name = "cheekL"
 script = ExtResource( 3 )
@@ -1193,7 +1193,7 @@ material/0 = null
 
 [node name="att_cheekR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.883206, -0.19232, 0.427736, -0.30562, -0.927819, 0.213889, 0.355728, -0.319633, -0.878233, -0.501764, 4.32922, 1.88585 )
+transform = Transform( 0.547234, -0.0275813, 0.836524, 0.00202321, -0.999411, -0.0342755, 0.836977, 0.0204494, -0.546857, -1.2744, 4.87048, 1.78435 )
 visible = false
 bone_name = "cheekR"
 script = ExtResource( 3 )
@@ -1227,7 +1227,7 @@ mesh = SubResource( 9 )
 material/0 = null
 
 [node name="att_eyeL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.847247, -0.0204399, -0.530806, 0.0312879, -0.995605, 0.0882783, -0.530277, -0.0914012, -0.842884, 1.52897, 5.69441, 1.24872 )
+transform = Transform( 0.989462, -0.00562917, -0.14468, -0.0130546, -0.998643, -0.0504247, -0.1442, 0.0517823, -0.988193, 0.833806, 6.26653, 1.77621 )
 bone_name = "eyeL"
 script = ExtResource( 3 )
 rot_enabled = true
@@ -1264,7 +1264,7 @@ material/0 = null
 
 [node name="att_lower_lidL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889376, -0.239185, -0.389615, 0.000569192, -0.851643, 0.524123, -0.457175, -0.466364, -0.757295, 1.53798, 5.67459, 1.26622 )
+transform = Transform( 0.995666, 0.0347542, 0.0862595, -0.000115558, -0.927082, 0.374858, 0.0929976, -0.373244, -0.923061, 0.831396, 6.25606, 1.80199 )
 visible = false
 bone_name = "lower_lidL"
 script = ExtResource( 3 )
@@ -1302,7 +1302,7 @@ material/0 = null
 
 [node name="att_lid_internalL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.749618, -0.102398, -0.653903, 0.0906174, -0.962779, 0.254649, -0.65564, -0.250144, -0.712437, 1.14743, 5.54156, 1.70078 )
+transform = Transform( 0.986145, 0.0103175, -0.165565, -0.0119107, -0.991085, -0.132704, -0.165458, 0.132837, -0.97723, 0.265035, 6.21594, 1.99353 )
 visible = false
 bone_name = "lid_internalL"
 script = ExtResource( 3 )
@@ -1336,7 +1336,7 @@ material/0 = null
 
 [node name="att_lid_externalL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.497693, -0.0990175, -0.861683, 0.169534, -0.963194, 0.208603, -0.850624, -0.249904, -0.462589, 1.92357, 5.68838, 1.10699 )
+transform = Transform( 0.87942, 0.0130365, -0.475869, -0.0528353, -0.990776, -0.124784, -0.473107, 0.13488, -0.87062, 1.24286, 6.28211, 1.86707 )
 visible = false
 bone_name = "lid_externalL"
 script = ExtResource( 3 )
@@ -1370,7 +1370,7 @@ material/0 = null
 
 [node name="att_upper_lidL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889376, -0.0634092, -0.452757, 0.000569057, -0.990181, 0.139794, -0.457175, -0.124587, -0.880607, 1.52897, 5.69441, 1.24872 )
+transform = Transform( 0.995666, -0.0447833, 0.0815045, -0.000115743, -0.877013, -0.480467, 0.0929975, 0.478376, -0.873217, 0.833806, 6.26653, 1.77621 )
 visible = false
 bone_name = "upper_lidL"
 script = ExtResource( 3 )
@@ -1406,7 +1406,7 @@ mesh = SubResource( 9 )
 material/0 = null
 
 [node name="att_eyeR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.776418, 0.0299962, -0.629504, 0.0740664, -0.996288, 0.0438786, -0.625851, -0.0806931, -0.775758, -0.179389, 5.69331, 2.12689 )
+transform = Transform( 0.980065, -0.00574655, -0.198595, -0.0159496, -0.998631, -0.0498146, -0.198037, 0.0519893, -0.978815, -1.07872, 6.26675, 1.59758 )
 bone_name = "eyeR"
 script = ExtResource( 3 )
 rot_enabled = true
@@ -1445,7 +1445,7 @@ material/0 = null
 
 [node name="att_lower_lidR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889376, -0.239185, -0.389615, 0.000569192, -0.851643, 0.524123, -0.457175, -0.466364, -0.757295, -0.170378, 5.6735, 2.14439 )
+transform = Transform( 0.995666, 0.0347542, 0.0862595, -0.000115558, -0.927082, 0.374858, 0.0929976, -0.373244, -0.923061, -1.08113, 6.25628, 1.62336 )
 visible = false
 bone_name = "lower_lidR"
 script = ExtResource( 3 )
@@ -1482,7 +1482,7 @@ material/0 = null
 
 [node name="att_lid_internalR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.975166, -0.0970927, -0.199054, -0.0441359, -0.965949, 0.25494, -0.217029, -0.239823, -0.946248, 0.410429, 5.54109, 2.07963 )
+transform = Transform( 0.939055, 0.00920814, 0.343642, 0.0582861, -0.989433, -0.132763, 0.338789, 0.144701, -0.929669, -0.560049, 6.21603, 1.91647 )
 visible = false
 bone_name = "lid_internalR"
 script = ExtResource( 3 )
@@ -1516,7 +1516,7 @@ material/0 = null
 
 [node name="att_lid_externalR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.988592, -0.0838838, 0.125093, -0.108933, -0.971779, 0.209234, 0.104012, -0.220474, -0.969831, -0.524282, 5.68681, 2.36528 )
+transform = Transform( 0.777474, 0.00989324, 0.628837, 0.113574, -0.985646, -0.124912, 0.618576, 0.168536, -0.767437, -1.49753, 6.28243, 1.61112 )
 visible = false
 bone_name = "lid_externalR"
 script = ExtResource( 3 )
@@ -1550,7 +1550,7 @@ material/0 = null
 
 [node name="att_upper_lidR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889376, -0.0634084, -0.452757, 0.000570006, -0.990181, 0.139794, -0.457176, -0.124587, -0.880607, -0.179389, 5.69331, 2.12689 )
+transform = Transform( 0.995666, -0.0447823, 0.0815045, -0.000114907, -0.877013, -0.480467, 0.092997, 0.478376, -0.873217, -1.07872, 6.26675, 1.59758 )
 visible = false
 bone_name = "upper_lidR"
 script = ExtResource( 3 )
@@ -1587,7 +1587,7 @@ material/0 = null
 
 [node name="att_forehead" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889377, -0.156099, -0.4297, 0.000570987, -0.939523, 0.342485, -0.457175, -0.304844, -0.835501, 1.18008, 6.38066, 2.67162 )
+transform = Transform( 0.995666, -0.00521413, 0.0928511, -0.000113708, -0.998495, -0.0548521, 0.0929973, 0.0546038, -0.994168, -0.191759, 7.33325, 2.43017 )
 visible = false
 bone_name = "forehead"
 script = ExtResource( 3 )
@@ -1622,7 +1622,7 @@ material/0 = null
 
 [node name="att_eyebrow01L" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.803873, -0.101115, -0.586143, 0.0681249, -0.963308, 0.259611, -0.590886, -0.248625, -0.767489, 1.39257, 5.86961, 2.16078 )
+transform = Transform( 0.996835, 0.0105771, -0.0787835, -0.000177918, -0.990809, -0.135274, -0.0794895, 0.13486, -0.987672, 0.240403, 6.7226, 2.34281 )
 visible = false
 bone_name = "eyebrow01L"
 script = ExtResource( 3 )
@@ -1657,7 +1657,7 @@ material/0 = null
 
 [node name="att_eyebrow02L" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.729518, -0.102876, -0.676181, 0.0982758, -0.962599, 0.252479, -0.676866, -0.25064, -0.692123, 1.7988, 6.09128, 1.92554 )
+transform = Transform( 0.980692, 0.0101839, -0.195294, -0.0159096, -0.991179, -0.131578, -0.194911, 0.132145, -0.971878, 0.717474, 6.91685, 2.27817 )
 visible = false
 bone_name = "eyebrow02L"
 script = ExtResource( 3 )
@@ -1692,7 +1692,7 @@ material/0 = null
 
 [node name="att_eyebrow03L" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.484117, -0.108649, -0.868231, 0.172807, -0.960847, 0.216594, -0.85777, -0.254894, -0.446387, 1.96686, 5.9969, 1.25053 )
+transform = Transform( 0.871846, 0.0076216, -0.48972, -0.054764, -0.992093, -0.112936, -0.486708, 0.125282, -0.864534, 1.21476, 6.62378, 1.87866 )
 visible = false
 bone_name = "eyebrow03L"
 script = ExtResource( 3 )
@@ -1727,7 +1727,7 @@ material/0 = null
 
 [node name="att_foreheadL" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.613991, -0.156099, -0.773723, 0.14946, -0.939523, 0.308154, -0.775034, -0.304844, -0.553529, 2.00828, 6.62146, 1.93063 )
+transform = Transform( 0.936959, -0.00521434, -0.349401, -0.0239572, -0.998495, -0.049343, -0.348618, 0.054603, -0.935673, 0.911834, 7.4436, 2.17944 )
 visible = false
 bone_name = "foreheadL"
 script = ExtResource( 3 )
@@ -1762,7 +1762,7 @@ material/0 = null
 
 [node name="att_eyebrow01R" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.954065, -0.0975804, -0.283262, -0.0216057, -0.96542, 0.259805, -0.298819, -0.24175, -0.923182, 0.641513, 5.86913, 2.54686 )
+transform = Transform( 0.965479, 0.00983872, 0.260295, 0.0465662, -0.989708, -0.135313, 0.256284, 0.142763, -0.956001, -0.60041, 6.7227, 2.26428 )
 visible = false
 bone_name = "eyebrow01R"
 script = ExtResource( 3 )
@@ -1797,7 +1797,7 @@ material/0 = null
 
 [node name="att_eyebrow02R" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.980736, -0.0969649, -0.169566, -0.0518114, -0.96613, 0.252803, -0.188337, -0.239148, -0.952543, 0.213566, 6.09027, 2.74041 )
+transform = Transform( 0.928243, 0.00895095, 0.371867, 0.0622785, -0.989339, -0.131644, 0.366723, 0.145357, -0.918904, -1.05721, 6.91705, 2.11241 )
 visible = false
 bone_name = "eyebrow02R"
 script = ExtResource( 3 )
@@ -1832,7 +1832,7 @@ material/0 = null
 
 [node name="att_eyebrow03R" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.985105, -0.0968645, 0.142073, -0.126502, -0.967886, 0.217241, 0.116468, -0.231977, -0.965724, -0.433067, 5.99536, 2.48419 )
+transform = Transform( 0.767251, 0.00516161, 0.641326, 0.10116, -0.988425, -0.113068, 0.633319, 0.151628, -0.758892, -1.47198, 6.62409, 1.62771 )
 visible = false
 bone_name = "eyebrow03R"
 script = ExtResource( 3 )
@@ -1867,7 +1867,7 @@ material/0 = null
 
 [node name="att_foreheadR" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.987742, -0.156098, -0.000150896, -0.148431, -0.939524, 0.308649, -0.048321, -0.304843, -0.951177, 0.0952635, 6.62024, 2.914 )
+transform = Transform( 0.856198, -0.00521444, 0.516622, 0.0237528, -0.998495, -0.0494437, 0.516102, 0.0546048, -0.854785, -1.2298, 7.44385, 1.9794 )
 visible = false
 bone_name = "foreheadR"
 script = ExtResource( 3 )
@@ -1902,7 +1902,7 @@ material/0 = null
 
 [node name="att_tongue02" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( -0.889376, 0.256248, -0.378612, -0.000568341, 0.827533, 0.561417, 0.457176, 0.499526, -0.735843, 0.245797, 4.12807, 0.851298 )
+transform = Transform( -0.995666, -0.0176006, 0.0913166, 0.000116609, 0.98169, 0.190485, -0.0929973, 0.18967, -0.977434, -0.099595, 4.45725, 1.43984 )
 visible = false
 bone_name = "tongue02"
 script = ExtResource( 3 )
@@ -1937,7 +1937,7 @@ material/0 = null
 
 [node name="att_tongue03" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( -0.889376, 0.189434, -0.416082, -0.000568757, 0.909654, 0.415365, 0.457176, 0.369652, -0.808918, 0.416561, 3.87486, 1.18318 )
+transform = Transform( -0.995666, -0.00210719, 0.0929736, 0.00011609, 0.999714, 0.023901, -0.0929974, 0.0238084, -0.995382, -0.140781, 4.37134, 1.88069 )
 visible = false
 bone_name = "tongue03"
 script = ExtResource( 3 )
@@ -1998,7 +1998,7 @@ material/0 = SubResource( 15 )
 
 [node name="att_face_cam" type="BoneAttachment" parent="joan"]
 editor/display_folded = true
-transform = Transform( 0.889376, 0.429491, -0.156676, 0.000569135, -0.343743, -0.939064, -0.457176, 0.835092, -0.305961, -7.12989e-09, 5.59377, 0.374955 )
+transform = Transform( 0.995666, -0.0928577, -0.00509187, -0.000115776, 0.0535152, -0.998567, 0.0929972, 0.994241, 0.0532726, -7.12989e-09, 5.59377, 0.374955 )
 visible = false
 bone_name = "head"
 script = ExtResource( 3 )
