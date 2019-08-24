@@ -78,6 +78,7 @@ func init_avatar():
 				'parent_pose_inverse': pt.inverse(),
 				# bone info
 				'bid': bone_by_name[c.bone_name],
+				'pose_inverse': t.inverse(),
 				'pose_rot': Transform( q ),
 				'origin': t.origin,
 				'scale': t.basis.get_scale(),
@@ -125,7 +126,6 @@ func look_at( avatar_bone, global_pos ):
 	# global pos to object space
 	var corrected_pos = avatar_bone['correction'].xform( local_pos )
 	
-	
 	var b = Basis()
 	
 	var x_vec = Vector3(1,0,0)
@@ -163,18 +163,15 @@ func look_at( avatar_bone, global_pos ):
 	
 	# applying correction in all children:
 	if avatar_bone['child_count'] > 0:
-		if avatar_bone['front_y']:
-			y_vec = avatar_bone['pose_rot'].xform( y_vec )
-			z_vec = T - corrected_pos
-			z_vec = z_vec.normalized()
-			x_vec = y_vec.cross( z_vec )
-			x_vec = x_vec.normalized()
-			y_vec = x_vec.cross( z_vec )
-		t = Transform( Basis( x_vec, y_vec, z_vec ), Vector3() )
+
+		t = avatar_bone['pose_inverse'] * t
+		t.origin = Vector3()
+		t.basis = Basis( t.basis.x, t.basis.z, t.basis.y )
+		t.basis *= Basis(Vector3(1,0,0),Vector3(0,1,0),Vector3(0,0,-1))
 		get_node( 'debug_01' ).translation = t.xform(Vector3(5,0,0))
 		get_node( 'debug_02' ).translation = t.xform(Vector3(0,5,0))
 		get_node( 'debug_03' ).translation = t.xform(Vector3(0,0,5))
-		t.origin = t.xform( T ) - T
+		t.origin = t.xform( -T ) + T
 		for index in avatar_bone['children']:
 			avatar_bones[index]['correction'] *= t
 			pass
@@ -190,8 +187,9 @@ func _process(delta):
 	
 	elapsed_time += delta
 	
-#	look_at( avatar_map['head'], get_node( "../head" ).global_transform.origin )
-#	look_at( avatar_map['jaw'], get_node( "../head" ).global_transform.origin )
-#	look_at( avatar_map['chin'], get_node( "../head" ).global_transform.origin )
-	look_at( avatar_map['eyeL'], get_node( "../gaze" ).global_transform.origin )
-	look_at( avatar_map['eyeR'], get_node( "../gaze" ).global_transform.origin )
+	look_at( avatar_map['collarboneL'], get_node( "../collarbones/left" ).global_transform.origin )
+	look_at( avatar_map['collarboneR'], get_node( "../collarbones/right" ).global_transform.origin )
+	look_at( avatar_map['head'], get_node( "../head" ).global_transform.origin )
+#	look_at( avatar_map['jaw'], get_node( "../jaw" ).global_transform.origin )
+	look_at( avatar_map['eyeL'], get_node( "../gaze/left" ).global_transform.origin )
+	look_at( avatar_map['eyeR'], get_node( "../gaze/right" ).global_transform.origin )
