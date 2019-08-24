@@ -78,6 +78,7 @@ func init_avatar():
 				'parent_pose_inverse': pt.inverse(),
 				# bone info
 				'bid': bone_by_name[c.bone_name],
+				'pose': t.inverse(),
 				'pose_inverse': t.inverse(),
 				'pose_rot': Transform( q ),
 				'origin': t.origin,
@@ -96,8 +97,6 @@ func init_avatar():
 				'child_count': 0,
 				'children': []
 			}
-			
-			print( d['name'], ' > ', d['origin'] )
 			
 			register_in_hierarchy( d )
 			avatar_bones.append( d )
@@ -166,11 +165,20 @@ func look_at( avatar_bone, global_pos ):
 
 		t = avatar_bone['pose_inverse'] * t
 		t.origin = Vector3()
+		
+		# heavy black magic transformation of origin...
 		t.basis = Basis( t.basis.x, t.basis.z, t.basis.y )
 		t.basis *= Basis(Vector3(1,0,0),Vector3(0,1,0),Vector3(0,0,-1))
+		var euls = t.basis.get_euler()
+		euls.x += PI
+		euls.y += PI
+		euls.z += PI
+		t.basis = Basis( euls )
+		
 		get_node( 'debug_01' ).translation = t.xform(Vector3(5,0,0))
 		get_node( 'debug_02' ).translation = t.xform(Vector3(0,5,0))
 		get_node( 'debug_03' ).translation = t.xform(Vector3(0,0,5))
+		
 		t.origin = t.xform( -T ) + T
 		for index in avatar_bone['children']:
 			avatar_bones[index]['correction'] *= t
