@@ -1,17 +1,21 @@
 [gd_scene load_steps=27 format=2]
 
-[ext_resource path="res://scripts/lavatar_main.gd" type="Script" id=1]
+[ext_resource path="res://scripts/_lavatar_main.gd" type="Script" id=1]
 [ext_resource path="res://assets/themes/sharetech.theme" type="Theme" id=2]
 [ext_resource path="res://scripts/calib_mngr.gd" type="Script" id=3]
 [ext_resource path="res://assets/themes/sharetech_transparent.stylebox" type="StyleBox" id=4]
 [ext_resource path="res://textures/landmarks.png" type="Texture" id=5]
 [ext_resource path="res://scripts/lavatar_json_parser.gd" type="Script" id=6]
-[ext_resource path="res://scripts/lavatar_full_script.gd" type="Script" id=7]
+[ext_resource path="res://scripts/_lavatar_full_script.gd" type="Script" id=7]
 [ext_resource path="res://materials/skin.material" type="Material" id=8]
 [ext_resource path="res://materials/eyes.material" type="Material" id=9]
 [ext_resource path="res://materials/hairs.material" type="Material" id=10]
 [ext_resource path="res://materials/tongue.material" type="Material" id=11]
 [ext_resource path="res://assets/envs/environment_sky.tres" type="Environment" id=12]
+
+
+
+
 
 [sub_resource type="Animation" id=1]
 

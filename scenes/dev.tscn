@@ -1,6 +1,6 @@
 [gd_scene load_steps=28 format=2]
 
-[ext_resource path="res://scripts/lavatar_skeleton.gd" type="Script" id=1]
+[ext_resource path="res://scripts/_lavatar_skeleton.gd" type="Script" id=1]
 [ext_resource path="res://textures/Tileable seamless human skin texture (5).jpg" type="Texture" id=2]
 [ext_resource path="res://assets/sasha/Sasha001.material" type="Material" id=3]
 [ext_resource path="res://assets/sasha/Eyes001.material" type="Material" id=4]
@@ -9,6 +9,9 @@
 [ext_resource path="res://assets/sasha/Tongue001.material" type="Material" id=7]
 [ext_resource path="res://scripts/oscin.gd" type="Script" id=8]
 [ext_resource path="res://scripts/lavatar_json_parser.gd" type="Script" id=9]
+
+
+
 
 [sub_resource type="SpatialMaterial" id=1]
 

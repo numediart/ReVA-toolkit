@@ -2,7 +2,9 @@ tool
 
 extends Spatial
 
-export (String) var json_path = '' setget set_json_path
+export (String) var lavatar_json_path = '' setget set_lavatar_json_path
+export (String) var lavatar_node_path = ''
+
 export (float) var playhead = 0
 
 export (bool) var center_offset = true setget _center_offset
@@ -28,6 +30,10 @@ export (Vector3) var nostril_rotation = Vector3() setget _nostril_rotation
 export (Vector3) var nostril_translation = Vector3() setget _nostril_translation
 export (Vector3) var nostril_scale = Vector3(1,1,1) setget _nostril_scale
 
+export (String) var lavatar_config_path = ''
+export (bool) var save_config = false setget set_save_config
+export (bool) var load_config = false setget set_load_config
+
 var animation = {}
 var original_animation = {} # full copy of the animation once successfully loaded
 
@@ -39,29 +45,120 @@ var current_frame = null
 
 # right is red, left is blue -> respect order or it will be weird!!!
 var structure = {
-	'brow_right': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.7,0.0,0.0 ), 	'parent': null },
-	'eye_right': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 1.0,0.0,0.0 ), 	'parent': null },
-	'lid_right_upper': 	{ 'indices': [], 'correction': null, 'color': Color( 1.0,0.3,0.0 ), 		'parent': 'eye_right' },
-	'lid_right_lower': 	{ 'indices': [], 'correction': null, 'color': Color( 1.0,0.6,0.0 ), 		'parent': 'eye_right' },
-	'brow_left': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.0,0.7 ), 	'parent': null },
-	'eye_left': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.0,1.0 ), 	'parent': null },
-	'lid_left_upper': 	{ 'indices': [], 'correction': null, 'color': Color( 0.0,0.3,1.0 ), 		'parent': 'eye_left' },
-	'lid_left_lower': 	{ 'indices': [], 'correction': null, 'color': Color( 0.0,0.6,1.0 ), 		'parent': 'eye_left' },
-	'mouth_all': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.4,1.0,1.0 ), 	'parent': null },
-	'lip_corner_right': { 'indices': [], 'correction': null, 'color': Color( 1.0,1.0,0.4 ), 		'parent': 'mouth_all' },
-	'lip_corner_left': 	{ 'indices': [], 'correction': null, 'color': Color( 0.7,1.0,0.0 ), 		'parent': 'mouth_all' },
-	'lip_upper': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.7,1.0,0.0 ), 	'parent': 'mouth_all' },
-	'lip_upper_left': 	{ 'indices': [], 'correction': null, 'color': Color( 0.7,1.0,0.0 ), 		'parent': 'lip_upper' },
-	'lip_upper_center': { 'indices': [], 'correction': null, 'color': Color( 0.7,1.0,0.0 ), 		'parent': 'lip_upper' },
-	'lip_upper_right': 	{ 'indices': [], 'correction': null, 'color': Color( 0.7,1.0,0.0 ), 		'parent': 'lip_upper' },
-	'lip_lower': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 1.0,1.0,0.0 ), 	'parent': 'mouth_all' },
-	'lip_lower_left': 	{ 'indices': [], 'correction': null, 'color': Color( 1.0,1.0,0.0 ), 		'parent': 'lip_lower' },
-	'lip_lower_center': { 'indices': [], 'correction': null, 'color': Color( 1.0,1.0,0.0 ), 		'parent': 'lip_lower' },
-	'lip_lower_right': 	{ 'indices': [], 'correction': null, 'color': Color( 1.0,1.0,0.0 ), 		'parent': 'lip_lower' },
-	'nose_all': 		{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.6,0.2 ), 	'parent': null },
-	'nose_tip': 		{ 'indices': [], 'correction': null, 'color': Color( 0.5,1.0,0.5 ), 		'parent': 'nose_all' },
-	'nostril_right': 	{ 'indices': [], 'correction': Transform(), 'color': Color( 0.0,0.6,1.0 ), 	'parent': 'nose_all' },
-	'nostril_left': 	{ 'indices': [], 'correction': Transform(), 'color': Color( 0.8,0.6,0.2 ), 	'parent': 'nose_all' }
+	'brow_right': { 
+		'indices': [], 'correction': Transform(), 
+		'color': Color( 0.7,0.0,0.0 ),
+		'parent': null },
+		
+	'eye_right': { 
+		'indices': [], 'correction': Transform(), 
+		'color': Color( 1.0,0.0,0.0 ),
+		'parent': null },
+		
+	'lid_right_upper': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 1.0,0.3,0.0 ),
+		'parent': 'eye_right' },
+	
+	'lid_right_lower': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 1.0,0.6,0.0 ),
+		'parent': 'eye_right' },
+	
+	'brow_left': { 
+		'indices': [], 'correction': Transform(), 
+		'color': Color( 0.0,0.0,0.7 ),
+		'parent': null },
+	
+	'eye_left': { 
+		'indices': [], 'correction': Transform(), 
+		'color': Color( 0.0,0.0,1.0 ),
+		'parent': null },
+	
+	'lid_left_upper': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 0.0,0.3,1.0 ),
+		'parent': 'eye_left' },
+	
+	'lid_left_lower': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 0.0,0.6,1.0 ),
+		'parent': 'eye_left' },
+	
+	'mouth_all': { 
+		'indices': [], 'correction': Transform(), 
+		'color': Color( 0.4,1.0,1.0 ),
+		'parent': null },
+	
+	'lip_corner_right': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 1.0,1.0,0.4 ), 
+		'parent': 'mouth_all' },
+	
+	'lip_corner_left': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 0.7,1.0,0.0 ),
+		'parent': 'mouth_all' },
+	
+	'lip_upper': { 
+		'indices': [], 'correction': Transform(), 
+		'color': Color( 0.7,1.0,0.0 ),
+		'parent': 'mouth_all' },
+	
+	'lip_upper_left': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 0.7,1.0,0.0 ), 
+		'parent': 'lip_upper' },
+	
+	'lip_upper_center': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 0.7,1.0,0.0 ), 
+		'parent': 'lip_upper' },
+	
+	'lip_upper_right': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 0.7,1.0,0.0 ), 
+		'parent': 'lip_upper' },
+	
+	'lip_lower': { 
+		'indices': [], 'correction': Transform(), 
+		'color': Color( 1.0,1.0,0.0 ), 
+		'parent': 'mouth_all' },
+	
+	'lip_lower_left': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 1.0,1.0,0.0 ), 
+		'parent': 'lip_lower' },
+	
+	'lip_lower_center': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 1.0,1.0,0.0 ), 
+		'parent': 'lip_lower' },
+	
+	'lip_lower_right': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 1.0,1.0,0.0 ), 
+		'parent': 'lip_lower' },
+	
+	'nose_all': { 
+		'indices': [], 'correction': Transform(), 
+		'color': Color( 0.0,0.6,0.2 ), 
+		'parent': null },
+	
+	'nose_tip': { 
+		'indices': [], 'correction': null, 
+		'color': Color( 0.5,1.0,0.5 ), 
+		'parent': 'nose_all' },
+	
+	'nostril_right': { 
+		'indices': [], 'correction': Transform(), 
+		'color': Color( 0.0,0.6,1.0 ), 
+		'parent': 'nose_all' },
+	
+	'nostril_left': { 
+		'indices': [], 'correction': Transform(), 
+		'color': Color( 0.8,0.6,0.2 ), 
+		'parent': 'nose_all' }
 }
 
 func _center_offset( b ):
@@ -207,10 +304,61 @@ func _nostril_scale( v ):
 		v
 		)
 
-func set_json_path( path ):
+func set_lavatar_json_path( path ):
 	
-	json_path = path
+	lavatar_json_path = path
 	animation_loaded = false
+
+func set_save_config( b ):
+	save_config = false
+	if b:
+		if lavatar_node_path == '' or get_node( lavatar_node_path ) == null:
+			print ( "a lavatar (Skeleton + lavatar_skeleton.gd) must be linked to to script to enable saving" )
+			return
+		if len( lavatar_config_path ) == 0:
+			print ( "specify a file path (lavatar_config_path field) to enable saving" )
+			return
+		# getting lavatar
+		var savefile = File.new()
+		savefile.open(lavatar_config_path, File.WRITE)
+		var jdata = {
+			'lavatar_type': 'lavatar_config',
+			'mapping': structure,
+			'skeleton': get_node( lavatar_node_path ).serialise()
+		}
+		savefile.store_string(to_json(jdata))
+		savefile.close()
+		print ( "config saved at " + lavatar_config_path )
+
+func set_load_config( b ):
+	load_config = false
+	if b:
+		if lavatar_node_path == '' or get_node( lavatar_node_path ) == null:
+			print ( "a lavatar (Skeleton + lavatar_skeleton.gd) must be linked to to script to enable saving" )
+			return
+		if len( lavatar_config_path ) == 0:
+			print ( "specify a file path (lavatar_config_path field) to enable saving" )
+			return
+		var file = File.new()
+		file.open(lavatar_config_path, File.READ)
+		var result_json = JSON.parse(file.get_as_text())
+		file.close()
+		if result_json.error == OK:  # If parse OK
+			var jdata = result_json.result
+			if not 'lavatar_type' in jdata or jdata['lavatar_type'] != 'lavatar_config':
+				print("Error: no key 'lavatar_type' in json data, or type mismatch, should be 'lavatar_config'")
+				return false
+			if not 'mapping' in jdata or not 'skeleton' in jdata:
+				print("Error: no key 'mapping' and/or 'skeleton' in json data")
+				return false
+			structure = jdata['mapping']
+			get_node( lavatar_node_path ).deserialise( jdata['skeleton'] )
+		else:  # If parse has errors
+			print("Error: ", result_json.error)
+			print("Error Line: ", result_json.error_line)
+			print("Error String: ", result_json.error_string)
+			return false
+		return true
 
 func apply_correction( key ):
 	
@@ -300,7 +448,7 @@ func load_json():
 	
 	animation = {}
 	var file = File.new()
-	file.open( json_path, file.READ )
+	file.open( lavatar_json_path, file.READ )
 	var result_json = JSON.parse(file.get_as_text())
 	file.close()
 	if result_json.error == OK:  # If parse OK
@@ -549,7 +697,6 @@ func load_frame():
 		current_frame['gazes'][i] = la
 		la = pos + la
 		$gazes.get_child( i ).look_at_from_position( pos, pos + current_frame['gazes'][i], Vector3(0,1,0) )
-#		current_frame['gazes'][i] = $gazes.get_child( i ).global_transform.basis.get_euler()
 	
 func _ready():
 	pass # Replace with function body.
