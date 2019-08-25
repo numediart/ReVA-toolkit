@@ -2,8 +2,14 @@ tool
 
 extends Spatial
 
+var V3FRONT = Vector3(0,0,1)
+
 export (String) var lavatar_json_path = '' setget set_lavatar_json_path
 export (String) var lavatar_node_path = ''
+export (String) var lavatar_anchor_bone = ''
+export (Vector3) var anchor_offset = Vector3()
+export (Vector3) var anchor_rotation = Vector3()
+export (Vector3) var anchor_scale = Vector3(1,1,1)
 
 export (float) var playhead = 0
 
@@ -42,6 +48,8 @@ var prev_playhead = 0
 var current_index = 0
 # contains all values of current frame
 var current_frame = null
+
+var lavatar_node = null
 
 # right is red, left is blue -> respect order or it will be weird!!!
 var structure = {
@@ -160,6 +168,8 @@ var structure = {
 		'color': Color( 0.8,0.6,0.2 ), 
 		'parent': 'nose_all' }
 }
+
+############# EXPORT SETGETS #############
 
 func _center_offset( b ):
 	center_offset = b
@@ -309,6 +319,8 @@ func set_lavatar_json_path( path ):
 	lavatar_json_path = path
 	animation_loaded = false
 
+############# CONFIGURATION #############
+
 func set_save_config( b ):
 	save_config = false
 	if b:
@@ -360,6 +372,8 @@ func set_load_config( b ):
 			return false
 		return true
 
+############# PROCESSING #############
+
 func apply_correction( key ):
 	
 	if not 'frame_count' in animation:
@@ -394,12 +408,10 @@ func update_correction( keys, trans, rot, sca ):
 	for k in keys:
 		if k.find( "left" ) != -1:
 			q.set_euler( rot * Vector3(1,-1,-1) )
-			structure[k]['correction'] = Transform( q ).scaled( sca )
-			structure[k]['correction'].origin = trans * Vector3(-1,1,1)
+			structure[k]['correction'] = Transform( Basis(q), trans * Vector3(-1,1,1) ).scaled( sca )
 		else:
 			q.set_euler( rot )
-			structure[k]['correction'] = Transform( q ).scaled( sca )
-			structure[k]['correction'].origin = trans
+			structure[k]['correction'] = Transform( Basis(q), trans ).scaled( sca )
 		
 		apply_correction( k )
 		
@@ -697,7 +709,26 @@ func load_frame():
 		current_frame['gazes'][i] = la
 		la = pos + la
 		$gazes.get_child( i ).look_at_from_position( pos, pos + current_frame['gazes'][i], Vector3(0,1,0) )
+
+func orient():
 	
+	if lavatar_anchor_bone == '' or lavatar_node.find_bone( lavatar_anchor_bone ) == -1:
+		return
+	
+	var bt = lavatar_node.get_bone_global_pose(lavatar_node.find_bone( lavatar_anchor_bone ))
+	var q = Quat()
+	q.set_euler( lavatar_node.rotation )
+	
+	var glob_head = Transform(Basis(q),lavatar_node.translation) * bt
+	
+	q.set_euler( glob_head.basis.get_euler() )
+	var t_rot = Transform( Basis(q), Vector3())
+	var t = Transform( Basis(q), glob_head.origin * lavatar_node.scale )
+	global_transform = t
+	q.set_euler( anchor_rotation )
+	global_transform.basis *= Basis(q).scaled(anchor_scale)
+	global_transform.origin += t_rot.xform( anchor_offset )
+
 func _ready():
 	pass # Replace with function body.
 
@@ -710,13 +741,26 @@ func play_sound():
 
 #warning-ignore:unused_argument
 func _process(delta):
+	
+	if lavatar_node == null:
+		lavatar_node = get_node( lavatar_node_path )
+	if lavatar_node == null:
+		return
+	
 	if not animation_loaded:
 		load_animation()
 	if prev_playhead != playhead:
 		load_frame()
 		prev_playhead = playhead
+	
+	orient()
+	
+	if lavatar_node.debug:
+		return
+	lavatar_node.bone_rotate( lavatar_node.avatar_map['eyeL'], get_gaze(1).get_euler() )
+	lavatar_node.bone_rotate( lavatar_node.avatar_map['eyeR'], get_gaze(0).get_euler() )
 
-############# GETTERS #############
+############# INTERNAL GETTERS #############
 
 func get_center():
 	if current_frame == null or not center_offset:

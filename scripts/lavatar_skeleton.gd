@@ -2,6 +2,7 @@ tool
 
 extends Skeleton
 
+export(bool) var debug = false
 export(bool) var reload = false
 export(bool) var update_config = false setget retrieve_configurations
 
@@ -308,6 +309,9 @@ func _process(delta):
 		ab['correction'] = Transform()
 		set_bone_pose( ab['bid'], ab['correction'] )
 	
+	if not debug:
+		return
+	
 	elapsed_time += delta
 	
 	if get_node( "../collarbones" ).visible:
@@ -419,4 +423,3 @@ func deserialise( data ):
 		d['front_y'] = a['front_y']
 		
 		verify_configuration(d)
-		

@@ -49,7 +49,7 @@ func _on_load_pressed():
 	$ui/main.hide()
 
 func _on_json_load_file_selected(path):
-	$ui/main/btn_load/json_path.text = path
+	$ui/main/btn_load/lavatar_json_path.text = path
 	change_play( false )
 	$json.set_json_path( path )
 
