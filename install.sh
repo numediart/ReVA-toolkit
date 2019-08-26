@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # preparation of godot engine recompilation
-cd ~
 mkdir forge.godot
 cd forge.godot
 # getting godot engine
@@ -13,7 +12,7 @@ git clone git@gitlab.com:frankiezafe/gosc.git gsoc
 cd gosc
 python3 install.py
 # back to godot
-cd ~/forge.godot/godot
+cd ../../../
 # installing dependencies (debian based distro)
 sudo apt-get install build-essential scons pkg-config libx11-dev libxcursor-dev libxinerama-dev libgl1-mesa-dev libglu-dev libasound2-dev libpulse-dev libudev-dev libxi-dev libxrandr-dev yasm
 # compilation
@@ -21,7 +20,7 @@ scons platform=x11
 # engine is recompiled with gsoc module
 
 # getting the lavatar project
-cd ~/forge.godot/
+cd ../
 git clone git@gitlab.com:polymorphcool/lavatar.git
 # launching lavatar
 cd lavatar
