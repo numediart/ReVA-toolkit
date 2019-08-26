@@ -15,8 +15,6 @@ cd gosc
 python install.py
 # back to godot
 cd ../../
-# installing dependencies (debian based distro)
-sudo apt-get install build-essential scons pkg-config libx11-dev libxcursor-dev libxinerama-dev libgl1-mesa-dev libglu-dev libasound2-dev libpulse-dev libudev-dev libxi-dev libxrandr-dev yasm
 # compilation
 scons platform=x11 -j4
 # engine is recompiled with gsoc module

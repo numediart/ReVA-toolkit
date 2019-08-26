@@ -19,7 +19,7 @@ $ pip install pyosc
 
 To edit the avatar, you need to recompile godot engine with an extra module for OSC.
 
-On **Linux**, run `install.sh` to install and compile godot. The bash file already contains all the command lines here below. The script will create a *forge.godot* folder in your user home directory, download, compile and run the godot project.
+On **Linux**, first install [godot dependencies](https://docs.godotengine.org/en/latest/development/compiling/) and run `install.sh` to install and compile godot. The bash file already contains all the command lines here below. The script will create a *forge.godot* folder in your user home directory, download, compile and run the godot project.
 
 For Windows & OSX, you will need to:
 
