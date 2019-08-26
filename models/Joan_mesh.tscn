@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/joan.gd" type="Script" id=1]
+[ext_resource path="res://models/Joan_mesh.escn" type="PackedScene" id=2]
+
+[node name="Joan_mesh" index="0" instance=ExtResource( 2 )]
+
+[node name="joan_arma" parent="layer16_armature" index="0"]
+script = ExtResource( 1 )
+head_rotation = Vector3( -1.21, 1.14, 0 )
+eyeR_rotation = Vector3( 0, -0.14, 0 )

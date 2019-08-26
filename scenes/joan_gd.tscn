@@ -407,10 +407,6 @@ bones/46/enabled = true
 bones/46/bound_children = [ NodePath("att_collarboneR") ]
 script = ExtResource( 2 )
 debug = true
-reload = false
-update_config = false
-lid_rotX = 0.0
-lip_trans = Vector3( 0, 0, 0 )
 
 [node name="debug_01" type="Spatial" parent="joan"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.99766, 0.000220046, 0.153026 )
@@ -1957,27 +1953,15 @@ lavatar_anchor_bone = "nose_tip"
 anchor_offset = Vector3( 0, 0.19, -0.09 )
 anchor_rotation = Vector3( 0.12, 3.142, 3.142 )
 anchor_scale = Vector3( 1.35, 1, 1 )
-playhead = 0.0
 center_offset = false
-center_rotation = true
 brow_rotation = Vector3( 0.4, -0.22, 0 )
 brow_translation = Vector3( -0.07, 0.15, 0.04 )
-brow_scale = Vector3( 1, 1, 1 )
 eye_rotation = Vector3( 0, 0, -0.14 )
 eye_translation = Vector3( -0.04, 0, -0.11 )
 eye_scale = Vector3( 1.5, 3.5, 1 )
-mouth_rotation = Vector3( 0, 0, 0 )
 mouth_translation = Vector3( 0, -0.14, 0 )
-mouth_scale = Vector3( 1, 1, 1 )
-nose_rotation = Vector3( 0, 0, 0 )
 nose_translation = Vector3( 0, -0.12, -0.05 )
-nose_scale = Vector3( 1, 1, 1 )
-nostril_rotation = Vector3( 0, 0, 0 )
-nostril_translation = Vector3( 0, 0, 0 )
-nostril_scale = Vector3( 1, 1, 1 )
 lavatar_config_path = "res://assets/configs/default.json"
-save_config = false
-load_config = false
 
 [node name="soundplayer" type="AudioStreamPlayer" parent="json"]
 
