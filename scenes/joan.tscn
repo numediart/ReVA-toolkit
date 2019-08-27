@@ -1,9 +1,10 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://assets/envs/environment_sky.tres" type="Environment" id=1]
 [ext_resource path="res://scripts/lavatar_json_parser.gd" type="Script" id=2]
 [ext_resource path="res://scripts/bone_configuration.gd" type="Script" id=3]
 [ext_resource path="res://scripts/lavatar_skeleton.gd" type="Script" id=4]
+[ext_resource path="res://scripts/config_cam.gd" type="Script" id=5]
 [ext_resource path="res://materials/eyes.material" type="Material" id=6]
 [ext_resource path="res://materials/joan_skin.material" type="Material" id=8]
 [ext_resource path="res://models/Material.material" type="Material" id=11]
@@ -148,7 +149,7 @@ albedo_color = Color( 0, 1, 0, 1 )
 flags_unshaded = true
 albedo_color = Color( 0, 0, 1, 1 )
 
-[sub_resource type="Animation" id=17]
+[sub_resource type="Animation" id=24]
 length = 11.633
 tracks/0/type = "value"
 tracks/0/path = NodePath("../json:playhead")
@@ -193,7 +194,7 @@ __meta__ = {
 }
 
 [node name="cam" type="Camera" parent="."]
-transform = Transform( 0.927469, 0.00873863, 0.411516, 0, 1.01447, -0.0215426, -0.411609, 0.0196906, 0.92726, 1.77573, 2.85806, 7.53007 )
+transform = Transform( 1.0147, 0, 0, 0, 1.0147, 0, 0, 0, 1.0147, 0, 1.66414, 6.19872 )
 fov = 35.0
 far = 20.0
 
@@ -219,6 +220,7 @@ environment = ExtResource( 1 )
 
 [node name="head" type="Position3D" parent="."]
 transform = Transform( 0.600002, -4.58703e-17, -8.60074e-17, 4.58703e-17, 0.600002, 6.57527e-33, 8.60074e-17, -1.31505e-32, 0.600002, -0.0187323, 3.26054, 2.07679 )
+visible = false
 
 [node name="jaw" type="Position3D" parent="."]
 transform = Transform( 0.600002, -4.58703e-17, -8.60074e-17, 4.58703e-17, 0.600002, 6.57528e-33, 8.60074e-17, -1.31505e-32, 0.600002, -0.0730141, 0.722059, 1.39509 )
@@ -226,6 +228,7 @@ visible = false
 
 [node name="gaze" type="Position3D" parent="."]
 transform = Transform( 1, -7.64505e-17, -1.43345e-16, 7.64505e-17, 1, 1.09589e-32, 1.43345e-16, -2.19179e-32, 1, -0.460551, 2.41253, 2.48843 )
+visible = false
 
 [node name="left" type="Position3D" parent="gaze"]
 transform = Transform( 0.1, 0, 1.32349e-24, 0, 0.1, 5.26367e-40, -1.32349e-24, -5.26367e-40, 0.1, 0.3, 0, 0 )
@@ -263,7 +266,7 @@ bones/3/name = "head"
 bones/3/parent = 2
 bones/3/rest = Transform( 1, 6.8706e-07, 1.52728e-07, -6.99281e-07, 0.94523, 0.326404, 7.98962e-08, -0.326404, 0.94523, 1.24345e-14, 4.47035e-08, -0.83756 )
 bones/3/enabled = true
-bones/3/bound_children = [ NodePath("att_head") ]
+bones/3/bound_children = [ NodePath("att_head"), NodePath("att_face_cam") ]
 bones/4/name = "jaw"
 bones/4/parent = 3
 bones/4/rest = Transform( 1, -3.03646e-07, 1.60541e-07, -1.20622e-07, -0.748096, -0.663591, 3.21596e-07, 0.663591, -0.748095, -3.30635e-08, 0.12796, -0.0103386 )
@@ -1297,12 +1300,13 @@ mesh = SubResource( 14 )
 material/0 = null
 
 [node name="att_eyeL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.992691, 0.0139074, 0.119877, -0.000629949, -0.992727, 0.120387, 0.120679, -0.119583, -0.985462, 0.352686, 2.27916, 0.621686 )
+transform = Transform( 0.994822, 0.00864553, 0.101261, -7.24685e-09, 0.996375, -0.0850689, -0.10163, 0.0846287, 0.991216, 0.352686, 2.27916, 0.621686 )
 bone_name = "eyeL"
 script = ExtResource( 3 )
 rot_enabled = true
 
 [node name="dot" type="Spatial" parent="joan/att_eyeL"]
+transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0 )
 visible = false
 
 [node name="sphere" type="MeshInstance" parent="joan/att_eyeL/dot"]
@@ -1467,12 +1471,13 @@ mesh = SubResource( 14 )
 material/0 = null
 
 [node name="att_eyeR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.998288, -0.00574344, -0.0582093, 0.000634002, -0.994047, 0.108954, -0.0584885, -0.108805, -0.992341, -0.352687, 2.27916, 0.621686 )
+transform = Transform( 0.97271, 0.0260139, 0.230562, -1.69093e-08, 0.993695, -0.112117, -0.232024, 0.109058, 0.966576, -0.352687, 2.27916, 0.621686 )
 bone_name = "eyeR"
 script = ExtResource( 3 )
 rot_enabled = true
 
 [node name="dot" type="Spatial" parent="joan/att_eyeR"]
+transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0 )
 visible = false
 
 [node name="sphere" type="MeshInstance" parent="joan/att_eyeR/dot"]
@@ -2000,30 +2005,43 @@ material_override = SubResource( 16 )
 mesh = SubResource( 14 )
 material/0 = null
 
+[node name="att_face_cam" type="BoneAttachment" parent="joan"]
+transform = Transform( 1, 2.38419e-07, 3.38618e-13, 3.19091e-10, -0.00133839, -0.999999, -2.38418e-07, 0.999999, -0.00133851, -4.31014e-09, 2.05851, 0.1378 )
+bone_name = "head"
+script = ExtResource( 3 )
+active = false
+
+[node name="piv" type="Spatial" parent="joan/att_face_cam"]
+transform = Transform( 1.42242, 0, 2.77556e-17, 2.84217e-14, 1.42242, -3.49246e-10, 1.66533e-16, -4.65661e-10, 1.42242, 0, 0, 0 )
+
+[node name="front_pivot" type="Spatial" parent="joan/att_face_cam/piv"]
+transform = Transform( 1.0147, 3.77698e-13, 6.58725e-08, -6.58729e-08, -1.31782e-07, 1.0147, -8.32667e-17, -1.0147, -1.07102e-08, -5.96049e-08, 9.905, 9.53674e-07 )
+
+[node name="side_pivot" type="Spatial" parent="joan/att_face_cam/piv"]
+transform = Transform( 0.314301, -0.00129135, -0.964797, 0.964797, -0.000937507, 0.314302, -0.00129128, -1.0147, 0.000937488, -9.90499, 3.74838, -0.00518537 )
+
 [node name="json" type="Spatial" parent="."]
-transform = Transform( 1.36985, -0.00049249, -0.000554186, 0.000438475, 0.995346, 0.197248, 0.000331753, -0.197249, 0.995346, -2.94155e-08, 2.03015, 1.02224 )
+transform = Transform( 1.0147, 1.35613e-06, 8.84545e-08, 1.35894e-06, -1.0118, -0.0766749, -1.42731e-08, 0.0766749, -1.0118, -8.48468e-09, 2.01528, 1.0946 )
 script = ExtResource( 2 )
 lavatar_json_path = "res://assets/json/mouth_open.json"
 lavatar_node_path = "../joan"
 lavatar_anchor_bone = "nose_tip"
-anchor_offset = Vector3( 0, -0.02, 0.07 )
-anchor_rotation = Vector3( 0.12, 3.142, 3.142 )
-anchor_scale = Vector3( 1.35, 1, 1 )
-playhead = 7.9333
-center_offset = false
-brow_rotation = Vector3( 0.4, -0.22, 0 )
-brow_translation = Vector3( -0.07, 0.15, 0.04 )
-eye_rotation = Vector3( 0, 0, -0.14 )
-eye_translation = Vector3( -0.04, 0, -0.11 )
-eye_scale = Vector3( 1.5, 3.5, 1 )
-mouth_translation = Vector3( 0, -0.14, 0 )
-nose_translation = Vector3( 0, -0.12, -0.05 )
+anchor_rotation = Vector3( 179.1, 0, 0 )
+anchor_translation = Vector3( -0.02, 0.07, 0.12 )
+anchor_scale = Vector3( 1.48, 1, 1 )
+brow_rotation = Vector3( 0.72, -0.48, -0.34 )
+brow_translation = Vector3( 0, 0.16, 0.05 )
+eye_translation = Vector3( -0.03, 0.03, -0.04 )
+eye_scale = Vector3( 1.39, 3.79, 1 )
+mouth_rotation = Vector3( 0.41, 0, 0 )
+mouth_translation = Vector3( 0, -0.07, 0 )
+mouth_scale = Vector3( 0.83, 1, 1 )
 lavatar_config_path = "res://assets/configs/default.json"
 
 [node name="soundplayer" type="AudioStreamPlayer" parent="json"]
 
 [node name="animplayer" type="AnimationPlayer" parent="json"]
-anims/json = SubResource( 17 )
+anims/json = SubResource( 24 )
 
 [node name="landmarks" type="Spatial" parent="json"]
 
@@ -2039,7 +2057,7 @@ mesh = SubResource( 19 )
 material/0 = null
 
 [node name="axis" type="Spatial" parent="json"]
-transform = Transform( 0.996757, 0.0759041, 0.0267374, -0.0790619, 0.98562, 0.149334, -0.0150179, -0.150964, 0.988423, 0, 0, 0 )
+transform = Transform( 0.998733, 0.0388898, -0.0319369, -0.036925, 0.997517, 0.0599639, 0.0341897, -0.0587087, 0.997687, 0, 0, 0 )
 
 [node name="x" type="MeshInstance" parent="json/axis"]
 transform = Transform( 0.2, 0, 0, 0, 0.004, 0, 0, 0, 0.004, 0.1, 0, 0 )
@@ -2061,3 +2079,45 @@ material_override = SubResource( 23 )
 cast_shadow = 0
 mesh = SubResource( 21 )
 material/0 = null
+
+[node name="ui" type="Node2D" parent="."]
+
+[node name="front" type="ViewportContainer" parent="ui"]
+margin_left = 524.0
+margin_right = 1024.0
+margin_bottom = 600.0
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+pivot_path = "../../joan/att_face_cam/piv/front_pivot"
+
+[node name="vp" type="Viewport" parent="ui/front"]
+size = Vector2( 500, 600 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="cam" type="Camera" parent="ui/front/vp"]
+transform = Transform( 1, 3.93555e-15, 3.03337e-07, 4.05977e-10, 0.999999, -0.00133838, -3.03337e-07, 0.00133838, 0.999999, 3.22263e-06, 2.0101, 14.0207 )
+fov = 9.6
+size = 2.0
+
+[node name="side" type="ViewportContainer" parent="ui"]
+margin_left = 224.0
+margin_right = 624.0
+margin_bottom = 600.0
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+pivot_path = "../../joan/att_face_cam/piv/side_pivot"
+
+[node name="vp" type="Viewport" parent="ui/side"]
+size = Vector2( 300, 600 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="cam" type="Camera" parent="ui/side/vp"]
+transform = Transform( 0.309747, -0.00127264, -0.950818, 1.94592e-09, 0.999999, -0.00133847, 0.950819, 0.000414585, 0.309747, -13.8849, 2.02892, 5.39033 )
+fov = 9.6
+size = 2.0

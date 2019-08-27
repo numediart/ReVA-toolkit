@@ -19,10 +19,6 @@ config/name="Laughing avatar"
 run/main_scene="res://scenes/joan.tscn"
 config/icon="res://icon.png"
 
-[display]
-
-window/size/fullscreen=true
-
 [rendering]
 
 quality/shadows/filter_mode=2

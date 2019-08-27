@@ -2,19 +2,22 @@ tool
 
 extends Spatial
 
+var V3UNIT = Vector3(1,1,1)
 var V3FRONT = Vector3(0,0,1)
 
 export (String) var lavatar_json_path = '' setget set_lavatar_json_path
 export (String) var lavatar_node_path = ''
 export (String) var lavatar_anchor_bone = ''
-export (Vector3) var anchor_offset = Vector3()
-export (Vector3) var anchor_rotation = Vector3()
-export (Vector3) var anchor_scale = Vector3(1,1,1)
+
+export (Vector3) var anchor_rotation = Vector3() setget _anchor_rotation
+export (Vector3) var anchor_translation = Vector3() setget _anchor_translation
+export (Vector3) var anchor_scale = Vector3(1,1,1) setget _anchor_scale
 
 export (float) var playhead = 0
 
 export (bool) var center_offset = true setget _center_offset
 export (bool) var center_rotation = true setget _center_rotation
+export (bool) var reset_correction = false setget _reset_correction
 
 export (Vector3) var brow_rotation = Vector3() setget _brow_rotation
 export (Vector3) var brow_translation = Vector3() setget _brow_translation
@@ -43,6 +46,7 @@ export (bool) var load_config = false setget set_load_config
 var animation = {}
 var original_animation = {} # full copy of the animation once successfully loaded
 
+var anchor_transform = Transform()
 var animation_loaded = true
 var prev_playhead = 0
 var current_index = 0
@@ -171,6 +175,18 @@ var structure = {
 
 ############# EXPORT SETGETS #############
 
+func _anchor_rotation( v ):
+	anchor_rotation = v
+	anchor_correction()
+
+func _anchor_translation( v ):
+	anchor_translation = v
+	anchor_correction()
+
+func _anchor_scale( v ):
+	anchor_scale = v
+	anchor_correction()
+
 func _center_offset( b ):
 	center_offset = b
 	load_frame()
@@ -178,6 +194,30 @@ func _center_offset( b ):
 func _center_rotation( b ):
 	center_rotation = b
 	load_frame()
+
+func _reset_correction( b ):
+	
+	reset_correction = false
+	
+	_brow_rotation( Vector3() )
+	_brow_translation( Vector3() )
+	_brow_scale( V3UNIT )
+	
+	_eye_rotation( Vector3() )
+	_eye_translation( Vector3() )
+	_eye_scale( V3UNIT )
+	
+	_mouth_rotation( Vector3() )
+	_mouth_translation( Vector3() )
+	_mouth_scale( V3UNIT )
+	
+	_nose_rotation( Vector3() )
+	_nose_translation( Vector3() )
+	_nose_scale( V3UNIT )
+	
+	_nostril_rotation( Vector3() )
+	_nostril_translation( Vector3() )
+	_nostril_scale( V3UNIT )
 
 func _brow_rotation( v ):
 	brow_rotation = v
@@ -319,6 +359,28 @@ func set_lavatar_json_path( path ):
 	lavatar_json_path = path
 	animation_loaded = false
 
+func anchor_correction():
+	
+	var q = Quat()
+	q.set_euler( anchor_rotation )
+	anchor_transform = Transform( Basis(q).scaled( anchor_scale ), anchor_translation )
+	load_frame()
+
+func update_correction( keys, trans, rot, sca ):
+	
+	var q = Quat()
+	for k in keys:
+		if k.find( "left" ) != -1:
+			q.set_euler( rot * Vector3(1,-1,-1) )
+			structure[k]['correction'] = Transform( Basis(q).scaled( sca ), trans * Vector3(-1,1,1) )
+		else:
+			q.set_euler( rot )
+			structure[k]['correction'] = Transform( Basis(q).scaled( sca ), trans )
+		
+		apply_correction( k )
+		
+	load_frame()
+
 ############# CONFIGURATION #############
 
 func set_save_config( b ):
@@ -401,21 +463,6 @@ func apply_correction( key ):
 			var rel = src_frame[i] - bary
 			rel = framet.xform( rel )
 			dst_frame[i] = bary + rel
-
-func update_correction( keys, trans, rot, sca ):
-	
-	var q = Quat()
-	for k in keys:
-		if k.find( "left" ) != -1:
-			q.set_euler( rot * Vector3(1,-1,-1) )
-			structure[k]['correction'] = Transform( Basis(q), trans * Vector3(-1,1,1) ).scaled( sca )
-		else:
-			q.set_euler( rot )
-			structure[k]['correction'] = Transform( Basis(q), trans ).scaled( sca )
-		
-		apply_correction( k )
-		
-	load_frame()
 
 func clear_all():
 	
@@ -679,6 +726,8 @@ func load_frame():
 	if not center_offset:
 		pose.origin = current_frame['aabb']['center'] * -1
 	
+	pose = anchor_transform * pose
+	
 	var tmp_landmarks = []
 	for i in range( animation['landmark_count'] ):
 		current_frame['landmarks'][i] = pose.xform( frame['landmarks'][i] * pc + prev_frame['landmarks'][i] * pci )
@@ -725,9 +774,9 @@ func orient():
 	var t_rot = Transform( Basis(q), Vector3())
 	var t = Transform( Basis(q), glob_head.origin * lavatar_node.scale )
 	global_transform = t
-	q.set_euler( anchor_rotation )
-	global_transform.basis *= Basis(q).scaled(anchor_scale)
-	global_transform.origin += t_rot.xform( anchor_offset )
+#	q.set_euler( anchor_rotation )
+#	global_transform.basis *= Basis(q).scaled(anchor_scale)
+#	global_transform.origin += t_rot.xform( anchor_offset )
 
 func _ready():
 	pass # Replace with function body.
@@ -757,8 +806,9 @@ func _process(delta):
 	
 	if lavatar_node.debug:
 		return
-	lavatar_node.bone_rotate( lavatar_node.avatar_map['eyeL'], get_gaze(1).get_euler() )
-	lavatar_node.bone_rotate( lavatar_node.avatar_map['eyeR'], get_gaze(0).get_euler() )
+	
+	lavatar_node.bone_rotate( lavatar_node.avatar_map['eyeL'], get_gaze(0).get_euler() )
+	lavatar_node.bone_rotate( lavatar_node.avatar_map['eyeR'], get_gaze(1).get_euler() )
 
 ############# INTERNAL GETTERS #############
 

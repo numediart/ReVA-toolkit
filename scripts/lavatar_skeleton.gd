@@ -12,9 +12,12 @@ export(Vector3) var lip_trans = Vector3()
 var V3UNIT = Vector3(1,1,1)
 var V3INVERTX = Vector3(-1,1,1)
 var V3INVERTY = Vector3(1,-1,1)
+# warning-ignore:unused_class_variable
 var V3INVERTZ = Vector3(1,1,-1)
 var V3NOX = Vector3(0,1,1)
+# warning-ignore:unused_class_variable
 var V3NOY = Vector3(1,0,1)
+# warning-ignore:unused_class_variable
 var V3NOZ = Vector3(1,1,0)
 
 var avatar_bones = null
@@ -268,7 +271,8 @@ func bone_rotate( avatar_bone, eulers, alpha = 1 ):
 		q = q.slerp( q_full, alpha )
 	else:
 		q.set_euler( eulers )
-	var t = Transform( Basis( q ), Vector3() )
+	var t = avatar_bone['rest_inverse'] * avatar_bone['parent_pose_inverse'] * Transform( Basis( q ), Vector3() )
+	t.origin = Vector3()
 	
 	set_bone_pose( i, t )
 	
