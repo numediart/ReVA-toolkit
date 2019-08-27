@@ -179,9 +179,104 @@ var mapping = {
 	
 	'jaw': {
 		'landmarks': [
-			{ 'id': 7, 'weight': 1 },
-			{ 'id': 8, 'weight': 1 },
-			{ 'id': 9, 'weight': 1 } ]
+			{ 'id': 7, 'weight': 0.3 },
+			{ 'id': 8, 'weight': 0.3 },
+			{ 'id': 9, 'weight': 0.3 },
+			{ 'id': 58, 'weight': 0.7 },
+			{ 'id': 57, 'weight': 1 },
+			{ 'id': 56, 'weight': 0.7 } ]
+	},
+	
+	'commissureR': {
+		'landmarks': [
+			{ 'id': 49, 'weight': 0.1 },
+			{ 'id': 48, 'weight': 1 },
+			{ 'id': 59, 'weight': 0.1 } ]
+	},
+	
+	'upper_lipR': {
+		'landmarks': [
+			{ 'id': 49, 'weight': 0.8 },
+			{ 'id': 50, 'weight': 1 },
+			{ 'id': 51, 'weight': 0.2 } ]
+	},
+	'upper_lip': {
+		'landmarks': [
+			{ 'id': 50, 'weight': 0.2 },
+			{ 'id': 51, 'weight': 1 },
+			{ 'id': 52, 'weight': 0.2 } ]
+	},
+	'upper_lipL': {
+		'landmarks': [
+			{ 'id': 51, 'weight': 0.2 },
+			{ 'id': 52, 'weight': 1 },
+			{ 'id': 53, 'weight': 0.8 } ]
+	},
+	
+	'lower_lipR': {
+		'landmarks': [
+			{ 'id': 59, 'weight': 0.8 },
+			{ 'id': 58, 'weight': 1 },
+			{ 'id': 57, 'weight': 0.2 } ]
+	},
+	'lower_lip': {
+		'landmarks': [
+			{ 'id': 58, 'weight': 0.2 },
+			{ 'id': 57, 'weight': 1 },
+			{ 'id': 56, 'weight': 0.2 } ]
+	},
+	'lower_lipL': {
+		'landmarks': [
+			{ 'id': 57, 'weight': 0.2 },
+			{ 'id': 56, 'weight': 1 },
+			{ 'id': 55, 'weight': 0.8 } ]
+	},
+	
+	'commissureL': {
+		'landmarks': [
+			{ 'id': 53, 'weight': 0.1 },
+			{ 'id': 54, 'weight': 1 },
+			{ 'id': 55, 'weight': 0.1 } ]
+	},
+	
+	'muscle_lip02R': {
+		'landmarks': [
+			{ 'id': 48, 'weight': 0.7 },
+			{ 'id': 49, 'weight': 0.3 } ]
+	},
+	'muscle_lip01R': {
+		'landmarks': [
+			{ 'id': 48, 'weight': 0.5 },
+			{ 'id': 49, 'weight': 0.3 } ]
+	},
+	'nostrilR': {
+		'landmarks': [
+			{ 'id': 48, 'weight': 0.2 },
+			{ 'id': 49, 'weight': 0.1 } ]
+	},
+	'cheekR': {
+		'landmarks': [
+			{ 'id': 48, 'weight': 1 } ]
+	},
+	
+	'muscle_lip02L': {
+		'landmarks': [
+			{ 'id': 54, 'weight': 0.7 },
+			{ 'id': 53, 'weight': 0.3 } ]
+	},
+	'muscle_lip01L': {
+		'landmarks': [
+			{ 'id': 54, 'weight': 0.5 },
+			{ 'id': 53, 'weight': 0.3 } ]
+	},
+	'nostrilL': {
+		'landmarks': [
+			{ 'id': 54, 'weight': 0.2 },
+			{ 'id': 53, 'weight': 0.1 } ]
+	},
+	'cheekL': {
+		'landmarks': [
+			{ 'id': 54, 'weight': 1 } ]
 	},
 	
 	'upper_lidL': {
@@ -887,6 +982,24 @@ func apply_mapping( k ):
 	
 	if lbone['lookat_enabled']:
 		lavatar_node.bone_look_at( lbone, to_global(current) )
+		
+	elif lbone['rot_enabled']:
+		# rendering the rotation from basis to current
+		var absc = lavatar_node.to_local( to_global(current) ) - lbone['origin']
+		var absb = lavatar_node.to_local( to_global(basis) ) - lbone['origin']
+		var x = Vector3(1,0,0)
+		var y = Vector3(0,1,0)
+		var z = Vector3(0,1,0)
+		z = absc.normalized()
+		x = z.cross( y )
+		y = x.cross( z )
+		var bc = Basis(x,y,z)
+		z = absb.normalized()
+		x = z.cross( y )
+		y = x.cross( z )
+		bc = Basis(x,y,z).inverse() * bc
+		lavatar_node.bone_rotate( lbone, bc.get_euler() )
+		
 	elif lbone['trans_enabled']:
 		lavatar_node.bone_translate( lbone, to_global(current) - to_global(basis) )
 
