@@ -308,8 +308,8 @@ func bone_translate( avatar_bone, trans, alpha = 1 ):
 	get_node( "debug_local" ).translation = avatar_bone['origin'] + trans
 	
 	trans *= alpha
-	trans = avatar_bone['rest_inverse'] * avatar_bone['parent_pose_inverse'] * Transform( Basis(), trans )
-	set_bone_pose( avatar_bone['bid'], trans )
+	trans = ( Transform( avatar_bone['rest_inverse'].basis, Vector3() ) * Transform( avatar_bone['parent_pose_inverse'].basis, Vector3() ) ).xform( trans )
+	set_bone_pose( avatar_bone['bid'], Transform( Basis(), trans ) )
 
 func _process(delta):
 	
@@ -329,41 +329,41 @@ func _process(delta):
 	if get_node( "../collarbones" ).visible:
 		bone_look_at( avatar_map['collarboneL'], get_node( "../collarbones/left" ).global_transform.origin )
 		bone_look_at( avatar_map['collarboneR'], get_node( "../collarbones/right" ).global_transform.origin )
-	
+
 	if get_node( "../head" ).visible:
 		bone_look_at( avatar_map['head'], get_node( "../head" ).global_transform.origin )
-	
+
 	if get_node( "../jaw" ).visible:
 		bone_look_at( avatar_map['jaw'], get_node( "../jaw" ).global_transform.origin )
-	
+
 	if get_node( "../gaze" ).visible:
 		bone_look_at( avatar_map['eyeL'], get_node( "../gaze/left" ).global_transform.origin )
 		bone_look_at( avatar_map['eyeR'], get_node( "../gaze/right" ).global_transform.origin )
-		
-	# lids
-	bone_rotate( avatar_map['upper_lidL'], Vector3( lid_rotX,0,0 ) )
-	bone_rotate( avatar_map['upper_lidR'], Vector3( lid_rotX,0,0 ) )
-	bone_rotate( avatar_map['lower_lidL'], Vector3( -lid_rotX,0,0 ) )
-	bone_rotate( avatar_map['lower_lidR'], Vector3( -lid_rotX,0,0 ) )
-	
-	#lips
-	var ilip_trans = lip_trans * V3INVERTY
-	
-	bone_translate( avatar_map['nostrilL'], lip_trans * 0.65 )
-	bone_translate( avatar_map['muscle_lip01L'], lip_trans * 1.3 )
-	bone_translate( avatar_map['muscle_lip02L'], lip_trans * 0.9 )
-	
-	bone_translate( avatar_map['nostrilR'], ilip_trans * V3INVERTX * 0.65 )
-	bone_translate( avatar_map['muscle_lip01R'], ilip_trans * V3INVERTX * 1.3 )
-	bone_translate( avatar_map['muscle_lip02R'], ilip_trans * V3INVERTX * 0.9 )
-	
-	bone_translate( avatar_map['upper_lip'], lip_trans * V3NOX * V3NOX )
-	bone_translate( avatar_map['upper_lipL'], lip_trans * V3NOX )
-	bone_translate( avatar_map['upper_lipR'], lip_trans * V3NOX * V3INVERTX )
-	
-	bone_translate( avatar_map['lower_lip'], ilip_trans * V3NOX )
-	bone_translate( avatar_map['lower_lipL'], ilip_trans * V3NOX )
-	bone_translate( avatar_map['lower_lipR'], ilip_trans * V3NOX * V3INVERTX )
+
+#	# lids
+#	bone_rotate( avatar_map['upper_lidL'], Vector3( lid_rotX,0,0 ) )
+#	bone_rotate( avatar_map['upper_lidR'], Vector3( lid_rotX,0,0 ) )
+#	bone_rotate( avatar_map['lower_lidL'], Vector3( -lid_rotX,0,0 ) )
+#	bone_rotate( avatar_map['lower_lidR'], Vector3( -lid_rotX,0,0 ) )
+#
+#	#lips
+#	var ilip_trans = lip_trans * V3INVERTY
+#
+#	bone_translate( avatar_map['nostrilL'], lip_trans * 0.65 )
+#	bone_translate( avatar_map['muscle_lip01L'], lip_trans * 1.3 )
+#	bone_translate( avatar_map['muscle_lip02L'], lip_trans * 0.9 )
+#
+#	bone_translate( avatar_map['nostrilR'], ilip_trans * V3INVERTX * 0.65 )
+#	bone_translate( avatar_map['muscle_lip01R'], ilip_trans * V3INVERTX * 1.3 )
+#	bone_translate( avatar_map['muscle_lip02R'], ilip_trans * V3INVERTX * 0.9 )
+#
+#	bone_translate( avatar_map['upper_lip'], lip_trans * V3NOX * V3NOX )
+#	bone_translate( avatar_map['upper_lipL'], lip_trans * V3NOX )
+#	bone_translate( avatar_map['upper_lipR'], lip_trans * V3NOX * V3INVERTX )
+#
+#	bone_translate( avatar_map['lower_lip'], ilip_trans * V3NOX )
+#	bone_translate( avatar_map['lower_lipL'], ilip_trans * V3NOX )
+#	bone_translate( avatar_map['lower_lipR'], ilip_trans * V3NOX * V3INVERTX )
 
 ############# SERIALISATION #############
 
