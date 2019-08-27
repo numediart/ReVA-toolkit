@@ -50,13 +50,15 @@ var anchor_transform = Transform()
 var animation_loaded = true
 var prev_playhead = 0
 var current_index = 0
+
 # contains all values of current frame
+var base_frame = null
 var current_frame = null
 
 var lavatar_node = null
 
 # right is red, left is blue -> respect order or it will be weird!!!
-var structure = {
+var corrections = {
 	'brow_right': { 
 		'indices': [], 'correction': Transform(), 
 		'color': Color( 0.7,0.0,0.0 ),
@@ -173,6 +175,53 @@ var structure = {
 		'parent': 'nose_all' }
 }
 
+var mapping = {
+	'jaw': {
+		'landmarks': [
+			{ 'id': 7, 'weight': 1 },
+			{ 'id': 8, 'weight': 1 },
+			{ 'id': 9, 'weight': 1 } ]
+	},
+	'upper_lidL': {
+		'landmarks': [
+			{ 'id': 43, 'weight': 1 },
+			{ 'id': 44, 'weight': 1 } ]
+	},
+	'lower_lidL': {
+		'landmarks': [
+			{ 'id': 46, 'weight': 1 },
+			{ 'id': 47, 'weight': 1 } ]
+	},
+	'upper_lidR': {
+		'landmarks': [
+			{ 'id': 37, 'weight': 1 },
+			{ 'id': 38, 'weight': 1 } ]
+	},
+	'lower_lidR': {
+		'landmarks': [
+			{ 'id': 40, 'weight': 1 },
+			{ 'id': 41, 'weight': 1 } ]
+	},
+	'eyeL': { 'gaze': 1 },
+	'eyeR': { 'gaze': 0 },
+	'eyebrow01R': {
+		'landmarks': [
+			{ 'id': 20, 'weight': 0.3 },
+			{ 'id': 21, 'weight': 1 } ]
+	},
+	'eyebrow02R': {
+		'landmarks': [
+			{ 'id': 18, 'weight': 0.2 },
+			{ 'id': 19, 'weight': 1 },
+			{ 'id': 20, 'weight': 0.2 } ]
+	},
+	'eyebrow03R': {
+		'landmarks': [
+			{ 'id': 17, 'weight': 1 },
+			{ 'id': 18, 'weight': 0.3 } ]
+	}
+}
+
 ############# EXPORT SETGETS #############
 
 func _anchor_rotation( v ):
@@ -223,9 +272,9 @@ func _brow_rotation( v ):
 	brow_rotation = v
 	update_correction( 
 		['brow_right','brow_left'], 
-		structure['brow_right']['correction'].xform( Vector3() ),
+		corrections['brow_right']['correction'].xform( Vector3() ),
 		v,
-		structure['brow_right']['correction'].basis.get_scale()
+		corrections['brow_right']['correction'].basis.get_scale()
 		)
 
 func _brow_translation( v ):
@@ -233,16 +282,16 @@ func _brow_translation( v ):
 	update_correction( 
 		['brow_right','brow_left'], 
 		v, 
-		structure['brow_right']['correction'].basis.get_euler(),
-		structure['brow_right']['correction'].basis.get_scale()
+		corrections['brow_right']['correction'].basis.get_euler(),
+		corrections['brow_right']['correction'].basis.get_scale()
 		)
 
 func _brow_scale( v ):
 	brow_scale = v
 	update_correction( 
 		['brow_right','brow_left'], 
-		structure['brow_right']['correction'].xform( Vector3() ),
-		structure['brow_right']['correction'].basis.get_euler(),
+		corrections['brow_right']['correction'].xform( Vector3() ),
+		corrections['brow_right']['correction'].basis.get_euler(),
 		v
 		)
 
@@ -250,9 +299,9 @@ func _eye_rotation( v ):
 	eye_rotation = v
 	update_correction( 
 		['eye_right','eye_left'], 
-		structure['eye_right']['correction'].xform( Vector3() ), 
+		corrections['eye_right']['correction'].xform( Vector3() ), 
 		v,
-		structure['eye_right']['correction'].basis.get_scale()
+		corrections['eye_right']['correction'].basis.get_scale()
 		)
 
 func _eye_translation( v ):
@@ -260,16 +309,16 @@ func _eye_translation( v ):
 	update_correction( 
 		['eye_right','eye_left'], 
 		v, 
-		structure['eye_right']['correction'].basis.get_euler(),
-		structure['eye_right']['correction'].basis.get_scale()
+		corrections['eye_right']['correction'].basis.get_euler(),
+		corrections['eye_right']['correction'].basis.get_scale()
 		)
 		
 func _eye_scale( v ):
 	eye_scale = v
 	update_correction( 
 		['eye_right','eye_left'], 
-		structure['eye_right']['correction'].xform( Vector3() ),
-		structure['eye_right']['correction'].basis.get_euler(),
+		corrections['eye_right']['correction'].xform( Vector3() ),
+		corrections['eye_right']['correction'].basis.get_euler(),
 		v
 		)
 
@@ -277,9 +326,9 @@ func _mouth_rotation( v ):
 	mouth_rotation = v
 	update_correction( 
 		['mouth_all'], 
-		structure['mouth_all']['correction'].xform( Vector3() ), 
+		corrections['mouth_all']['correction'].xform( Vector3() ), 
 		v,
-		structure['mouth_all']['correction'].basis.get_scale()
+		corrections['mouth_all']['correction'].basis.get_scale()
 		)
 
 func _mouth_translation( v ):
@@ -287,16 +336,16 @@ func _mouth_translation( v ):
 	update_correction( 
 		['mouth_all'], 
 		v, 
-		structure['mouth_all']['correction'].basis.get_euler(),
-		structure['mouth_all']['correction'].basis.get_scale()
+		corrections['mouth_all']['correction'].basis.get_euler(),
+		corrections['mouth_all']['correction'].basis.get_scale()
 		)
 		
 func _mouth_scale( v ):
 	mouth_scale = v
 	update_correction( 
 		['mouth_all'], 
-		structure['mouth_all']['correction'].xform( Vector3() ),
-		structure['mouth_all']['correction'].basis.get_euler(),
+		corrections['mouth_all']['correction'].xform( Vector3() ),
+		corrections['mouth_all']['correction'].basis.get_euler(),
 		v
 		)
 
@@ -304,9 +353,9 @@ func _nose_rotation( v ):
 	nose_rotation = v
 	update_correction( 
 		['nose_all'], 
-		structure['nose_all']['correction'].xform( Vector3() ), 
+		corrections['nose_all']['correction'].xform( Vector3() ), 
 		v,
-		structure['nose_all']['correction'].basis.get_scale()
+		corrections['nose_all']['correction'].basis.get_scale()
 		)
 
 func _nose_translation( v ):
@@ -314,16 +363,16 @@ func _nose_translation( v ):
 	update_correction( 
 		['nose_all'], 
 		v, 
-		structure['nose_all']['correction'].basis.get_euler(),
-		structure['nose_all']['correction'].basis.get_scale()
+		corrections['nose_all']['correction'].basis.get_euler(),
+		corrections['nose_all']['correction'].basis.get_scale()
 		)
 		
 func _nose_scale( v ):
 	nose_scale = v
 	update_correction( 
 		['nose_all'], 
-		structure['nose_all']['correction'].xform( Vector3() ),
-		structure['nose_all']['correction'].basis.get_euler(),
+		corrections['nose_all']['correction'].xform( Vector3() ),
+		corrections['nose_all']['correction'].basis.get_euler(),
 		v
 		)
 
@@ -331,9 +380,9 @@ func _nostril_rotation( v ):
 	nostril_rotation = v
 	update_correction( 
 		['nostril_right','nostril_left'], 
-		structure['nostril_right']['correction'].xform( Vector3() ), 
+		corrections['nostril_right']['correction'].xform( Vector3() ), 
 		v,
-		structure['nostril_right']['correction'].basis.get_scale()
+		corrections['nostril_right']['correction'].basis.get_scale()
 		)
 
 func _nostril_translation( v ):
@@ -341,16 +390,16 @@ func _nostril_translation( v ):
 	update_correction( 
 		['nostril_right','nostril_left'], 
 		v, 
-		structure['nostril_right']['correction'].basis.get_euler(),
-		structure['nostril_right']['correction'].basis.get_scale()
+		corrections['nostril_right']['correction'].basis.get_euler(),
+		corrections['nostril_right']['correction'].basis.get_scale()
 		)
 
 func _nostril_scale( v ):
 	nostril_scale = v
 	update_correction( 
 		['nostril_right','nostril_left'], 
-		structure['nostril_right']['correction'].xform( Vector3() ),
-		structure['nostril_right']['correction'].basis.get_euler(),
+		corrections['nostril_right']['correction'].xform( Vector3() ),
+		corrections['nostril_right']['correction'].basis.get_euler(),
 		v
 		)
 
@@ -372,14 +421,15 @@ func update_correction( keys, trans, rot, sca ):
 	for k in keys:
 		if k.find( "left" ) != -1:
 			q.set_euler( rot * Vector3(1,-1,-1) )
-			structure[k]['correction'] = Transform( Basis(q).scaled( sca ), trans * Vector3(-1,1,1) )
+			corrections[k]['correction'] = Transform( Basis(q).scaled( sca ), trans * Vector3(-1,1,1) )
 		else:
 			q.set_euler( rot )
-			structure[k]['correction'] = Transform( Basis(q).scaled( sca ), trans )
-		
+			corrections[k]['correction'] = Transform( Basis(q).scaled( sca ), trans )
 		apply_correction( k )
 		
 	load_frame()
+	if current_frame != null:
+		base_frame = current_frame.duplicate(true)
 
 ############# CONFIGURATION #############
 
@@ -397,7 +447,8 @@ func set_save_config( b ):
 		savefile.open(lavatar_config_path, File.WRITE)
 		var jdata = {
 			'lavatar_type': 'lavatar_config',
-			'mapping': structure,
+			'corrections': corrections,
+			'mapping': mapping,
 			'skeleton': get_node( lavatar_node_path ).serialise()
 		}
 		savefile.store_string(to_json(jdata))
@@ -422,10 +473,11 @@ func set_load_config( b ):
 			if not 'lavatar_type' in jdata or jdata['lavatar_type'] != 'lavatar_config':
 				print("Error: no key 'lavatar_type' in json data, or type mismatch, should be 'lavatar_config'")
 				return false
-			if not 'mapping' in jdata or not 'skeleton' in jdata:
-				print("Error: no key 'mapping' and/or 'skeleton' in json data")
+			if not 'corrections' in jdata or not 'mapping' in jdata or not 'skeleton' in jdata:
+				print("Error: no key 'corrections', 'mapping' and/or 'skeleton' in json data")
 				return false
-			structure = jdata['mapping']
+			corrections = jdata['corrections']
+			mapping = jdata['mapping']
 			get_node( lavatar_node_path ).deserialise( jdata['skeleton'] )
 		else:  # If parse has errors
 			print("Error: ", result_json.error)
@@ -441,12 +493,12 @@ func apply_correction( key ):
 	if not 'frame_count' in animation:
 		return
 	
-	var struct = structure[key]
+	var struct = corrections[key]
 	if ( struct['correction'] == null ):
 		return
 	var transfo = struct['correction']
-	if struct['parent'] != null and structure[struct['parent']]['correction'] != null:
-		transfo = structure[struct['parent']]['correction'] * transfo
+	if struct['parent'] != null and corrections[struct['parent']]['correction'] != null:
+		transfo = corrections[struct['parent']]['correction'] * transfo
 	
 	for f in range(animation['frame_count']):
 		
@@ -476,32 +528,32 @@ func clear_all():
 	prev_playhead = 0
 	current_index = 0
 
-func structure_find( i ):
+func corrections_find( i ):
 	
 	var keys = []
 	var forbid = []
-	for k in structure:
+	for k in corrections:
 		if k in forbid:
 			continue
-		if i in structure[k][ 'indices' ]:
+		if i in corrections[k][ 'indices' ]:
 			keys.append( k )
-			if structure[k][ 'parent' ] != null:
-				keys.erase( structure[k][ 'parent' ] )
-				if not structure[k][ 'parent' ] in forbid:
-					forbid.append( structure[k][ 'parent' ] )
+			if corrections[k][ 'parent' ] != null:
+				keys.erase( corrections[k][ 'parent' ] )
+				if not corrections[k][ 'parent' ] in forbid:
+					forbid.append( corrections[k][ 'parent' ] )
 	# anti-collision
 	if len( keys ) > 0:
-		return structure[keys[0]]
+		return corrections[keys[0]]
 	return null
 
-func load_structure():
+func load_corrections():
 	
 	if not 'structure' in animation:
 		return
 	
-	for k in structure:
+	for k in corrections:
 		if k in animation['structure']:
-			structure[k]['indices'] = animation['structure'][k]
+			corrections[k]['indices'] = animation['structure'][k]
 
 func load_json():
 	
@@ -545,7 +597,7 @@ func load_data():
 	original_animation = animation.duplicate( true )
 	
 	# and applying all corrections
-	for k in structure:
+	for k in corrections:
 		apply_correction(k)
 
 func load_sound():
@@ -608,7 +660,7 @@ func load_debug():
 	for i in range( animation['landmark_count'] ):
 		var d = tmpl.duplicate()
 		d.visible = true
-		var struct = structure_find(i)
+		var struct = corrections_find(i)
 		if struct == null:
 			d.get_child(0).material_override.albedo_color = Color(1,1,1)
 		else:
@@ -655,13 +707,15 @@ func load_animation():
 		# recover from the original
 		animation = original_animation.duplicate( true )
 		return
-	load_structure()
+	load_corrections()
 	load_data()
 	load_sound()
 	load_video()
 	load_debug()
 	load_animplayer()
 	load_frame()
+	
+	base_frame = current_frame.duplicate(true)
 
 func interpolate_euler( eul_src, eul_dst, pc ):
 	var srcq = Quat()
@@ -738,8 +792,8 @@ func load_frame():
 		var side = 'left'
 		if i%2 == 1:
 			side = 'right'
-		var upper = structure['lid_' + side + '_upper']
-		var lower = structure['lid_' + side + '_lower']
+		var upper = corrections['lid_' + side + '_upper']
+		var lower = corrections['lid_' + side + '_lower']
 		if len( upper['indices'] ) == 0 or len( lower['indices'] ) == 0 :
 			continue
 		# average upper
@@ -759,6 +813,45 @@ func load_frame():
 		la = pos + la
 		$gazes.get_child( i ).look_at_from_position( pos, pos + current_frame['gazes'][i], Vector3(0,1,0) )
 
+#warning-ignore:unused_argument
+func play_sound():
+	
+	if not 'sound' in animation or animation['sound']['path'] == null:
+		return null
+	$soundplayer.play()
+
+func apply_mapping( k ):
+	
+	var lbone = lavatar_node.avatar_map[k]
+	var lconf = mapping[k]
+	
+	if 'gaze' in lconf:
+		if ( lconf['gaze'] == 0 or lconf['gaze'] == 1 ) and lbone['rot_enabled']:
+			lavatar_node.bone_rotate( lbone, get_gaze(lconf['gaze']).get_euler() )
+		return
+	
+	if base_frame == null or current_frame == null:
+		return
+	
+	if not 'landmarks' in lconf or len(lconf['landmarks']) == 0: 
+		return
+	
+	# avareging the landmarks
+	var basis = Vector3()
+	var current = Vector3()
+	var totalw = 0
+	for l in lconf['landmarks']:
+		basis += base_frame['landmarks'][l['id']] * l['weight']
+		current += current_frame['landmarks'][l['id']] * l['weight']
+		totalw += l['weight']
+	basis /= totalw
+	current /= totalw
+	
+	if lbone['lookat_enabled']:
+		lavatar_node.bone_look_at( lbone, to_global(current) )
+	elif lbone['trans_enabled']:
+		lavatar_node.bone_translate( lbone, to_global(current) - to_global(basis) )
+
 func orient():
 	
 	if lavatar_anchor_bone == '' or lavatar_node.find_bone( lavatar_anchor_bone ) == -1:
@@ -774,19 +867,9 @@ func orient():
 	var t_rot = Transform( Basis(q), Vector3())
 	var t = Transform( Basis(q), glob_head.origin * lavatar_node.scale )
 	global_transform = t
-#	q.set_euler( anchor_rotation )
-#	global_transform.basis *= Basis(q).scaled(anchor_scale)
-#	global_transform.origin += t_rot.xform( anchor_offset )
 
 func _ready():
 	pass # Replace with function body.
-
-#warning-ignore:unused_argument
-func play_sound():
-	
-	if not 'sound' in animation or animation['sound']['path'] == null:
-		return null
-	$soundplayer.play()
 
 #warning-ignore:unused_argument
 func _process(delta):
@@ -807,8 +890,8 @@ func _process(delta):
 	if lavatar_node.debug:
 		return
 	
-	lavatar_node.bone_rotate( lavatar_node.avatar_map['eyeL'], get_gaze(0).get_euler() )
-	lavatar_node.bone_rotate( lavatar_node.avatar_map['eyeR'], get_gaze(1).get_euler() )
+	for k in mapping:
+		apply_mapping( k )
 
 ############# INTERNAL GETTERS #############
 
@@ -837,14 +920,14 @@ func get_gaze( i ):
 
 func get_delta( group ):
 	
-	if not group in structure or current_frame == null or len( structure[group]['indices'] ) == 0:
+	if not group in corrections or current_frame == null or len( corrections[group]['indices'] ) == 0:
 		return Vector3()
 	
-	var l = len( structure[group]['indices'] )
+	var l = len( corrections[group]['indices'] )
 	var first_frame_avrg = Vector3()
 	var current_frame_avrg = Vector3()
 	# averaging default & current frame
-	for id in structure[group]['indices']:
+	for id in corrections[group]['indices']:
 		first_frame_avrg += animation['frames'][0]['landmarks'][id]
 		current_frame_avrg += current_frame['landmarks'][id]
 	first_frame_avrg /= l
@@ -853,11 +936,11 @@ func get_delta( group ):
 
 func get_global( group ):
 	
-	if not group in structure or current_frame == null or len( structure[group]['indices'] ) == 0:
+	if not group in corrections or current_frame == null or len( corrections[group]['indices'] ) == 0:
 		return Vector3()
-	var l = len( structure[group]['indices'] )
+	var l = len( corrections[group]['indices'] )
 	var current_frame_avrg = Vector3()
-	for id in structure[group]['indices']:
+	for id in corrections[group]['indices']:
 		current_frame_avrg += current_frame['landmarks'][id]
 	return global_transform.xform( current_frame_avrg / l )
 

@@ -53,6 +53,7 @@ func retrieve_configurations( b = true ):
 		
 		var c = d['attach']
 		
+		d['lookat_enabled'] = c.lookat_enabled
 		d['rot_enabled'] = c.rot_enabled
 		d['rot_lock'] = [ c.rot_lock_x, c.rot_lock_y, c.rot_lock_z ]
 		d['rot_mult'] = c.rot_mult
@@ -127,6 +128,7 @@ func init_avatar():
 				'scale': t.basis.get_scale(),
 				'rest_inverse': get_bone_rest( bone_by_name[c.bone_name] ).inverse(),
 				# controls
+				'lookat_enabled': c.lookat_enabled,
 				'rot_enabled': c.rot_enabled,
 				'rot_lock': [ c.rot_lock_x, c.rot_lock_y, c.rot_lock_z ],
 				'rot_mult': c.rot_mult,
@@ -154,8 +156,10 @@ func init_avatar():
 	retrieve_configurations()
 
 func _ready():
-	init_avatar()
-	serialise()
+	# reseting skeleton
+	for i in get_bone_count():
+		set_bone_pose( i, Transform() )
+	pass
 
 func bone_update_children( avatar_bone, t ):
 	
@@ -185,7 +189,7 @@ func bone_update_children( avatar_bone, t ):
 
 func bone_look_at( avatar_bone, global_pos ):
 	
-	if not avatar_bone['rot_enabled']:
+	if not avatar_bone['lookat_enabled'] or not avatar_bone['rot_enabled']:
 		return
 	
 	# working in global space
@@ -201,7 +205,11 @@ func bone_look_at( avatar_bone, global_pos ):
 	if avatar_bone['rot_postprocessing']:
 		# let's create a position that correspond to a 0 rotation
 		var diff = corrected_pos - T
-		var front = avatar_bone['pose'].basis.y * diff.length()
+		var front = Vector3()
+		if avatar_bone['front_y']:
+			front = avatar_bone['pose'].basis.y * diff.length()
+		else:
+			front = avatar_bone['pose'].basis.z * -diff.length()
 		if avatar_bone['rot_lock'][0]:
 			diff.x = front.x
 		if avatar_bone['rot_lock'][1]:
@@ -274,10 +282,10 @@ func bone_rotate( avatar_bone, eulers, alpha = 1 ):
 	var t = avatar_bone['rest_inverse'] * avatar_bone['parent_pose_inverse'] * Transform( Basis( q ), Vector3() )
 	t.origin = Vector3()
 	
-	set_bone_pose( i, t )
+	set_bone_pose( i, Transform( Basis( q ), Vector3() ) )
 	
 	# applying correction in all children:
-	bone_update_children( avatar_bone, t )
+#	bone_update_children( avatar_bone, t )
 
 func bone_translate( avatar_bone, trans, alpha = 1 ):
 	
@@ -288,8 +296,6 @@ func bone_translate( avatar_bone, trans, alpha = 1 ):
 		print( 'bone ' + avatar_bone['name'] + ' has children, translations are disabled' )
 		return
 	
-	var i = avatar_bone['bid']
-	
 	if avatar_bone['trans_postprocessing']:
 		if avatar_bone['trans_lock'][0]:
 			trans.x = 0
@@ -299,9 +305,11 @@ func bone_translate( avatar_bone, trans, alpha = 1 ):
 			trans.z = 0
 		trans *= avatar_bone['trans_mult']
 	
+	get_node( "debug_local" ).translation = avatar_bone['origin'] + trans
+	
 	trans *= alpha
-	trans = Transform( avatar_bone['parent_pose_inverse'].basis, Vector3() ).xform( trans )
-	set_bone_pose( i, Transform( Basis(), trans ) )
+	trans = avatar_bone['rest_inverse'] * avatar_bone['parent_pose_inverse'] * Transform( Basis(), trans )
+	set_bone_pose( avatar_bone['bid'], trans )
 
 func _process(delta):
 	
@@ -416,6 +424,7 @@ func deserialise( data ):
 			continue
 		
 		var d = avatar_map[a['name']]
+		d['lookat_enabled'] = a['lookat_enabled']
 		d['rot_enabled'] = a['rot_enabled']
 		d['rot_lock'] = a['rot_lock']
 		d['rot_mult'] = deserialise_vec3( a['rot_mult'] )

@@ -1,6 +1,7 @@
 extends BoneAttachment
 
 export(bool) var active = true
+export(bool) var lookat_enabled = false
 export(bool) var rot_enabled = false
 export(bool) var rot_lock_x = false
 export(bool) var rot_lock_y = false
