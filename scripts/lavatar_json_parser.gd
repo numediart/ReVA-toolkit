@@ -176,12 +176,14 @@ var corrections = {
 }
 
 var mapping = {
+	
 	'jaw': {
 		'landmarks': [
 			{ 'id': 7, 'weight': 1 },
 			{ 'id': 8, 'weight': 1 },
 			{ 'id': 9, 'weight': 1 } ]
 	},
+	
 	'upper_lidL': {
 		'landmarks': [
 			{ 'id': 43, 'weight': 1 },
@@ -197,13 +199,16 @@ var mapping = {
 			{ 'id': 37, 'weight': 1 },
 			{ 'id': 38, 'weight': 1 } ]
 	},
+	
 	'lower_lidR': {
 		'landmarks': [
 			{ 'id': 40, 'weight': 1 },
 			{ 'id': 41, 'weight': 1 } ]
 	},
-	'eyeL': { 'gaze': 1 },
-	'eyeR': { 'gaze': 0 },
+	
+	'eyeL': { 'gaze': 0 },
+	'eyeR': { 'gaze': 1 },
+	
 	'eyebrow01R': {
 		'landmarks': [
 			{ 'id': 20, 'weight': 0.3 },
@@ -219,6 +224,39 @@ var mapping = {
 		'landmarks': [
 			{ 'id': 17, 'weight': 1 },
 			{ 'id': 18, 'weight': 0.3 } ]
+	},
+	'foreheadR': {
+		'landmarks': [
+			{ 'id': 17, 'weight': 0.2 },
+			{ 'id': 18, 'weight': 0.4 },
+			{ 'id': 19, 'weight': 0.7 },
+			{ 'id': 20, 'weight': 0.7 },
+			{ 'id': 21, 'weight': 0.5 } ]
+	},
+	
+	'eyebrow01L': {
+		'landmarks': [
+			{ 'id': 23, 'weight': 0.3 },
+			{ 'id': 22, 'weight': 1 } ]
+	},
+	'eyebrow02L': {
+		'landmarks': [
+			{ 'id': 25, 'weight': 0.2 },
+			{ 'id': 24, 'weight': 1 },
+			{ 'id': 23, 'weight': 0.2 } ]
+	},
+	'eyebrow03L': {
+		'landmarks': [
+			{ 'id': 26, 'weight': 1 },
+			{ 'id': 25, 'weight': 0.3 } ]
+	},
+	'foreheadL': {
+		'landmarks': [
+			{ 'id': 26, 'weight': 0.2 },
+			{ 'id': 25, 'weight': 0.4 },
+			{ 'id': 24, 'weight': 0.7 },
+			{ 'id': 23, 'weight': 0.7 },
+			{ 'id': 22, 'weight': 0.5 } ]
 	}
 }
 

@@ -283,9 +283,6 @@ func bone_rotate( avatar_bone, eulers, alpha = 1 ):
 	t.origin = Vector3()
 	
 	set_bone_pose( i, Transform( Basis( q ), Vector3() ) )
-	
-	# applying correction in all children:
-#	bone_update_children( avatar_bone, t )
 
 func bone_translate( avatar_bone, trans, alpha = 1 ):
 	

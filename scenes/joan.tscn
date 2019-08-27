@@ -144,7 +144,7 @@ albedo_color = Color( 0, 1, 0, 1 )
 flags_unshaded = true
 albedo_color = Color( 0, 0, 1, 1 )
 
-[sub_resource type="Animation" id=17]
+[sub_resource type="Animation" id=24]
 length = 11.633
 tracks/0/type = "value"
 tracks/0/path = NodePath("../json:playhead")
@@ -582,7 +582,7 @@ mesh = SubResource( 9 )
 material/0 = null
 
 [node name="debug_local" type="Spatial" parent="joan"]
-transform = Transform( 0.12, 0, 0, 0, 0.12, 0, 0, 0, 0.12, -0.496512, 2.4091, 0.667217 )
+transform = Transform( 0.12, 0, 0, 0, 0.12, 0, 0, 0, 0.12, 0.395777, 2.70371, 0.804158 )
 
 [node name="sphere" type="MeshInstance" parent="joan/debug_local"]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
@@ -1355,15 +1355,15 @@ mesh = SubResource( 14 )
 material/0 = null
 
 [node name="att_eyeL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.973419, 0.025046, 0.227656, -0.000617374, -0.993712, 0.111965, 0.229029, -0.109129, -0.967283, 0.352686, 2.27916, 0.621686 )
+transform = Transform( 0.994505, -0.00953738, -0.104258, -0.00063181, -0.996371, 0.0851201, -0.104691, -0.0845866, -0.990901, 0.352686, 2.27916, 0.621686 )
 visible = false
 bone_name = "eyeL"
 script = ExtResource( 3 )
 rot_enabled = true
+rot_mult = Vector3( 1, -1, 1 )
 
 [node name="dot" type="Spatial" parent="joan/att_eyeL"]
 transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0 )
-visible = false
 
 [node name="sphere" type="MeshInstance" parent="joan/att_eyeL/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
@@ -1392,13 +1392,13 @@ mesh = SubResource( 14 )
 material/0 = null
 
 [node name="att_lower_lidL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.994139, 0.0125414, 0.107386, -0.0320595, -0.914381, 0.403582, 0.103253, -0.404659, -0.908619, 0.352686, 2.27916, 0.621686 )
+transform = Transform( 0.999914, 0.012834, -0.00274487, 0.0129555, -0.931823, 0.362682, 0.00209693, -0.362686, -0.931908, 0.352686, 2.27916, 0.621686 )
 visible = false
 bone_name = "lower_lidL"
 script = ExtResource( 3 )
 lookat_enabled = true
 rot_enabled = true
-rot_lock_y = true
+rot_lock_x = true
 rot_lock_z = true
 trans_enabled = true
 
@@ -1493,13 +1493,13 @@ mesh = SubResource( 14 )
 material/0 = null
 
 [node name="att_upper_lidL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.990156, -0.0127279, 0.139396, 0.0456339, -0.912098, -0.407427, 0.132329, 0.409777, -0.902537, 0.352686, 2.27916, 0.621686 )
+transform = Transform( 0.999905, -0.0134814, -0.00293555, -0.0137541, -0.957104, -0.28942, 0.00109219, 0.289433, -0.957198, 0.352686, 2.27916, 0.621686 )
 visible = false
 bone_name = "upper_lidL"
 script = ExtResource( 3 )
 lookat_enabled = true
 rot_enabled = true
-rot_lock_y = true
+rot_lock_x = true
 rot_lock_z = true
 
 [node name="dot" type="Spatial" parent="joan/att_upper_lidL"]
@@ -1529,15 +1529,15 @@ mesh = SubResource( 14 )
 material/0 = null
 
 [node name="att_eyeR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.994505, 0.00953859, 0.104258, 0.000632113, -0.99637, 0.0851288, 0.104691, -0.0845952, -0.9909, -0.352687, 2.27916, 0.621686 )
+transform = Transform( 0.973419, -0.0250431, -0.227657, 0.000617669, -0.993713, 0.111953, -0.229029, -0.109118, -0.967284, -0.352687, 2.27916, 0.621686 )
 visible = false
 bone_name = "eyeR"
 script = ExtResource( 3 )
 rot_enabled = true
+rot_mult = Vector3( 1, -1, 1 )
 
 [node name="dot" type="Spatial" parent="joan/att_eyeR"]
 transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0 )
-visible = false
 
 [node name="sphere" type="MeshInstance" parent="joan/att_eyeR/dot"]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
@@ -1568,13 +1568,13 @@ mesh = SubResource( 14 )
 material/0 = null
 
 [node name="att_lower_lidR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.981416, -0.0122319, 0.191504, -0.0891206, -0.912865, 0.398416, 0.169944, -0.408081, -0.896989, -0.352687, 2.27916, 0.621686 )
+transform = Transform( 0.999915, -0.0127854, 0.0027289, -0.0128725, -0.926416, 0.37628, -0.00228279, -0.376285, -0.926501, -0.352687, 2.27916, 0.621686 )
 visible = false
 bone_name = "lower_lidR"
 script = ExtResource( 3 )
 lookat_enabled = true
 rot_enabled = true
-rot_lock_y = true
+rot_lock_x = true
 rot_lock_z = true
 
 [node name="dot" type="Spatial" parent="joan/att_lower_lidR"]
@@ -1668,13 +1668,13 @@ mesh = SubResource( 14 )
 material/0 = null
 
 [node name="att_upper_lidR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.976441, 0.0123911, 0.215434, 0.100197, -0.910238, -0.401783, 0.191118, 0.413903, -0.890034, -0.352687, 2.27916, 0.621686 )
+transform = Transform( 0.999901, 0.0137972, 0.00298322, 0.0141127, -0.972616, -0.231992, -0.00029927, 0.232011, -0.972714, -0.352687, 2.27916, 0.621686 )
 visible = false
 bone_name = "upper_lidR"
 script = ExtResource( 3 )
 lookat_enabled = true
 rot_enabled = true
-rot_lock_y = true
+rot_lock_x = true
 rot_lock_z = true
 
 [node name="dot" type="Spatial" parent="joan/att_upper_lidR"]
@@ -1742,6 +1742,7 @@ visible = false
 bone_name = "eyebrow01L"
 script = ExtResource( 3 )
 trans_enabled = true
+trans_lock_z = true
 
 [node name="dot" type="Spatial" parent="joan/att_eyebrow01L"]
 
@@ -1775,6 +1776,7 @@ visible = false
 bone_name = "eyebrow02L"
 script = ExtResource( 3 )
 trans_enabled = true
+trans_lock_z = true
 
 [node name="dot" type="Spatial" parent="joan/att_eyebrow02L"]
 
@@ -1809,6 +1811,7 @@ bone_name = "eyebrow03L"
 script = ExtResource( 3 )
 trans_enabled = true
 trans_lock_x = true
+trans_lock_z = true
 
 [node name="dot" type="Spatial" parent="joan/att_eyebrow03L"]
 
@@ -1842,6 +1845,8 @@ visible = false
 bone_name = "foreheadL"
 script = ExtResource( 3 )
 trans_enabled = true
+trans_lock_x = true
+trans_lock_z = true
 
 [node name="dot" type="Spatial" parent="joan/att_foreheadL"]
 
@@ -1875,7 +1880,8 @@ visible = false
 bone_name = "eyebrow01R"
 script = ExtResource( 3 )
 trans_enabled = true
-trans_mult = Vector3( 1, 1, -1 )
+trans_lock_z = true
+trans_mult = Vector3( 1, 1, 0.1 )
 
 [node name="dot" type="Spatial" parent="joan/att_eyebrow01R"]
 
@@ -1909,6 +1915,7 @@ visible = false
 bone_name = "eyebrow02R"
 script = ExtResource( 3 )
 trans_enabled = true
+trans_lock_z = true
 
 [node name="dot" type="Spatial" parent="joan/att_eyebrow02R"]
 
@@ -1941,6 +1948,8 @@ transform = Transform( 0.822811, 0.0193548, 0.567985, 0.0704284, -0.995189, -0.0
 bone_name = "eyebrow03R"
 script = ExtResource( 3 )
 trans_enabled = true
+trans_lock_x = true
+trans_lock_z = true
 
 [node name="dot" type="Spatial" parent="joan/att_eyebrow03R"]
 
@@ -1974,6 +1983,8 @@ visible = false
 bone_name = "foreheadR"
 script = ExtResource( 3 )
 trans_enabled = true
+trans_lock_x = true
+trans_lock_z = true
 
 [node name="dot" type="Spatial" parent="joan/att_foreheadR"]
 
@@ -2103,7 +2114,7 @@ lavatar_config_path = "res://assets/configs/default.json"
 [node name="soundplayer" type="AudioStreamPlayer" parent="json"]
 
 [node name="animplayer" type="AnimationPlayer" parent="json"]
-anims/json = SubResource( 17 )
+anims/json = SubResource( 24 )
 
 [node name="landmarks" type="Spatial" parent="json"]
 
