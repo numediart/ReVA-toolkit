@@ -55,3 +55,8 @@ $ cd git clone git@gitlab.com:polymorphcool/lavatar.git
 ```
 
 Once done, run your local version of godot, import *project.godot* and run it.
+
+## OpenFace Python
+
+To control the avatar in realtime with OpenFace, clone this [repository](https://github.com/numediart/OpenFace) and follow the instructions at the top of the readme.
+
