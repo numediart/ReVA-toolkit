@@ -1,4 +1,4 @@
-# Lavatar
+# ReVA-toolkit
 
 Open-source avatar for real-time
 human-agent interaction applications.
