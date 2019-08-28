@@ -582,7 +582,7 @@ mesh = SubResource( 32 )
 material/0 = null
 
 [node name="debug_local" type="Spatial" parent="joan"]
-transform = Transform( 0.12, 0, 0, 0, 0.12, 0, 0, 0, 0.12, 0.395777, 2.70371, 0.804158 )
+transform = Transform( 0.12, 0, 0, 0, 0.12, 0, 0, 0, 0.12, 0.395777, 2.7275, 0.804158 )
 
 [node name="sphere" type="MeshInstance" parent="joan/debug_local"]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
@@ -725,7 +725,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_jaw" type="BoneAttachment" parent="joan"]
-transform = Transform( 1, -4.82099e-07, 2.70055e-09, -3.21456e-07, -0.662589, 0.748983, -3.59294e-07, -0.748984, -0.662589, -6.86555e-09, 2.06868, 0.265774 )
+transform = Transform( 0.999984, 5.3467e-05, -0.00558813, 0.00416446, -0.67394, 0.738774, -0.00372656, -0.738787, -0.67393, -6.86555e-09, 2.06868, 0.265774 )
 visible = false
 bone_name = "jaw"
 script = ExtResource( 3 )
@@ -759,7 +759,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_chin" type="BoneAttachment" parent="joan"]
-transform = Transform( 1, 2.35701e-07, 9.6898e-10, 2.05595e-07, -0.874263, 0.48545, 1.1527e-07, -0.485451, -0.874264, -9.0409e-09, 1.46535, 0.799507 )
+transform = Transform( 0.999984, 0.00191281, -0.00525092, 0.00416499, -0.881565, 0.472043, -0.00372609, -0.472059, -0.881559, 0.00450138, 1.47358, 0.808642 )
 visible = false
 bone_name = "chin"
 script = ExtResource( 3 )
@@ -793,7 +793,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_lower_lip" type="BoneAttachment" parent="joan"]
-transform = Transform( 1, 3.09449e-06, -9.5256e-12, 3.08763e-06, -0.997785, -0.0665209, -2.0585e-07, 0.0665201, -0.997786, -8.61895e-09, 1.5963, 0.960868 )
+transform = Transform( 0.999984, 0.00445852, -0.00337332, 0.00416787, -0.996644, -0.0817443, -0.00372646, 0.0817282, -0.996648, 0.0147024, 1.60988, 0.967905 )
 visible = false
 bone_name = "lower_lip"
 script = ExtResource( 3 )
@@ -827,7 +827,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_lower_lipL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.981405, 0.014998, -0.191361, 0.00675014, -0.999022, -0.0436826, -0.19183, 0.0415778, -0.980548, 0.0918131, 1.62131, 0.902909 )
+transform = Transform( 0.980659, 0.0193671, -0.194765, 0.00790825, -0.9982, -0.0594427, -0.195566, 0.0567519, -0.979048, 0.11159, 1.63125, 0.909257 )
 visible = false
 bone_name = "lower_lipL"
 script = ExtResource( 3 )
@@ -861,7 +861,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_lower_lipR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.981405, 0.0150049, 0.191362, 0.0237878, -0.998762, -0.0436828, 0.190469, 0.0474213, -0.980547, -0.091813, 1.62131, 0.902909 )
+transform = Transform( 0.981987, 0.0193943, 0.187952, 0.0307798, -0.99785, -0.057849, 0.186426, 0.0625907, -0.980473, -0.0855821, 1.63086, 0.909985 )
 visible = false
 bone_name = "lower_lipR"
 script = ExtResource( 3 )
@@ -895,7 +895,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_commissureL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.93902, 0.0125494, -0.343635, -0.0203993, -0.99554, -0.0920999, -0.343259, 0.0934936, -0.934577, 0.223918, 1.66632, 0.876259 )
+transform = Transform( 0.937834, 0.0170939, -0.346664, -0.021726, -0.993936, -0.107786, -0.346405, 0.108617, -0.931776, 0.256334, 1.66271, 0.881593 )
 visible = false
 bone_name = "commissureL"
 script = ExtResource( 3 )
@@ -930,7 +930,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_commissureR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.939019, 0.0125502, 0.343635, 0.0469978, -0.99464, -0.0921001, 0.340637, 0.102634, -0.934577, -0.223918, 1.66632, 0.876258 )
+transform = Transform( 0.940054, 0.0171244, 0.340595, 0.0561027, -0.992897, -0.104924, 0.33638, 0.117742, -0.934338, -0.224654, 1.66767, 0.883279 )
 visible = false
 bone_name = "commissureR"
 script = ExtResource( 3 )
@@ -965,7 +965,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_upper_lip" type="BoneAttachment" parent="joan"]
-transform = Transform( 1, -1.43552e-06, -1.77852e-10, -1.43176e-06, -0.997371, -0.0724649, 1.03847e-07, 0.0724647, -0.997371, -7.95127e-09, 1.75138, 0.99157 )
+transform = Transform( 1, -1.43552e-06, -1.77852e-10, -1.43176e-06, -0.997371, -0.0724649, 1.03847e-07, 0.0724647, -0.997371, 0.0225335, 1.75098, 0.99157 )
 visible = false
 bone_name = "upper_lip"
 script = ExtResource( 3 )
@@ -999,7 +999,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_upper_lipL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.975725, 0.02297, -0.217791, 0.00543513, -0.996718, -0.0807724, -0.218931, 0.0776277, -0.972647, 0.127545, 1.75194, 0.978301 )
+transform = Transform( 0.975725, 0.02297, -0.217791, 0.00543513, -0.996718, -0.0807724, -0.218931, 0.0776277, -0.972647, 0.15411, 1.74741, 0.978301 )
 visible = false
 bone_name = "upper_lipL"
 script = ExtResource( 3 )
@@ -1033,7 +1033,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_upper_lipR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.975725, 0.0229563, 0.217791, 0.0414594, -0.99587, -0.0807724, 0.215037, 0.0878409, -0.972647, -0.127546, 1.75194, 0.978301 )
+transform = Transform( 0.975725, 0.0229563, 0.217791, 0.0414594, -0.99587, -0.0807724, 0.215037, 0.0878409, -0.972647, -0.113505, 1.75301, 0.978301 )
 visible = false
 bone_name = "upper_lipR"
 script = ExtResource( 3 )
@@ -1067,7 +1067,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_muscle_lip01L" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.974136, 0.0229245, -0.224799, 0.00484703, -0.996732, -0.0806407, -0.225913, 0.0774651, -0.971063, 0.176593, 1.9523, 0.916788 )
+transform = Transform( 0.974136, 0.0229245, -0.224799, 0.00484703, -0.996732, -0.0806407, -0.225913, 0.0774651, -0.971063, 0.205169, 1.93937, 0.916788 )
 visible = false
 bone_name = "muscle_lip01L"
 script = ExtResource( 3 )
@@ -1101,7 +1101,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_muscle_lip02L" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.940245, 0.0221257, -0.339779, -0.00466739, -0.996955, -0.0778352, -0.340467, 0.0747699, -0.937279, 0.262695, 1.81759, 0.895942 )
+transform = Transform( 0.940245, 0.0221257, -0.339779, -0.00466739, -0.996955, -0.0778352, -0.340467, 0.0747699, -0.937279, 0.29146, 1.80414, 0.895942 )
 visible = false
 bone_name = "muscle_lip02L"
 script = ExtResource( 3 )
@@ -1135,7 +1135,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_muscle_lip01R" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.974135, 0.0229259, 0.224799, 0.0420463, -0.995856, -0.0806407, 0.222018, 0.0880067, -0.971063, -0.176593, 1.9523, 0.916789 )
+transform = Transform( 0.974135, 0.0229259, 0.224799, 0.0420463, -0.995856, -0.0806407, 0.222018, 0.0880067, -0.971063, -0.178106, 1.94734, 0.916789 )
 visible = false
 bone_name = "muscle_lip01R"
 script = ExtResource( 3 )
@@ -1169,7 +1169,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_muscle_lip02R" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.940245, 0.0221282, 0.339779, 0.0515593, -0.995632, -0.0778352, 0.336573, 0.0907026, -0.937279, -0.262695, 1.81759, 0.895942 )
+transform = Transform( 0.940245, 0.0221282, 0.339779, 0.0515593, -0.995632, -0.0778352, 0.336573, 0.0907026, -0.937279, -0.265052, 1.81199, 0.895942 )
 visible = false
 bone_name = "muscle_lip02R"
 script = ExtResource( 3 )
@@ -1235,7 +1235,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_nostrilL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.765027, 4.4363e-07, -0.643998, -5.12809e-08, -1, -7.23056e-07, -0.643998, 4.48665e-07, -0.765028, 0.0852437, 1.96, 1.02604 )
+transform = Transform( 0.765027, 4.4363e-07, -0.643998, -5.12809e-08, -1, -7.23056e-07, -0.643998, 4.48665e-07, -0.765028, 0.113925, 1.94678, 1.02604 )
 visible = false
 bone_name = "nostrilL"
 script = ExtResource( 3 )
@@ -1269,7 +1269,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_nostrilR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.765026, -1.37516e-07, 0.643999, 3.92436e-07, -1, -7.53906e-07, 0.643999, 5.08619e-07, -0.765027, -0.0852437, 1.96, 1.02604 )
+transform = Transform( 0.765026, -1.37516e-07, 0.643999, 3.92436e-07, -1, -7.53906e-07, 0.643999, 5.08619e-07, -0.765027, -0.0872257, 1.95468, 1.02604 )
 visible = false
 bone_name = "nostrilR"
 script = ExtResource( 3 )
@@ -1303,7 +1303,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_cheekL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.6227, -0.0254444, -0.782047, -0.0408273, -0.999166, 3.41097e-08, -0.781395, 0.0319288, -0.623219, 0.41868, 1.76197, 0.682376 )
+transform = Transform( 0.6227, -0.0254444, -0.782047, -0.0408273, -0.999166, 3.41097e-08, -0.781395, 0.0319288, -0.623219, 0.448203, 1.74644, 0.682376 )
 visible = false
 bone_name = "cheekL"
 script = ExtResource( 3 )
@@ -1338,7 +1338,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_cheekR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.6227, -0.025444, 0.782047, -0.0408268, -0.999166, 9.45874e-08, 0.781395, -0.0319286, -0.62322, -0.41868, 1.76197, 0.682377 )
+transform = Transform( 0.6227, -0.025444, 0.782047, -0.0408268, -0.999166, 9.45874e-08, 0.781395, -0.0319286, -0.62322, -0.424409, 1.75377, 0.682377 )
 visible = false
 bone_name = "cheekR"
 script = ExtResource( 3 )
@@ -1373,7 +1373,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_eyeL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.994505, -0.00953845, -0.104258, -0.000631811, -0.99637, 0.0851304, -0.104691, -0.0845968, -0.9909, 0.352686, 2.27916, 0.621686 )
+transform = Transform( 0.995398, 0.0109733, 0.0951965, -0.000631748, -0.992649, 0.121028, 0.0958248, -0.120532, -0.988073, 0.352686, 2.27916, 0.621686 )
 visible = false
 bone_name = "eyeL"
 script = ExtResource( 3 )
@@ -1410,7 +1410,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_lower_lidL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.999914, 0.012834, -0.00274487, 0.0129555, -0.931823, 0.362682, 0.00209693, -0.362686, -0.931908, 0.352686, 2.27916, 0.621686 )
+transform = Transform( 0.99991, 0.013122, -0.00281552, 0.0133699, -0.955781, 0.293774, 0.00116386, -0.293785, -0.95587, 0.352686, 2.27916, 0.621686 )
 visible = false
 bone_name = "lower_lidL"
 script = ExtResource( 3 )
@@ -1511,7 +1511,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_upper_lidL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.999905, -0.0134814, -0.00293555, -0.0137541, -0.957104, -0.28942, 0.00109219, 0.289433, -0.957198, 0.352686, 2.27916, 0.621686 )
+transform = Transform( 0.999898, -0.0139835, -0.0030038, -0.014302, -0.979349, -0.201674, -0.000121647, 0.201696, -0.979449, 0.352686, 2.27916, 0.621686 )
 visible = false
 bone_name = "upper_lidL"
 script = ExtResource( 3 )
@@ -1547,7 +1547,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_eyeR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.973419, -0.0250463, -0.227656, 0.000617671, -0.993712, 0.111967, -0.229029, -0.109132, -0.967282, -0.352687, 2.27916, 0.621686 )
+transform = Transform( 0.993502, -0.0134226, -0.113019, 0.000630788, -0.992357, 0.123402, -0.113811, -0.122672, -0.9859, -0.352687, 2.27916, 0.621686 )
 visible = false
 bone_name = "eyeR"
 script = ExtResource( 3 )
@@ -1586,7 +1586,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_lower_lidR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.999915, -0.0127854, 0.0027289, -0.0128725, -0.926416, 0.37628, -0.00228279, -0.376285, -0.926501, -0.352687, 2.27916, 0.621686 )
+transform = Transform( 0.999912, -0.0130163, 0.00279349, -0.0132305, -0.948338, 0.316985, -0.0014768, -0.316996, -0.948426, -0.352687, 2.27916, 0.621686 )
 visible = false
 bone_name = "lower_lidR"
 script = ExtResource( 3 )
@@ -1686,7 +1686,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_upper_lidR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.999901, 0.0137972, 0.00298322, 0.0141127, -0.972616, -0.231992, -0.00029927, 0.232011, -0.972714, -0.352687, 2.27916, 0.621686 )
+transform = Transform( 0.999891, 0.0144813, 0.00304053, 0.0147543, -0.99132, -0.130644, 0.00112227, 0.130675, -0.991425, -0.352687, 2.27916, 0.621686 )
 visible = false
 bone_name = "upper_lidR"
 script = ExtResource( 3 )
@@ -1755,7 +1755,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_eyebrow01L" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.985124, 0.0231852, -0.170277, 0.0093601, -0.996625, -0.0815503, -0.171593, 0.0787432, -0.982016, 0.155383, 2.43421, 0.872321 )
+transform = Transform( 0.985124, 0.0231852, -0.170277, 0.0093601, -0.996625, -0.0815503, -0.171593, 0.0787432, -0.982016, 0.187054, 2.46714, 0.872321 )
 visible = false
 bone_name = "eyebrow01L"
 script = ExtResource( 3 )
@@ -1789,7 +1789,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_eyebrow02L" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.958318, 0.0225436, -0.284814, -0.000127427, -0.996848, -0.0793312, -0.285705, 0.0760607, -0.955294, 0.327963, 2.5078, 0.836287 )
+transform = Transform( 0.958318, 0.0225436, -0.284814, -0.000127427, -0.996848, -0.0793312, -0.285705, 0.0760607, -0.955294, 0.352087, 2.52703, 0.836287 )
 visible = false
 bone_name = "eyebrow02L"
 script = ExtResource( 3 )
@@ -1823,7 +1823,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_eyebrow03L" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.822812, 0.0193541, -0.567985, -0.023558, -0.9974, -0.0681137, -0.567826, 0.0694252, -0.820216, 0.496511, 2.4091, 0.667217 )
+transform = Transform( 0.822812, 0.0193541, -0.567985, -0.023558, -0.9974, -0.0681137, -0.567826, 0.0694252, -0.820216, 0.496511, 2.43064, 0.667217 )
 visible = false
 bone_name = "eyebrow03L"
 script = ExtResource( 3 )
@@ -1858,7 +1858,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_foreheadL" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.900481, 1.32839e-06, -0.434896, 1.44629e-06, -1, -1.33412e-07, -0.434897, -5.9139e-07, -0.900481, 0.395777, 2.70371, 0.804158 )
+transform = Transform( 0.900481, 1.32839e-06, -0.434896, 1.44629e-06, -1, -1.33412e-07, -0.434897, -5.9139e-07, -0.900481, 0.395777, 2.7275, 0.804158 )
 visible = false
 bone_name = "foreheadL"
 script = ExtResource( 3 )
@@ -1893,7 +1893,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_eyebrow01R" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.985123, 0.0231896, 0.170277, 0.0375406, -0.995962, -0.0815503, 0.167698, 0.0867294, -0.982016, -0.155383, 2.43421, 0.872321 )
+transform = Transform( 0.985123, 0.0231896, 0.170277, 0.0375406, -0.995962, -0.0815503, 0.167698, 0.0867294, -0.982016, -0.141489, 2.44964, 0.872321 )
 visible = false
 bone_name = "eyebrow01R"
 script = ExtResource( 3 )
@@ -1928,7 +1928,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_eyebrow02R" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.958317, 0.0225458, 0.284815, 0.0470037, -0.99574, -0.0793312, 0.281812, 0.0894117, -0.955294, -0.327964, 2.5078, 0.836287 )
+transform = Transform( 0.958317, 0.0225458, 0.284815, 0.0470037, -0.99574, -0.0793312, 0.281812, 0.0894117, -0.955294, -0.326012, 2.52371, 0.836287 )
 visible = false
 bone_name = "eyebrow02R"
 script = ExtResource( 3 )
@@ -1962,7 +1962,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_eyebrow03R" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.822811, 0.0193548, 0.567985, 0.0704284, -0.995189, -0.0681138, 0.563934, 0.0960469, -0.820216, -0.496512, 2.4091, 0.667217 )
+transform = Transform( 0.822811, 0.0193548, 0.567985, 0.0704284, -0.995189, -0.0681138, 0.563934, 0.0960469, -0.820216, -0.496512, 2.41406, 0.667217 )
 bone_name = "eyebrow03R"
 script = ExtResource( 3 )
 trans_enabled = true
@@ -1996,7 +1996,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_foreheadR" type="BoneAttachment" parent="joan"]
-transform = Transform( 0.900481, 2.35284e-06, 0.434896, 2.60031e-06, -1, -1.33179e-07, 0.434896, 1.15868e-06, -0.900481, -0.395778, 2.70371, 0.804157 )
+transform = Transform( 0.900481, 2.35284e-06, 0.434896, 2.60031e-06, -1, -1.33179e-07, 0.434896, 1.15868e-06, -0.900481, -0.395778, 2.71804, 0.804157 )
 visible = false
 bone_name = "foreheadR"
 script = ExtResource( 3 )
@@ -2031,7 +2031,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_tongue02" type="BoneAttachment" parent="joan"]
-transform = Transform( -1, 8.61927e-07, -2.16353e-09, 8.35331e-07, 0.969763, 0.244047, 2.12441e-07, 0.244048, -0.969763, -1.00353e-08, 1.61931, 0.507855 )
+transform = Transform( -0.999984, -0.00319891, -0.00458166, -0.00416395, 0.973367, 0.229213, 0.00372641, 0.229229, -0.973366, 0.0027834, 1.62306, 0.514678 )
 visible = false
 bone_name = "tongue02"
 script = ExtResource( 3 )
@@ -2064,7 +2064,7 @@ mesh = SubResource( 37 )
 material/0 = null
 
 [node name="att_tongue03" type="BoneAttachment" parent="joan"]
-transform = Transform( -1, 3.26843e-07, -2.28237e-09, 3.25644e-07, 0.996897, 0.0787018, 2.79896e-08, 0.0787027, -0.996898, -9.67629e-09, 1.5788, 0.668813 )
+transform = Transform( -0.999984, -0.00391951, -0.00398308, -0.00416446, 0.997974, 0.0634737, 0.00372623, 0.0634902, -0.997975, 0.00354385, 1.58502, 0.676234 )
 visible = false
 bone_name = "tongue03"
 script = ExtResource( 3 )
@@ -2113,7 +2113,6 @@ transform = Transform( 0.314301, -0.00129135, -0.964797, 0.964797, -0.000937507,
 
 [node name="json" type="Spatial" parent="."]
 transform = Transform( 1.0147, 1.35613e-06, 8.84545e-08, 1.35894e-06, -1.0118, -0.0766749, -1.42731e-08, 0.0766749, -1.0118, -8.48468e-09, 2.01528, 1.0946 )
-visible = false
 script = ExtResource( 2 )
 lavatar_json_path = "res://assets/json/mouth_open.json"
 lavatar_node_path = "../joan"
@@ -2121,6 +2120,7 @@ lavatar_anchor_bone = "nose_tip"
 anchor_rotation = Vector3( 179.1, 0, 0 )
 anchor_translation = Vector3( -0.02, 0.07, 0.12 )
 anchor_scale = Vector3( 1.48, 1, 1 )
+playhead = 11.6
 brow_rotation = Vector3( -0.06, -0.2, -0.18 )
 brow_translation = Vector3( 0, 0.25, 0.1 )
 eye_translation = Vector3( -0.03, 0.03, -0.04 )
@@ -2149,7 +2149,7 @@ mesh = SubResource( 19 )
 material/0 = null
 
 [node name="axis" type="Spatial" parent="json"]
-transform = Transform( 0.998733, 0.0388898, -0.0319369, -0.036925, 0.997517, 0.0599639, 0.0341897, -0.0587087, 0.997688, 0, 0, 0 )
+transform = Transform( 0.996558, 0.0807172, 0.0188733, -0.0823571, 0.989975, 0.114746, -0.00942213, -0.115906, 0.993214, 0.0153788, -0.000214562, 0.00804533 )
 
 [node name="x" type="MeshInstance" parent="json/axis"]
 transform = Transform( 0.2, 0, 0, 0, 0.004, 0, 0, 0, 0.004, 0.1, 0, 0 )

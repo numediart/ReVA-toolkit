@@ -11,7 +11,7 @@ git clone git@github.com:godotengine/godot.git godot
 cd godot
 git checkout bf8322376c97eee0f2ce25737c959bc33b945e60
 # getting gosc module
-cd godot/modules
+cd modules
 git clone git@gitlab.com:frankiezafe/gosc.git gosc
 # running the installation of gosc
 cd gosc
