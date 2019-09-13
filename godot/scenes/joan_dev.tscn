@@ -1,6 +1,6 @@
 [gd_scene load_steps=39 format=2]
 
-[ext_resource path="res://assets/envs/environment_sky.tres" type="Environment" id=1]
+[ext_resource path="res://envs/environment_sky.tres" type="Environment" id=1]
 [ext_resource path="res://scripts/lavatar_json_parser.gd" type="Script" id=2]
 [ext_resource path="res://scripts/bone_configuration.gd" type="Script" id=3]
 [ext_resource path="res://scripts/lavatar_skeleton.gd" type="Script" id=4]
@@ -15,6 +15,7 @@
 [ext_resource path="res://materials/joan_mouth.material" type="Material" id=16]
 [ext_resource path="res://materials/joan_teeth_top.material" type="Material" id=17]
 [ext_resource path="res://materials/joan_teeth_bottom.material" type="Material" id=18]
+
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "eyebrow"
