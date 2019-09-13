@@ -4,3 +4,5 @@
 .import/*
 *test.json
 assets/python/trash/*
+assets/python/processed/*
+python/processed/*
