@@ -211,20 +211,6 @@ def pack_animation( frames, display_name, corr_mat ):
 
 def animation_add_sound( animation, sound_path, json_path = None ):
 	
-	cmd = FFPROBE_EXEC_PATH + ' -i ' + sound_path + ' -show_streams -select_streams a:0'
-	proc = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE)
-	lines = proc.stdout.decode('utf-8').split('\n')
-	for l in lines:
-		if l.startswith( 'sample_rate' ):
-			ws = l.split('=')
-			print( 'sample_rate is', ws[1] )
-		if l.startswith( 'channels' ):
-			ws = l.split('=')
-			print( 'channels is', ws[1] )
-		if l.startswith( 'bits_per_sample' ):
-			ws = l.split('=')
-			print( 'bits_per_sample is', ws[1] )
-	
 	if os.path.isfile(sound_path):
 		abs_path = os.path.abspath(sound_path)
 		animation['sound'] = copy.deepcopy(SOUND_TEMPLATE)
