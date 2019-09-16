@@ -40,9 +40,9 @@ FRAME_TEMPLATE = {
 }
 
 SOUND_TEMPLATE = {
-	'bits_per_sample': 16,
-	'channels': 2,
-	'sample_rate': 44100,
+	'bits_per_sample': 0,
+	'channels': 0,
+	'sample_rate': 0,
 	'path': ''
 }
 
