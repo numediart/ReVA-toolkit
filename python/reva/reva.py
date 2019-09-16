@@ -9,6 +9,45 @@ from pythonosc import osc_message_builder
 from pythonosc import udp_client
 
 '''
+## GLOBALS ##
+'''
+
+ReVA_VERSION = 1
+ReVA_PREFIX = 'ReVA'
+
+'''
+## TEMPLATES ##
+see https://github.com/numediart/ReVA-toolkit/wiki/file_format for
+valid frame json format
+'''
+
+FRAME_TEMPLATE = {
+	'gazes': [],
+	'points': [],
+	'pose_euler': [0,0,0],
+	'pose_translation': [0,0,0],
+	'timestamp': 0.0
+}
+
+ANIMATION_TEMPLATE = {
+	'type' : ReVA_PREFIX+'_animation',
+	'version' : ReVA_VERSION,
+	'display_name': '',
+	'frames' : [],
+	'gaze_count': 0,
+	'point_count': 0,
+	'duration': 0,
+	'sound': {},
+	'video': {},
+	'aabb': {
+		'center': None,
+		'min': None,
+		'max': None,
+		'size': None,
+	}
+}
+
+'''
 ## UTILS ##
 all general & utility functions
 '''
@@ -60,3 +99,15 @@ def apply_matrix_rotation( xyz, matrix ):
 	em = euler_matrix( xyz[0], xyz[1], xyz[2], axes='sxyz' )
 	rot = euler_from_matrix( concatenate_matrices( matrix, em ), axes='sxyz' ) # godot convention for rotations!!!
 	return [rot[0],rot[1],rot[2]]
+
+def save_animation_json( anim, path, compress = True ):
+	
+	out = open( path, 'w' )
+	if ( compress ):
+		cc = json.dumps( anim, sort_keys=True, indent=0, separators=(',', ':'))
+		cc = cc.replace( '\n','' )
+		cc = cc.replace( '\r','' )
+	else:
+		cc = json.dumps( anim, sort_keys=True, indent=4, separators=(',', ':'))
+	out.write( cc )
+	out.close()
