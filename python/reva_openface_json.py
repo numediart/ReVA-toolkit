@@ -211,6 +211,31 @@ def parse_frame( line ):
 	
 	frames.append( frame )
 
+def push_in_aabb( aabb, pt ):
+	
+	if aabb['min'] == None:
+		aabb['min'] = list(pt)
+		aabb['max'] = list(pt)
+	else:
+		for i in range(0,3):
+			if aabb['min'][i] > pt[i]:
+				aabb['min'][i] = pt[i]
+			if aabb['max'][i] < pt[i]:
+				aabb['max'][i] = pt[i]
+
+def process_aabb( aabb ):
+	aabb['center'] = [0,0,0]
+	aabb['size'] = [0,0,0]
+	for i in range(0,3):
+		aabb['size'][i] = aabb['max'][i] - aabb['min'][i]
+		aabb['center'][i] = aabb['min'][i] + aabb['size'][i] * 0.5
+
+def normalise_in_aabb( aabb, pt ):
+	for i in range(0,3):
+		pt[i] -= aabb['center'][i]
+		pt[i] /= aabb['size'][i]
+	return pt
+
 '''
 see https://github.com/numediart/ReVA-toolkit/wiki/file_format#animation- for
 valid frame json format
@@ -228,10 +253,10 @@ def pack_animation():
 		'sound': {},
 		'video': {},
 		'aabb': {
-			'center': [0.0,0.0,0.0],
-			'min': [0.0,0.0,0.0],
-			'max': [0.0,0.0,0.0],
-			'size': [0.0,0.0,0.0],
+			'center': None,
+			'min': None,
+			'max': None,
+			'size': None,
 		}
 	}
 	
@@ -246,13 +271,21 @@ def pack_animation():
 			f['pose_translation'] = reva.apply_matrix_position( f['pose_translation'], MAT_CORRECTION )
 			for g in f['gazes']:
 				g = reva.apply_matrix_rotation( g, MAT_CORRECTION )
-			for p in f['points']:
-				p = reva.apply_matrix_position( p, MAT_CORRECTION )
-			# preparation of normalisation
+			for pt in f['points']:
+				pt = reva.apply_matrix_position( pt, MAT_CORRECTION )
+				# preparation of normalisation
+				if render_aabb:
+					push_in_aabb( anim['aabb'], pt )
+				else:
+					pt = normalise_in_aabb( anim['aabb'], pt )
+			
 			if render_aabb:
-				pass
+				process_aabb( anim['aabb'] )
+				for pt in f['points']:
+					pt = normalise_in_aabb( anim['aabb'], pt )
+				render_aabb = False
+			
 			anim['frames'].append(f)
-		
 		
 	return anim
 
