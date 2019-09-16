@@ -2,10 +2,17 @@ import reva.reva as reva
 import copy
 import os.path
 
+'''
 CSV_PATH = "../assets/openface/smile.csv"
-WAV_PATH = ""
+WAV_PATH = "../assets/openface/smile_low.wav"
 VIDEO_PATH = ""
-JSON_PATH = "../json/smile.json"
+JSON_PATH = "../json/anim/smile.json"
+'''
+
+CSV_PATH = "../assets/openface/laugh.csv"
+WAV_PATH = "../assets/openface/laugh.wav"
+VIDEO_PATH = ""
+JSON_PATH = "../json/anim/laugh.json"
 
 MAT_CORRECTION = reva.mat([
 	[1,0,0,0],
@@ -153,6 +160,9 @@ def parse_frame( line ):
 	words = line.split( ',' )
 	lw = len( words )
 	
+	if len(line) == 0 or lw < len(references):
+		return
+	
 	for ref in references:
 		
 		if ref['field'] == 'timestamp':
@@ -202,80 +212,18 @@ def parse_frame( line ):
 	
 	frames.append( frame )
 
-def push_in_aabb( aabb, pt ):
-	
-	if aabb['min'] == None:
-		aabb['min'] = list(pt)
-		aabb['max'] = list(pt)
-	else:
-		for i in range(0,3):
-			if aabb['min'][i] > pt[i]:
-				aabb['min'][i] = pt[i]
-			if aabb['max'][i] < pt[i]:
-				aabb['max'][i] = pt[i]
-
-def process_aabb( aabb ):
-	aabb['center'] = [0,0,0]
-	aabb['size'] = [0,0,0]
-	for i in range(0,3):
-		aabb['size'][i] = aabb['max'][i] - aabb['min'][i]
-		aabb['center'][i] = aabb['min'][i] + aabb['size'][i] * 0.5
-
-def normalise_in_aabb( aabb, pt ):
-	for i in range(0,3):
-		pt[i] /= aabb['size'][i]
-	return pt
-
-def pack_animation():
-	
-	anim = copy.deepcopy(reva.ANIMATION_TEMPLATE)
-	
-	anim['display_name'] = os.path.splitext( os.path.basename( JSON_PATH ) )[0]
-	
-	if len( frames ) != 0:
-		
-		f = frames[0]
-		anim[ 'gaze_count' ] = len(f['gazes'])
-		anim[ 'point_count' ] = len(f['points'])
-		
-		aabb = anim[ 'aabb' ]
-		
-		# rendering aabb
-		for i in range(anim[ 'point_count' ]):
-			pt = reva.apply_matrix_position( f['points'][i], MAT_CORRECTION )
-			push_in_aabb( aabb, pt )
-		process_aabb( aabb )
-		
-		
-		for f in frames:
-			
-			newf = copy.deepcopy(reva.FRAME_TEMPLATE)
-			
-			newf['pose_euler'] = reva.apply_matrix_rotation( f['pose_euler'], MAT_CORRECTION )
-			newf['pose_translation'] = reva.apply_matrix_position( f['pose_translation'], MAT_CORRECTION )
-			
-			for j in range(0,3):
-				newf['pose_translation'][j] -= aabb['center'][j]
-			
-			for g in f['gazes']:
-				newf['gazes'].append( reva.apply_matrix_rotation( g, MAT_CORRECTION ) )
-			
-			for i in range(anim[ 'point_count' ]):
-				pt = reva.apply_matrix_position( f['points'][i], MAT_CORRECTION )
-				for j in range(0,3):
-					pt[j] -= aabb['center'][j] + newf['pose_translation'][j]
-				newf['points'].append( normalise_in_aabb( aabb, pt ) )
-			
-			anim['frames'].append(newf)
-		
-	return anim
-
 with open( CSV_PATH ) as csv:
 	line = csv.readline()
 	get_references( line )
+	print( references )
 	while line:
 		line = csv.readline()
 		parse_frame( line )
 	csv.close()
 
-reva.save_animation_json( pack_animation(), JSON_PATH )
+animation = reva.pack_animation( frames, os.path.splitext(os.path.basename(JSON_PATH))[0], MAT_CORRECTION )
+
+reva.animation_add_sound( animation, WAV_PATH, JSON_PATH )
+reva.animation_add_video( animation, VIDEO_PATH, JSON_PATH )
+
+reva.save_animation_json( animation, JSON_PATH )
