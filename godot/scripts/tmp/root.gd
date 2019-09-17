@@ -5,9 +5,9 @@ var animation = null
 
 func _ready():
 	var animation = ReVA.load_animation( "../json/anim/smile.json" )
-	print( animation )
+	print( animation.errors )
 	var calibration = ReVA.load_calibration( "../json/anim/smile.json" )
-	print( calibration )
+	print( calibration.errors )
 
 func _process(delta):
 	pass
