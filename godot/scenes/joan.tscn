@@ -216,7 +216,6 @@ __meta__ = {
 script = ExtResource( 9 )
 
 [node name="calib_panel" type="Node2D" parent="ui"]
-visible = false
 
 [node name="front" type="ViewportContainer" parent="ui/calib_panel"]
 margin_left = 524.0
@@ -232,7 +231,7 @@ pivot_path = "../../joan/att_face_cam/piv/front_pivot"
 [node name="vp" type="Viewport" parent="ui/calib_panel/front"]
 size = Vector2( 500, 600 )
 handle_input_locally = false
-render_target_update_mode = 0
+render_target_update_mode = 3
 
 [node name="cam" type="Camera" parent="ui/calib_panel/front/vp"]
 transform = Transform( 1, 3.93555e-15, 3.03337e-07, 4.05977e-10, 0.999999, -0.00133838, -3.03337e-07, 0.00133838, 0.999999, 3.22263e-06, 2.0101, 14.0207 )
@@ -252,7 +251,7 @@ pivot_path = "../../joan/att_face_cam/piv/side_pivot"
 [node name="vp" type="Viewport" parent="ui/calib_panel/side"]
 size = Vector2( 300, 600 )
 handle_input_locally = false
-render_target_update_mode = 0
+render_target_update_mode = 3
 
 [node name="cam" type="Camera" parent="ui/calib_panel/side/vp"]
 transform = Transform( 0.309747, -0.00127264, -0.950818, 1.94592e-09, 0.999999, -0.00133847, 0.950819, 0.000414585, 0.309747, -13.8849, 2.02892, 5.39033 )
@@ -605,6 +604,7 @@ __meta__ = {
 }
 
 [node name="main_panel" type="Node2D" parent="ui"]
+visible = false
 
 [node name="calib" type="Button" parent="ui/main_panel"]
 margin_left = 17.0
@@ -2660,6 +2660,7 @@ lavatar_anchor_bone = "nose_tip"
 anchor_rotation = Vector3( 179.1, 0, 0 )
 anchor_translation = Vector3( -0.02, 0.07, 0.12 )
 anchor_scale = Vector3( 1.48, 1, 1 )
+playhead = 11.6
 center_offset = false
 brow_rotation = Vector3( -0.06, -0.2, -0.18 )
 brow_translation = Vector3( 0, 0.25, 0.1 )

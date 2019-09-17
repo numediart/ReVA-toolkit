@@ -16,8 +16,8 @@ JSON_PATH = "../json/anim/laugh.json"
 
 MAT_CORRECTION = reva.mat([
 	[1,0,0,0],
+	[0,0,1,0],
 	[0,-1,0,0],
-	[0,0,-1,0],
 	[0,0,0,1]
 ])
 

@@ -5,7 +5,8 @@ import time
 import json
 import argparse
 import copy
-import shutil 
+import shutil
+import wave
 import subprocess
 from .transformations import *
 from pythonosc import osc_message_builder
@@ -148,6 +149,7 @@ def process_aabb( aabb ):
 		aabb['center'][i] = aabb['min'][i] + aabb['size'][i] * 0.5
 
 def normalise_in_aabb( aabb, pt ):
+	
 	for i in range(0,3):
 		pt[i] /= aabb['size'][i]
 	return pt
@@ -191,17 +193,15 @@ def pack_animation( frames, display_name, corr_mat ):
 			newf['pose_euler'] = apply_matrix_rotation( f['pose_euler'], corr_mat )
 			newf['pose_translation'] = apply_matrix_position( f['pose_translation'], corr_mat )
 			
-			for j in range(0,3):
-				newf['pose_translation'][j] -= aabb['center'][j]
-			
 			for g in f['gazes']:
 				newf['gazes'].append( apply_matrix_rotation( g, corr_mat ) )
 			
 			for i in range(anim[ 'point_count' ]):
 				pt = apply_matrix_position( f['points'][i], corr_mat )
 				for j in range(0,3):
-					pt[j] -= aabb['center'][j] + newf['pose_translation'][j]
-				newf['points'].append( normalise_in_aabb( aabb, pt ) )
+					pt[j] -= newf['pose_translation'][j]
+				#newf['points'].append( normalise_in_aabb( aabb, pt ) )
+				newf['points'].append( pt )
 			
 			anim['frames'].append(newf)
 	
@@ -221,8 +221,20 @@ def animation_add_sound( animation, sound_path, json_path = None ):
 			sound_path = os.path.basename(target_path)
 		else:
 			sound_path = abs_path
-		
-		# getting info from ffprobe:
+
+		# getting wav info with std library
+		try:
+			with wave.open(abs_path,'r') as w:
+				animation['sound']['sample_rate'] = w.getframerate()
+				animation['sound']['bits_per_sample'] = w.getsampwidth() * 8
+				animation['sound']['channels'] = w.getnchannels()
+				animation['sound']['path'] = sound_path
+		except Exception as e:
+			print( e )
+			animation['sound'] = None
+
+		# getting info from ffprobe:		
+		'''
 		cmd = FFPROBE_EXEC_PATH + ' -i ' + abs_path + ' -show_streams -select_streams a:0'
 		proc = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE)
 		lines = proc.stdout.decode('utf-8').split('\n')
@@ -236,8 +248,9 @@ def animation_add_sound( animation, sound_path, json_path = None ):
 			if l.startswith( 'bits_per_sample' ):
 				ws = l.split('=')
 				animation['sound']['bits_per_sample'] = parse_int(ws[1])
-		
 		animation['sound']['path'] = sound_path
+		'''
+	
 	else:
 		animation['sound'] = None
 
