@@ -28,6 +28,7 @@ func _ready():
 		for i in range( animation.content.point_count ):
 			var p = $pt.duplicate()
 			p.visible = true
+			p.material_override = p.get_surface_material(0).duplicate()
 			mask.add_child( p )
 		
 		axis = $axis.duplicate()
@@ -44,20 +45,6 @@ func _ready():
 
 	var calibration = ReVA.load_calibration( "../json/calibration/openface_default.json" )
 	ReVA.check_calibration( calibration, animation )
-	
-	for k in calibration:
-		print( '####### ', k , ' #######' )
-		if k ==  'content':
-			for kk in calibration[k]:
-				if kk == 'groups':
-					print( 'groups' )
-					for g in calibration[k][kk]:
-						print( '\t\t',g )
-				else:
-					print( kk )
-					print( '\t',calibration[k][kk] )
-		else:
-			print( calibration[k] )
 
 func _process(delta):
 	

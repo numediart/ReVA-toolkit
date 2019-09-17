@@ -329,7 +329,6 @@ static func load_animation( p ):
 	return validate_animation( load_json( p ) )
 
 static func reset( data ):
-
 	if 'original' in data and 'content' in data:
 		data.content = clone_dict( data.original )
 
@@ -403,7 +402,7 @@ static func search_in_hierarchy( level, gname ):
 	for node in level:
 		if node.group == gname:
 			return node
-		var o = search_in_hierarchy( node.chidren, gname )
+		var o = search_in_hierarchy( node.children, gname )
 		if o != null:
 			return o
 	return null
