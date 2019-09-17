@@ -531,11 +531,13 @@ static func check_calibration( calibration, animation ):
 		newg.points = []
 		if 'symmetry' in g:
 			for sub in g.points:
+				var subg = []
 				for i in sub:
 					if i >= 0 and i < animation.content.point_count:
-						newg.points.append( i )
+						subg.append( i )
 					else:
 						jlog( calibration, ReVA_WARNING, "invalid point index [" + str(i) + "] in group " + g.name )
+				newg.points.append( subg )
 		else:
 			for i in g.points:
 				if i >= 0 and i < animation.content.point_count:
