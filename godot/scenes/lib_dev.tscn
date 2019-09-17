@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/tmp/root.gd" type="Script" id=1]
+[ext_resource path="res://themes/osi.theme" type="Theme" id=2]
 
 [sub_resource type="CubeMesh" id=5]
 
@@ -70,3 +71,300 @@ transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 50, 0, 0, 25 )
 material_override = SubResource( 10 )
 mesh = SubResource( 8 )
 material/0 = null
+
+[node name="ui" type="Node2D" parent="."]
+
+[node name="groups" type="OptionButton" parent="ui"]
+margin_left = 15.0
+margin_top = 15.0
+margin_right = 198.0
+margin_bottom = 46.0
+theme = ExtResource( 2 )
+text = "groups"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="gname" type="Label" parent="ui"]
+margin_left = 15.0
+margin_top = 53.0
+margin_right = 103.0
+margin_bottom = 84.0
+theme = ExtResource( 2 )
+text = "group name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ginfo" type="Label" parent="ui"]
+margin_left = 15.0
+margin_top = 76.0
+margin_right = 103.0
+margin_bottom = 107.0
+theme = ExtResource( 2 )
+text = "group info"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rot_panel" type="Node2D" parent="ui"]
+position = Vector2( 0, 114 )
+
+[node name="rot" type="Label" parent="ui/rot_panel"]
+margin_left = 22.0
+margin_top = 1.0
+margin_right = 85.0
+margin_bottom = 32.0
+theme = ExtResource( 2 )
+text = "rotation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rotx" type="SpinBox" parent="ui/rot_panel"]
+margin_left = 44.0
+margin_top = 32.0
+margin_right = 217.0
+margin_bottom = 62.0
+theme = ExtResource( 2 )
+min_value = -180.0
+max_value = 180.0
+step = 0.1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbl" type="Label" parent="ui/rot_panel/rotx"]
+margin_left = -21.0
+margin_top = -1.0
+margin_right = -3.0
+margin_bottom = 30.0
+theme = ExtResource( 2 )
+text = "X"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="roty" type="SpinBox" parent="ui/rot_panel"]
+margin_left = 44.0
+margin_top = 66.0
+margin_right = 217.0
+margin_bottom = 97.0
+theme = ExtResource( 2 )
+min_value = -180.0
+max_value = 180.0
+step = 0.1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbl" type="Label" parent="ui/rot_panel/roty"]
+margin_left = -21.0
+margin_top = -1.0
+margin_right = -3.0
+margin_bottom = 30.0
+theme = ExtResource( 2 )
+text = "Y"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rotz" type="SpinBox" parent="ui/rot_panel"]
+margin_left = 44.0
+margin_top = 100.0
+margin_right = 217.0
+margin_bottom = 131.0
+theme = ExtResource( 2 )
+min_value = -180.0
+max_value = 180.0
+step = 0.1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbl" type="Label" parent="ui/rot_panel/rotz"]
+margin_left = -21.0
+margin_top = -1.0
+margin_right = -3.0
+margin_bottom = 30.0
+theme = ExtResource( 2 )
+text = "Z"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="trans_panel" type="Node2D" parent="ui"]
+position = Vector2( 0, 256 )
+
+[node name="trans" type="Label" parent="ui/trans_panel"]
+margin_left = 22.0
+margin_top = 1.0
+margin_right = 85.0
+margin_bottom = 32.0
+theme = ExtResource( 2 )
+text = "translation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="transx" type="SpinBox" parent="ui/trans_panel"]
+margin_left = 44.0
+margin_top = 32.0
+margin_right = 217.0
+margin_bottom = 62.0
+theme = ExtResource( 2 )
+min_value = -2.0
+max_value = 2.0
+step = 0.01
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbl" type="Label" parent="ui/trans_panel/transx"]
+margin_left = -21.0
+margin_top = -1.0
+margin_right = -3.0
+margin_bottom = 30.0
+theme = ExtResource( 2 )
+text = "X"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="transy" type="SpinBox" parent="ui/trans_panel"]
+margin_left = 44.0
+margin_top = 66.0
+margin_right = 217.0
+margin_bottom = 97.0
+theme = ExtResource( 2 )
+min_value = -2.0
+max_value = 2.0
+step = 0.01
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbl" type="Label" parent="ui/trans_panel/transy"]
+margin_left = -21.0
+margin_top = -1.0
+margin_right = -3.0
+margin_bottom = 30.0
+theme = ExtResource( 2 )
+text = "Y"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="transz" type="SpinBox" parent="ui/trans_panel"]
+margin_left = 44.0
+margin_top = 100.0
+margin_right = 217.0
+margin_bottom = 131.0
+theme = ExtResource( 2 )
+min_value = -2.0
+max_value = 2.0
+step = 0.01
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbl" type="Label" parent="ui/trans_panel/transz"]
+margin_left = -21.0
+margin_top = -1.0
+margin_right = -3.0
+margin_bottom = 30.0
+theme = ExtResource( 2 )
+text = "Z"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scale_panel" type="Node2D" parent="ui"]
+position = Vector2( 0, 392 )
+
+[node name="scale" type="Label" parent="ui/scale_panel"]
+margin_left = 22.0
+margin_top = 1.0
+margin_right = 85.0
+margin_bottom = 32.0
+theme = ExtResource( 2 )
+text = "scale"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scalex" type="SpinBox" parent="ui/scale_panel"]
+margin_left = 44.0
+margin_top = 32.0
+margin_right = 217.0
+margin_bottom = 62.0
+theme = ExtResource( 2 )
+min_value = 0.001
+max_value = 5.0
+step = 0.1
+value = 0.001
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbl" type="Label" parent="ui/scale_panel/scalex"]
+margin_left = -21.0
+margin_top = -1.0
+margin_right = -3.0
+margin_bottom = 30.0
+theme = ExtResource( 2 )
+text = "X"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scaley" type="SpinBox" parent="ui/scale_panel"]
+margin_left = 44.0
+margin_top = 66.0
+margin_right = 217.0
+margin_bottom = 97.0
+theme = ExtResource( 2 )
+min_value = 0.001
+max_value = 5.0
+step = 0.1
+value = 0.001
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbl" type="Label" parent="ui/scale_panel/scaley"]
+margin_left = -21.0
+margin_top = -1.0
+margin_right = -3.0
+margin_bottom = 30.0
+theme = ExtResource( 2 )
+text = "Y"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scalez" type="SpinBox" parent="ui/scale_panel"]
+margin_left = 44.0
+margin_top = 100.0
+margin_right = 217.0
+margin_bottom = 131.0
+theme = ExtResource( 2 )
+min_value = 0.001
+max_value = 5.0
+step = 0.1
+value = 0.001
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbl" type="Label" parent="ui/scale_panel/scalez"]
+margin_left = -21.0
+margin_top = -1.0
+margin_right = -3.0
+margin_bottom = 30.0
+theme = ExtResource( 2 )
+text = "Z"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="item_selected" from="ui/groups" to="." method="_on_groups_item_selected"]
