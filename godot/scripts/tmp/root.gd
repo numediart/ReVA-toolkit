@@ -14,8 +14,8 @@ var elapsed_time = 0
 
 func _ready():
 	
-	animation = ReVA.load_animation( "../json/anim/smile.json" )
-#	animation = ReVA.load_animation( "../json/anim/laugh.json" )
+#	animation = ReVA.load_animation( "../json/anim/smile.json" )
+	animation = ReVA.load_animation( "../json/anim/laugh.json" )
 	
 	if animation.success:
 		
@@ -42,8 +42,22 @@ func _ready():
 		for i in range( animation.content.point_count ):
 			mask.get_child(i).translation = frame.points[i]
 
-	var calibration = ReVA.load_calibration( "../json/anim/smile.json" )
-	print( calibration.errors )
+	var calibration = ReVA.load_calibration( "../json/calibration/openface_default.json" )
+	ReVA.check_calibration( calibration, animation )
+	
+	for k in calibration:
+		print( '####### ', k , ' #######' )
+		if k ==  'content':
+			for kk in calibration[k]:
+				if kk == 'groups':
+					print( 'groups' )
+					for g in calibration[k][kk]:
+						print( '\t\t',g )
+				else:
+					print( kk )
+					print( '\t',calibration[k][kk] )
+		else:
+			print( calibration[k] )
 
 func _process(delta):
 	

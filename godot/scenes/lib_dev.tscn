@@ -33,11 +33,13 @@ albedo_color = Color( 0, 0, 1, 1 )
 
 [node name="root" type="Spatial"]
 script = ExtResource( 1 )
+apply_pose_euler = false
 apply_pose_translation = false
 
 [node name="cam" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.75423 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 159.069 )
 visible = false
+far = 100000.0
 
 [node name="mask" type="MeshInstance" parent="."]
 visible = false

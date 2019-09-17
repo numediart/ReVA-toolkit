@@ -65,6 +65,15 @@ static func blank_animation():
 		'errors': []
 	}
 
+static func blank_calibration():
+	return {
+		'path': null,
+		'original': null,
+		'content': null,
+		'success': false,
+		'errors': []
+	}
+
 static func blank_frame( animation ):
 	if not animation.success:
 		return null
@@ -131,6 +140,8 @@ static func cancel_json( jdata ):
 		'success': false,
 		'errors': jdata.errors
 	}
+
+### ANIMATIONS ###
 
 static func validate_animation( jdata ):
 	
@@ -317,6 +328,86 @@ static func validate_animation( jdata ):
 static func load_animation( p ):
 	return validate_animation( load_json( p ) )
 
+static func reset( data ):
+
+	if 'original' in data and 'content' in data:
+		data.content = clone_dict( data.original )
+
+static func interpolate_euler( src, dst, alpha ):
+	var srcq = Quat()
+	srcq.set_euler( src )
+	var dstq = Quat()
+	dstq.set_euler( dst )
+	return srcq.slerp( dstq, alpha ).get_euler()
+
+static func lerp_vec3( src, dst, alpha ):
+	return src * (1-alpha) + dst * alpha
+
+static func animation_frame( animation, ts, interpolation = true ):
+	
+	if not animation.success:
+		return null
+	
+	var anim = animation.content
+	while ts > anim.duration:
+		ts -= anim.duration
+	
+	if not interpolation:
+		var prev_frame = anim.frames[0]
+		for f in anim.frames:
+			if f.timestamp > ts:
+				return prev_frame
+			prev_frame = f
+	else:
+		# frame interpolation
+		var prev_frame = anim.frames[0]
+		var next_frame = anim.frames[0]
+		for f in anim.frames:
+			if f.timestamp >= ts:
+				prev_frame = next_frame
+				next_frame = f
+				break
+			else:
+				prev_frame = next_frame
+				next_frame = f
+		
+		var nframe = blank_frame( animation )
+		nframe.timestamp = ts
+		
+		var ts_diff = next_frame.timestamp - prev_frame.timestamp
+		var pc = ( ts - prev_frame.timestamp ) / ts_diff
+		
+		nframe.pose_euler = interpolate_euler( prev_frame.pose_euler, next_frame.pose_euler, pc )
+		nframe.pose_translation = lerp_vec3( prev_frame.pose_translation, next_frame.pose_translation, pc )
+		for i in range( animation.content.gaze_count ):
+			nframe.gazes[i] = interpolate_euler( prev_frame.gazes[i], next_frame.gazes[i], pc )
+		for i in range( animation.content.point_count ):
+			nframe.points[i] = lerp_vec3( prev_frame.points[i], next_frame.points[i], pc )
+		
+		return nframe
+
+### CALIBRATIONS ###
+
+static func decompress_indexlist( l ):
+	
+	var out = []
+	for i in l:
+		if i is Array and len(i) == 2:
+			for j in range( i[0], i[1]+1 ):
+				out.append( j )
+		else:
+			out.append( i )
+	return out
+
+static func search_in_hierarchy( level, gname ):
+	for node in level:
+		if node.group == gname:
+			return node
+		var o = search_in_hierarchy( node.chidren, gname )
+		if o != null:
+			return o
+	return null
+
 static func validate_calibration( jdata ):
 	
 	# basic stuff
@@ -371,6 +462,12 @@ static func validate_calibration( jdata ):
 		if not 'scale' in g.correction or not g.correction.scale is Array:
 			jlog( jdata, ReVA_ERROR, "calibration group correction must have a scale key" )
 			return cancel_json( jdata )
+		if 'symmetry' in g and not g.symmetry is Array:
+			jlog( jdata, ReVA_ERROR, "calibration group symmetry must have be a list" )
+			return cancel_json( jdata )
+		if 'symmetry' in g and len( g.points ) != 2:
+			jlog( jdata, ReVA_ERROR, "calibration group symmetry requires 2 list of points" )
+			return cancel_json( jdata )
 		
 		var arr = g.correction.rotation
 		g.correction.rotation = Vector3( arr[0],arr[1],arr[2] )
@@ -378,6 +475,17 @@ static func validate_calibration( jdata ):
 		g.correction.translation = Vector3( arr[0],arr[1],arr[2] )
 		arr = g.correction.scale
 		g.correction.scale = Vector3( arr[0],arr[1],arr[2] )
+		
+		# post processing of points:
+		if 'symmetry' in g:
+			arr = g.symmetry
+			g.symmetry = Transform( Basis( Vector3(arr[0],0,0), Vector3(0,arr[1],0), Vector3(0,0,arr[2]) ), Vector3() )
+			var pts = []
+			for sub in g.points:
+				pts.append( decompress_indexlist( sub ) )
+			g.points = pts
+		else:
+			g.points = decompress_indexlist( g.points )
 		
 		# warnings
 		if not 'parent' in g or len(g.parent) == 0:
@@ -391,60 +499,49 @@ static func validate_calibration( jdata ):
 			jlog( jdata, ReVA_WARNING, "calibration group invalid display_name" )
 			g.display_name = g.name
 	
-	return jdata
+	# generation of a group hierarchy
+	jdata.content.hierarchy = []
+	for g in jdata.content.groups:
+		if g.parent == null:
+			jdata.content.hierarchy.append( { 'group': g.name, 'children': [] } )
+		else:
+			var p = search_in_hierarchy( jdata.content.hierarchy, g.parent )
+			if p != null:
+				p.children.append( { 'group': g.name, 'children': [] } )
+	
+	var a = blank_calibration()
+	a.path = jdata.path
+	a.original = clone_dict( jdata.content )
+	a.content = jdata.content
+	a.success = jdata.success
+	a.errors = jdata.errors
+	return a
 
 static func load_calibration( p ):
 	return validate_calibration( load_json( p ) )
 
-static func interpolate_euler( src, dst, alpha ):
-	var srcq = Quat()
-	srcq.set_euler( src )
-	var dstq = Quat()
-	dstq.set_euler( dst )
-	return srcq.slerp( dstq, alpha ).get_euler()
-
-static func lerp_vec3( src, dst, alpha ):
-	return src * (1-alpha) + dst * alpha
-
-static func animation_frame( animation, ts, interpolation = true ):
+static func check_calibration( calibration, animation ):
 	
-	if not animation.success:
-		return null
+	if not calibration.success or not not animation.success:
+		return cancel_json( calibration )
 	
-	var anim = animation.content
-	while ts > anim.duration:
-		ts -= anim.duration
-	
-	if not interpolation:
-		var prev_frame = anim.frames[0]
-		for f in anim.frames:
-			if f.timestamp > ts:
-				return prev_frame
-			prev_frame = f
-	else:
-		# frame interpolation
-		var prev_frame = anim.frames[0]
-		var next_frame = anim.frames[0]
-		for f in anim.frames:
-			if f.timestamp >= ts:
-				prev_frame = next_frame
-				next_frame = f
-				break
-			else:
-				prev_frame = next_frame
-				next_frame = f
-		
-		var nframe = blank_frame( animation )
-		nframe.timestamp = ts
-		
-		var ts_diff = next_frame.timestamp - prev_frame.timestamp
-		var pc = ( ts - prev_frame.timestamp ) / ts_diff
-		
-		nframe.pose_euler = interpolate_euler( prev_frame.pose_euler, next_frame.pose_euler, pc )
-		nframe.pose_translation = lerp_vec3( prev_frame.pose_translation, next_frame.pose_translation, pc )
-		for i in range( animation.content.gaze_count ):
-			nframe.gazes[i] = interpolate_euler( prev_frame.gazes[i], next_frame.gazes[i], pc )
-		for i in range( animation.content.point_count ):
-			nframe.points[i] = lerp_vec3( prev_frame.points[i], next_frame.points[i], pc )
-		
-		return nframe
+	# looping over all groups to validate there is no off-range numbers
+	var gs = []
+	for g in calibration.groups:
+		var newg = clone_dict(g)
+		newg.points = []
+		if 'symmetry' in g:
+			for sub in g.points:
+				for i in sub:
+					if i >= 0 and i < animation.content.point_count:
+						newg.points.append( i )
+					else:
+						jlog( calibration, ReVA_WARNING, "invalid point index in group " + g.name )
+		else:
+			for i in g.points:
+				if i >= 0 and i < animation.content.point_count:
+					newg.points.append( i )
+				else:
+					jlog( calibration, ReVA_WARNING, "invalid point index in group " + g.name )
+		gs.append( newg )
+	calibration.groups = gs
