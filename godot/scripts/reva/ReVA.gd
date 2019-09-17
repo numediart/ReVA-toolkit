@@ -521,12 +521,12 @@ static func load_calibration( p ):
 
 static func check_calibration( calibration, animation ):
 	
-	if not calibration.success or not not animation.success:
+	if not calibration.success or not animation.success:
 		return cancel_json( calibration )
 	
 	# looping over all groups to validate there is no off-range numbers
 	var gs = []
-	for g in calibration.groups:
+	for g in calibration.content.groups:
 		var newg = clone_dict(g)
 		newg.points = []
 		if 'symmetry' in g:
@@ -535,12 +535,12 @@ static func check_calibration( calibration, animation ):
 					if i >= 0 and i < animation.content.point_count:
 						newg.points.append( i )
 					else:
-						jlog( calibration, ReVA_WARNING, "invalid point index in group " + g.name )
+						jlog( calibration, ReVA_WARNING, "invalid point index [" + str(i) + "] in group " + g.name )
 		else:
 			for i in g.points:
 				if i >= 0 and i < animation.content.point_count:
 					newg.points.append( i )
 				else:
-					jlog( calibration, ReVA_WARNING, "invalid point index in group " + g.name )
+					jlog( calibration, ReVA_WARNING, "invalid point index [" + str(i) + "] in group " + g.name )
 		gs.append( newg )
-	calibration.groups = gs
+	calibration.content.groups = gs
