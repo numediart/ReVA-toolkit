@@ -55,8 +55,7 @@ func _ready():
 
 	calibration = ReVA.load_calibration( "../json/calibration/openface_default.json" )
 	ReVA.check_calibration( calibration, animation )
-	
-	print( calibration )
+	ReVA.apply_calibration( calibration, animation )
 	
 	# apply colors on points
 	for g in calibration.content.groups:
@@ -91,6 +90,27 @@ func _process(delta):
 			mask.translation = Vector3()
 		for i in range( animation.content.point_count ):
 			mask.get_child(i).translation = frame.points[i]
+	if sel_group != -1:
+		$group_viz.clear()
+		$group_viz.begin( Mesh.PRIMITIVE_LINES )
+		var g = calibration.content.groups[sel_group]
+		if 'symmetry' in g:
+			for subg in g.points:
+				for i in range(1, len(subg) ):
+					var p0 = subg[i-1]
+					var p1 = subg[i]
+					$group_viz.add_vertex( mask.get_child(p0).global_transform.origin )
+					$group_viz.add_vertex( mask.get_child(p1).global_transform.origin )
+		else:
+			for i in range(1, len(g.points) ):
+				var p0 = g.points[i-1]
+				var p1 = g.points[i]
+				$group_viz.add_vertex( mask.get_child(p0).global_transform.origin )
+				$group_viz.add_vertex( mask.get_child(p1).global_transform.origin )
+		$group_viz.end()
+		$group_viz.visible = true
+	else:
+		$group_viz.visible = false
 
 func group_config_visibility( b ):
 	$ui/gname.visible = b
@@ -100,6 +120,9 @@ func group_config_visibility( b ):
 	$ui/scale_panel.visible = b
 
 func group_config_load( g ):
+	# disabling on_value_changed callbacks
+	var sg = sel_group
+	sel_group = -1
 	$ui/rot_panel/rotx.value = g.correction.rotation.x
 	$ui/rot_panel/roty.value = g.correction.rotation.y
 	$ui/rot_panel/rotz.value = g.correction.rotation.z
@@ -109,9 +132,11 @@ func group_config_load( g ):
 	$ui/scale_panel/scalex.value = g.correction.scale.x
 	$ui/scale_panel/scaley.value = g.correction.scale.y
 	$ui/scale_panel/scalez.value = g.correction.scale.z
+	# enabling on_value_changed callbacks
+	sel_group = sg
 
 func _on_groups_item_selected(id):
-	var sel_group = id - 2
+	sel_group = id - 2
 	if sel_group < 0:
 		sel_group = -1
 	if sel_group != -1:
@@ -129,3 +154,48 @@ func _on_groups_item_selected(id):
 		group_config_visibility(true)
 	else:
 		group_config_visibility(false)
+
+func _on_rotx_value_changed(value):
+	if sel_group != -1:
+		calibration.content.groups[sel_group].correction.rotation.x = value
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_roty_value_changed(value):
+	if sel_group != -1:
+		calibration.content.groups[sel_group].correction.rotation.y = value
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_rotz_value_changed(value):
+	if sel_group != -1:
+		calibration.content.groups[sel_group].correction.rotation.z = value
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_transx_value_changed(value):
+	if sel_group != -1:
+		calibration.content.groups[sel_group].correction.translation.x = value
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_transy_value_changed(value):
+	if sel_group != -1:
+		calibration.content.groups[sel_group].correction.translation.y = value
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_transz_value_changed(value):
+	if sel_group != -1:
+		calibration.content.groups[sel_group].correction.translation.z = value
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_scalex_value_changed(value):
+	if sel_group != -1:
+		calibration.content.groups[sel_group].correction.scale.x = value
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_scaley_value_changed(value):
+	if sel_group != -1:
+		calibration.content.groups[sel_group].correction.scale.y = value
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_scalez_value_changed(value):
+	if sel_group != -1:
+		calibration.content.groups[sel_group].correction.scale.z = value
+		ReVA.apply_calibration( calibration, animation )

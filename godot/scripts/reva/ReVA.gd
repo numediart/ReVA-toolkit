@@ -546,3 +546,8 @@ static func check_calibration( calibration, animation ):
 					jlog( calibration, ReVA_WARNING, "invalid point index [" + str(i) + "] in group " + g.name )
 		gs.append( newg )
 	calibration.content.groups = gs
+
+static func apply_calibration( calibration, animation ):
+	
+	if not calibration.success or not animation.success:
+		return

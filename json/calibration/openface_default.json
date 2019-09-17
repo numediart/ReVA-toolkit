@@ -29,7 +29,7 @@
 		{
 			"name": "mouth",
 			"display_name": "mouth",
-			"points" : [[48,64]],
+			"points" : [[48,67]],
 			"correction" : {
 				"rotation": [0.0,0.0,0.0],
 				"translation": [0.0,0.0,0.0],
