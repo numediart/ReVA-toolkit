@@ -21,13 +21,6 @@ MAT_CORRECTION = reva.mat([
 	[0,0,0,1]
 ])
 
-MAT_ROTATION = reva.mat([
-	[1,0,0,0],
-	[0,1,0,0],
-	[0,0,1,0],
-	[0,0,0,1]
-])
-
 references = []
 frames = []
 
