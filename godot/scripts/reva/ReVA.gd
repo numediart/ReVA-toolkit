@@ -461,8 +461,17 @@ static func validate_calibration( jdata ):
 		if not 'scale' in g.correction or not g.correction.scale is Array:
 			jlog( jdata, ReVA_ERROR, "calibration group correction must have a scale key" )
 			return cancel_json( jdata )
-		if 'symmetry' in g and not g.symmetry is Array:
-			jlog( jdata, ReVA_ERROR, "calibration group symmetry must have be a list" )
+		if 'symmetry' in g and not g.symmetry is Dictionary:
+			jlog( jdata, ReVA_ERROR, "calibration group symmetry must have be a dictionary" )
+			return cancel_json( jdata )
+		if 'symmetry' in g and (not 'rotation' in g.symmetry or not g.symmetry.rotation is Array):
+			jlog( jdata, ReVA_ERROR, "calibration group symmetry must have a rotation key" )
+			return cancel_json( jdata )
+		if 'symmetry' in g and (not 'translation' in g.symmetry or not g.symmetry.translation is Array):
+			jlog( jdata, ReVA_ERROR, "calibration group symmetry must have a translation key" )
+			return cancel_json( jdata )
+		if 'symmetry' in g and (not 'scale' in g.symmetry or not g.symmetry.scale is Array):
+			jlog( jdata, ReVA_ERROR, "calibration group symmetry must have a scale key" )
 			return cancel_json( jdata )
 		if 'symmetry' in g and len( g.points ) != 2:
 			jlog( jdata, ReVA_ERROR, "calibration group symmetry requires 2 list of points" )
@@ -477,8 +486,12 @@ static func validate_calibration( jdata ):
 		
 		# post processing of points:
 		if 'symmetry' in g:
-			arr = g.symmetry
-			g.symmetry = Transform( Basis( Vector3(arr[0],0,0), Vector3(0,arr[1],0), Vector3(0,0,arr[2]) ), Vector3() )
+			arr = g.symmetry.rotation
+			g.symmetry.rotation = Vector3(arr[0],arr[1],arr[2])
+			arr = g.symmetry.translation
+			g.symmetry.translation = Vector3(arr[0],arr[1],arr[2])
+			arr = g.symmetry.scale
+			g.symmetry.scale = Vector3(arr[0],arr[1],arr[2])
 			var pts = []
 			for sub in g.points:
 				pts.append( decompress_indexlist( sub ) )
@@ -500,13 +513,15 @@ static func validate_calibration( jdata ):
 	
 	# generation of a group hierarchy
 	jdata.content.hierarchy = []
+	var gid = 0
 	for g in jdata.content.groups:
 		if g.parent == null:
-			jdata.content.hierarchy.append( { 'group': g.name, 'children': [] } )
+			jdata.content.hierarchy.append( { 'id': gid, 'group': g.name, 'children': [] } )
 		else:
 			var p = search_in_hierarchy( jdata.content.hierarchy, g.parent )
 			if p != null:
-				p.children.append( { 'group': g.name, 'children': [] } )
+				p.children.append( {'id': gid, 'group': g.name, 'children': [] } )
+		gid += 1
 	
 	var a = blank_calibration()
 	a.path = jdata.path
@@ -547,7 +562,42 @@ static func check_calibration( calibration, animation ):
 		gs.append( newg )
 	calibration.content.groups = gs
 
+static func identity_correction( c ):
+	return c.rotation.x == 0 and c.rotation.y == 0 and c.rotation.z == 0 and c.translation.x == 0 and c.translation.y == 0 and c.translation.z == 0 and c.scale.x == 1 and c.scale.y == 1 and c.scale.z == 1
+
+static func apply_correction( transform, indices, animation ):
+	for f in animation.content.frames:
+		# averaging the position of points in the frame
+		var avrg = Vector3()
+		for i in indices:
+			avrg += f.points[i]
+		avrg /= len(indices)
+		for i in indices:
+			f.points[i] = avrg + transform.xform( f.points[i] - avrg )
+
+static func apply_calibration_group( ginfo, calibration, animation ):
+	
+	if not animation.success:
+		return
+	var group = calibration.content.groups[ginfo.id]
+	var corr = group.correction
+	if not identity_correction(corr):
+		var t = Transform( Basis( corr.rotation ), corr.translation ).scaled( corr.scale )
+		if 'symmetry' in group:
+			apply_correction( t, group.points[0], animation )
+			t = Transform( Basis( corr.rotation * group.symmetry.rotation ), corr.translation * group.symmetry.translation ).scaled( corr.scale * group.symmetry.scale )
+			apply_correction( t, group.points[1], animation )
+		else:
+			apply_correction( t, group.points, animation )
+	
+	for g in ginfo.children:
+		apply_calibration_group( g, calibration, animation )
+
 static func apply_calibration( calibration, animation ):
 	
 	if not calibration.success or not animation.success:
 		return
+	reset( animation )
+	for g in calibration.content.hierarchy:
+		apply_calibration_group( g, calibration, animation )
+	

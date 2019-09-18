@@ -1,11 +1,15 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scripts/tmp/root.gd" type="Script" id=1]
 [ext_resource path="res://themes/osi.theme" type="Theme" id=2]
+[ext_resource path="res://textures/svg/icon_tool_rotate.svg" type="Texture" id=3]
+[ext_resource path="res://textures/svg/icon_tool_move.svg" type="Texture" id=4]
+[ext_resource path="res://textures/svg/icon_tool_scale.svg" type="Texture" id=5]
+[ext_resource path="res://textures/svg/icon_mirror_x.svg" type="Texture" id=6]
 
-[sub_resource type="CubeMesh" id=5]
+[sub_resource type="CubeMesh" id=1]
 
-[sub_resource type="SpatialMaterial" id=6]
+[sub_resource type="SpatialMaterial" id=2]
 flags_unshaded = true
 albedo_color = Color( 1, 0, 1, 1 )
 
@@ -17,26 +21,30 @@ rings = 6
 flags_unshaded = true
 albedo_color = Color( 1, 1, 0, 1 )
 
-[sub_resource type="SpatialMaterial" id=11]
+[sub_resource type="SpatialMaterial" id=5]
 flags_unshaded = true
 
-[sub_resource type="SpatialMaterial" id=7]
+[sub_resource type="SpatialMaterial" id=6]
 flags_unshaded = true
 albedo_color = Color( 1, 0, 0, 1 )
 
-[sub_resource type="CubeMesh" id=8]
+[sub_resource type="CubeMesh" id=7]
 size = Vector3( 1, 1, 1 )
 
-[sub_resource type="SpatialMaterial" id=9]
+[sub_resource type="SpatialMaterial" id=8]
 flags_unshaded = true
 albedo_color = Color( 0, 1, 0, 1 )
 
-[sub_resource type="SpatialMaterial" id=10]
+[sub_resource type="SpatialMaterial" id=9]
 flags_unshaded = true
 albedo_color = Color( 0, 0, 1, 1 )
 
 [node name="root" type="Spatial"]
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 563.381 ],
+"_edit_vertical_guides_": [ 201.0, 20.0 ]
+}
 apply_pose_translation = false
 
 [node name="cam" type="Camera" parent="."]
@@ -46,8 +54,8 @@ far = 100000.0
 
 [node name="mask" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 5 )
-material/0 = SubResource( 6 )
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )
 
 [node name="pt" type="MeshInstance" parent="."]
 visible = false
@@ -56,35 +64,37 @@ material/0 = SubResource( 4 )
 
 [node name="group_viz" type="ImmediateGeometry" parent="."]
 visible = false
-material_override = SubResource( 11 )
+material_override = SubResource( 5 )
 
 [node name="axis" type="Spatial" parent="."]
 visible = false
 
 [node name="x" type="MeshInstance" parent="axis"]
 transform = Transform( 50, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 25, 0, 0 )
-material_override = SubResource( 7 )
-mesh = SubResource( 8 )
+material_override = SubResource( 6 )
+mesh = SubResource( 7 )
 material/0 = null
 
 [node name="y" type="MeshInstance" parent="axis"]
 transform = Transform( 0.3, 0, 0, 0, 50, 0, 0, 0, 0.3, 0, 25, 0 )
-material_override = SubResource( 9 )
-mesh = SubResource( 8 )
+material_override = SubResource( 8 )
+mesh = SubResource( 7 )
 material/0 = null
 
 [node name="z" type="MeshInstance" parent="axis"]
 transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 50, 0, 0, 25 )
-material_override = SubResource( 10 )
-mesh = SubResource( 8 )
+material_override = SubResource( 9 )
+mesh = SubResource( 7 )
 material/0 = null
 
 [node name="ui" type="Node2D" parent="."]
 
-[node name="groups" type="OptionButton" parent="ui"]
-margin_left = 15.0
+[node name="calib_panel" type="Node2D" parent="ui"]
+
+[node name="groups" type="OptionButton" parent="ui/calib_panel"]
+margin_left = 19.0
 margin_top = 15.0
-margin_right = 198.0
+margin_right = 204.0
 margin_bottom = 46.0
 theme = ExtResource( 2 )
 text = "groups"
@@ -92,7 +102,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="gname" type="Label" parent="ui"]
+[node name="gname" type="Label" parent="ui/calib_panel"]
 margin_left = 15.0
 margin_top = 53.0
 margin_right = 103.0
@@ -103,7 +113,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ginfo" type="Label" parent="ui"]
+[node name="ginfo" type="Label" parent="ui/calib_panel"]
 margin_left = 15.0
 margin_top = 76.0
 margin_right = 103.0
@@ -114,37 +124,76 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="rot_panel" type="Node2D" parent="ui"]
-position = Vector2( 0, 114 )
+[node name="b_rot" type="TextureButton" parent="ui/calib_panel"]
+margin_left = 20.0
+margin_top = 117.0
+margin_right = 36.0
+margin_bottom = 133.0
+texture_normal = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="rot" type="Label" parent="ui/rot_panel"]
-margin_left = 22.0
-margin_top = 1.0
+[node name="b_trans" type="TextureButton" parent="ui/calib_panel"]
+margin_left = 45.0
+margin_top = 117.0
+margin_right = 61.0
+margin_bottom = 133.0
+texture_normal = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="b_scale" type="TextureButton" parent="ui/calib_panel"]
+margin_left = 70.0
+margin_top = 117.0
+margin_right = 86.0
+margin_bottom = 133.0
+texture_normal = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="b_sym" type="TextureButton" parent="ui/calib_panel"]
+margin_left = 95.0
+margin_top = 117.0
+margin_right = 111.0
+margin_bottom = 133.0
+texture_normal = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rot_panel" type="Node2D" parent="ui/calib_panel"]
+visible = false
+position = Vector2( 0, 141 )
+
+[node name="lbl" type="Label" parent="ui/calib_panel/rot_panel"]
+margin_left = 15.0
 margin_right = 85.0
-margin_bottom = 32.0
+margin_bottom = 31.0
 theme = ExtResource( 2 )
 text = "rotation"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="rotx" type="SpinBox" parent="ui/rot_panel"]
-margin_left = 44.0
-margin_top = 32.0
-margin_right = 217.0
-margin_bottom = 62.0
+[node name="rotx" type="SpinBox" parent="ui/calib_panel/rot_panel"]
+margin_left = 19.0
+margin_top = 30.0
+margin_right = 204.0
+margin_bottom = 61.0
 theme = ExtResource( 2 )
 min_value = -180.0
 max_value = 180.0
-step = 0.1
+step = 0.05
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="lbl" type="Label" parent="ui/rot_panel/rotx"]
-margin_left = -21.0
+[node name="lbl" type="Label" parent="ui/calib_panel/rot_panel/rotx"]
+margin_left = -18.0
 margin_top = -1.0
-margin_right = -3.0
 margin_bottom = 30.0
 theme = ExtResource( 2 )
 text = "X"
@@ -152,23 +201,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="roty" type="SpinBox" parent="ui/rot_panel"]
-margin_left = 44.0
-margin_top = 66.0
-margin_right = 217.0
-margin_bottom = 97.0
+[node name="roty" type="SpinBox" parent="ui/calib_panel/rot_panel"]
+margin_left = 19.0
+margin_top = 64.0
+margin_right = 204.0
+margin_bottom = 95.0
 theme = ExtResource( 2 )
 min_value = -180.0
 max_value = 180.0
-step = 0.1
+step = 0.05
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="lbl" type="Label" parent="ui/rot_panel/roty"]
-margin_left = -21.0
+[node name="lbl" type="Label" parent="ui/calib_panel/rot_panel/roty"]
+margin_left = -18.0
 margin_top = -1.0
-margin_right = -3.0
 margin_bottom = 30.0
 theme = ExtResource( 2 )
 text = "Y"
@@ -176,23 +224,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="rotz" type="SpinBox" parent="ui/rot_panel"]
-margin_left = 44.0
-margin_top = 100.0
-margin_right = 217.0
-margin_bottom = 131.0
+[node name="rotz" type="SpinBox" parent="ui/calib_panel/rot_panel"]
+margin_left = 19.0
+margin_top = 98.0
+margin_right = 204.0
+margin_bottom = 129.0
 theme = ExtResource( 2 )
 min_value = -180.0
 max_value = 180.0
-step = 0.1
+step = 0.05
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="lbl" type="Label" parent="ui/rot_panel/rotz"]
-margin_left = -21.0
+[node name="lbl" type="Label" parent="ui/calib_panel/rot_panel/rotz"]
+margin_left = -18.0
 margin_top = -1.0
-margin_right = -3.0
 margin_bottom = 30.0
 theme = ExtResource( 2 )
 text = "Z"
@@ -200,37 +247,38 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="trans_panel" type="Node2D" parent="ui"]
-position = Vector2( 0, 256 )
+[node name="trans_panel" type="Node2D" parent="ui/calib_panel"]
+visible = false
+position = Vector2( 0, 141 )
 
-[node name="trans" type="Label" parent="ui/trans_panel"]
-margin_left = 22.0
-margin_top = 1.0
+[node name="lbl" type="Label" parent="ui/calib_panel/trans_panel"]
+margin_left = 15.0
 margin_right = 85.0
-margin_bottom = 32.0
+margin_bottom = 31.0
 theme = ExtResource( 2 )
 text = "translation"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="transx" type="SpinBox" parent="ui/trans_panel"]
-margin_left = 44.0
-margin_top = 32.0
-margin_right = 217.0
-margin_bottom = 62.0
+[node name="transx" type="SpinBox" parent="ui/calib_panel/trans_panel"]
+margin_left = 19.0
+margin_top = 30.0
+margin_right = 204.0
+margin_bottom = 61.0
 theme = ExtResource( 2 )
-min_value = -2.0
-max_value = 2.0
+min_value = -100.0
+max_value = 100.0
 step = 0.01
+allow_greater = true
+allow_lesser = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="lbl" type="Label" parent="ui/trans_panel/transx"]
-margin_left = -21.0
+[node name="lbl" type="Label" parent="ui/calib_panel/trans_panel/transx"]
+margin_left = -18.0
 margin_top = -1.0
-margin_right = -3.0
 margin_bottom = 30.0
 theme = ExtResource( 2 )
 text = "X"
@@ -238,23 +286,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="transy" type="SpinBox" parent="ui/trans_panel"]
-margin_left = 44.0
-margin_top = 66.0
-margin_right = 217.0
-margin_bottom = 97.0
+[node name="transy" type="SpinBox" parent="ui/calib_panel/trans_panel"]
+margin_left = 19.0
+margin_top = 64.0
+margin_right = 204.0
+margin_bottom = 95.0
 theme = ExtResource( 2 )
-min_value = -2.0
-max_value = 2.0
+min_value = -100.0
+max_value = 100.0
 step = 0.01
+allow_greater = true
+allow_lesser = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="lbl" type="Label" parent="ui/trans_panel/transy"]
-margin_left = -21.0
+[node name="lbl" type="Label" parent="ui/calib_panel/trans_panel/transy"]
+margin_left = -18.0
 margin_top = -1.0
-margin_right = -3.0
 margin_bottom = 30.0
 theme = ExtResource( 2 )
 text = "Y"
@@ -262,23 +311,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="transz" type="SpinBox" parent="ui/trans_panel"]
-margin_left = 44.0
-margin_top = 100.0
-margin_right = 217.0
-margin_bottom = 131.0
+[node name="transz" type="SpinBox" parent="ui/calib_panel/trans_panel"]
+margin_left = 19.0
+margin_top = 98.0
+margin_right = 204.0
+margin_bottom = 129.0
 theme = ExtResource( 2 )
-min_value = -2.0
-max_value = 2.0
+min_value = -100.0
+max_value = 100.0
 step = 0.01
+allow_greater = true
+allow_lesser = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="lbl" type="Label" parent="ui/trans_panel/transz"]
-margin_left = -21.0
+[node name="lbl" type="Label" parent="ui/calib_panel/trans_panel/transz"]
+margin_left = -18.0
 margin_top = -1.0
-margin_right = -3.0
 margin_bottom = 30.0
 theme = ExtResource( 2 )
 text = "Z"
@@ -286,38 +336,39 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="scale_panel" type="Node2D" parent="ui"]
-position = Vector2( 0, 392 )
+[node name="scale_panel" type="Node2D" parent="ui/calib_panel"]
+visible = false
+position = Vector2( 0, 141 )
 
-[node name="scale" type="Label" parent="ui/scale_panel"]
-margin_left = 22.0
-margin_top = 1.0
-margin_right = 85.0
-margin_bottom = 32.0
+[node name="scale" type="Label" parent="ui/calib_panel/scale_panel"]
+margin_left = 15.0
+margin_right = 78.0
+margin_bottom = 31.0
 theme = ExtResource( 2 )
 text = "scale"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="scalex" type="SpinBox" parent="ui/scale_panel"]
-margin_left = 44.0
-margin_top = 32.0
-margin_right = 217.0
-margin_bottom = 62.0
+[node name="scalex" type="SpinBox" parent="ui/calib_panel/scale_panel"]
+margin_left = 19.0
+margin_top = 30.0
+margin_right = 204.0
+margin_bottom = 61.0
 theme = ExtResource( 2 )
 min_value = 0.001
 max_value = 5.0
-step = 0.1
+step = 0.01
 value = 0.001
+allow_greater = true
+allow_lesser = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="lbl" type="Label" parent="ui/scale_panel/scalex"]
-margin_left = -21.0
+[node name="lbl" type="Label" parent="ui/calib_panel/scale_panel/scalex"]
+margin_left = -18.0
 margin_top = -1.0
-margin_right = -3.0
 margin_bottom = 30.0
 theme = ExtResource( 2 )
 text = "X"
@@ -325,24 +376,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="scaley" type="SpinBox" parent="ui/scale_panel"]
-margin_left = 44.0
-margin_top = 66.0
-margin_right = 217.0
-margin_bottom = 97.0
+[node name="scaley" type="SpinBox" parent="ui/calib_panel/scale_panel"]
+margin_left = 19.0
+margin_top = 64.0
+margin_right = 204.0
+margin_bottom = 95.0
 theme = ExtResource( 2 )
 min_value = 0.001
 max_value = 5.0
-step = 0.1
+step = 0.01
 value = 0.001
+allow_greater = true
+allow_lesser = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="lbl" type="Label" parent="ui/scale_panel/scaley"]
-margin_left = -21.0
+[node name="lbl" type="Label" parent="ui/calib_panel/scale_panel/scaley"]
+margin_left = -18.0
 margin_top = -1.0
-margin_right = -3.0
 margin_bottom = 30.0
 theme = ExtResource( 2 )
 text = "Y"
@@ -350,37 +402,225 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="scalez" type="SpinBox" parent="ui/scale_panel"]
-margin_left = 44.0
-margin_top = 100.0
-margin_right = 217.0
-margin_bottom = 131.0
+[node name="scalez" type="SpinBox" parent="ui/calib_panel/scale_panel"]
+margin_left = 19.0
+margin_top = 98.0
+margin_right = 204.0
+margin_bottom = 129.0
 theme = ExtResource( 2 )
 min_value = 0.001
 max_value = 5.0
-step = 0.1
+step = 0.01
 value = 0.001
+allow_greater = true
+allow_lesser = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="lbl" type="Label" parent="ui/scale_panel/scalez"]
-margin_left = -21.0
+[node name="lbl" type="Label" parent="ui/calib_panel/scale_panel/scalez"]
+margin_left = -18.0
 margin_top = -1.0
-margin_right = -3.0
 margin_bottom = 30.0
 theme = ExtResource( 2 )
 text = "Z"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="item_selected" from="ui/groups" to="." method="_on_groups_item_selected"]
-[connection signal="value_changed" from="ui/rot_panel/rotx" to="." method="_on_rotx_value_changed"]
-[connection signal="value_changed" from="ui/rot_panel/roty" to="." method="_on_roty_value_changed"]
-[connection signal="value_changed" from="ui/rot_panel/rotz" to="." method="_on_rotz_value_changed"]
-[connection signal="value_changed" from="ui/trans_panel/transx" to="." method="_on_transx_value_changed"]
-[connection signal="value_changed" from="ui/trans_panel/transy" to="." method="_on_transy_value_changed"]
-[connection signal="value_changed" from="ui/trans_panel/transz" to="." method="_on_transz_value_changed"]
-[connection signal="value_changed" from="ui/scale_panel/scalex" to="." method="_on_scalex_value_changed"]
-[connection signal="value_changed" from="ui/scale_panel/scaley" to="." method="_on_scaley_value_changed"]
-[connection signal="value_changed" from="ui/scale_panel/scalez" to="." method="_on_scalez_value_changed"]
+
+[node name="sym_panel" type="Node2D" parent="ui/calib_panel"]
+visible = false
+position = Vector2( 0, 141 )
+
+[node name="symmetry" type="Label" parent="ui/calib_panel/sym_panel"]
+margin_left = 15.0
+margin_top = 1.0
+margin_right = 85.0
+margin_bottom = 32.0
+theme = ExtResource( 2 )
+text = "symmetry"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rot" type="Label" parent="ui/calib_panel/sym_panel"]
+margin_left = 15.0
+margin_top = 27.6028
+margin_right = 78.0
+margin_bottom = 58.6028
+theme = ExtResource( 2 )
+text = "rotation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rot_symx" type="CheckBox" parent="ui/calib_panel/sym_panel"]
+margin_left = 100.0
+margin_top = 27.6028
+margin_right = 138.0
+margin_bottom = 58.6028
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "X"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rot_symy" type="CheckBox" parent="ui/calib_panel/sym_panel"]
+margin_left = 134.0
+margin_top = 28.0
+margin_right = 172.0
+margin_bottom = 59.0
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "Y"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rot_symz" type="CheckBox" parent="ui/calib_panel/sym_panel"]
+margin_left = 168.0
+margin_top = 28.0
+margin_right = 206.0
+margin_bottom = 59.0
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "Z"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="trans" type="Label" parent="ui/calib_panel/sym_panel"]
+margin_left = 15.0
+margin_top = 59.6028
+margin_right = 97.0
+margin_bottom = 90.6028
+theme = ExtResource( 2 )
+text = "translation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="trans_symx" type="CheckBox" parent="ui/calib_panel/sym_panel"]
+margin_left = 100.0
+margin_top = 59.6028
+margin_right = 138.0
+margin_bottom = 90.6028
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "X"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="trans_symy" type="CheckBox" parent="ui/calib_panel/sym_panel"]
+margin_left = 134.0
+margin_top = 60.0
+margin_right = 172.0
+margin_bottom = 91.0
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "Y"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="trans_symz" type="CheckBox" parent="ui/calib_panel/sym_panel"]
+margin_left = 168.0
+margin_top = 60.0
+margin_right = 206.0
+margin_bottom = 91.0
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "Z"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scale" type="Label" parent="ui/calib_panel/sym_panel"]
+margin_left = 15.0
+margin_top = 90.0
+margin_right = 97.0
+margin_bottom = 121.0
+theme = ExtResource( 2 )
+text = "scale"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scale_symx" type="CheckBox" parent="ui/calib_panel/sym_panel"]
+margin_left = 100.0
+margin_top = 89.6028
+margin_right = 138.0
+margin_bottom = 120.603
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "X"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scale_symy" type="CheckBox" parent="ui/calib_panel/sym_panel"]
+margin_left = 134.0
+margin_top = 90.0
+margin_right = 172.0
+margin_bottom = 121.0
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "Y"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scale_symz" type="CheckBox" parent="ui/calib_panel/sym_panel"]
+margin_left = 168.0
+margin_top = 90.0
+margin_right = 206.0
+margin_bottom = 121.0
+focus_mode = 0
+theme = ExtResource( 2 )
+enabled_focus_mode = 0
+text = "Z"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="item_selected" from="ui/calib_panel/groups" to="." method="_on_groups_item_selected"]
+[connection signal="pressed" from="ui/calib_panel/b_rot" to="." method="_on_rot_pressed"]
+[connection signal="pressed" from="ui/calib_panel/b_trans" to="." method="_on_trans_pressed"]
+[connection signal="pressed" from="ui/calib_panel/b_scale" to="." method="_on_scale_pressed"]
+[connection signal="pressed" from="ui/calib_panel/b_sym" to="." method="_on_sym_pressed"]
+[connection signal="value_changed" from="ui/calib_panel/rot_panel/rotx" to="." method="_on_rotx_value_changed"]
+[connection signal="value_changed" from="ui/calib_panel/rot_panel/roty" to="." method="_on_roty_value_changed"]
+[connection signal="value_changed" from="ui/calib_panel/rot_panel/rotz" to="." method="_on_rotz_value_changed"]
+[connection signal="value_changed" from="ui/calib_panel/trans_panel/transx" to="." method="_on_transx_value_changed"]
+[connection signal="value_changed" from="ui/calib_panel/trans_panel/transy" to="." method="_on_transy_value_changed"]
+[connection signal="value_changed" from="ui/calib_panel/trans_panel/transz" to="." method="_on_transz_value_changed"]
+[connection signal="value_changed" from="ui/calib_panel/scale_panel/scalex" to="." method="_on_scalex_value_changed"]
+[connection signal="value_changed" from="ui/calib_panel/scale_panel/scaley" to="." method="_on_scaley_value_changed"]
+[connection signal="value_changed" from="ui/calib_panel/scale_panel/scalez" to="." method="_on_scalez_value_changed"]
+[connection signal="pressed" from="ui/calib_panel/sym_panel/rot_symx" to="." method="_on_rot_symx_pressed"]
+[connection signal="pressed" from="ui/calib_panel/sym_panel/rot_symy" to="." method="_on_rot_symy_pressed"]
+[connection signal="pressed" from="ui/calib_panel/sym_panel/rot_symz" to="." method="_on_rot_symz_pressed"]
+[connection signal="pressed" from="ui/calib_panel/sym_panel/trans_symx" to="." method="_on_trans_symx_pressed"]
+[connection signal="pressed" from="ui/calib_panel/sym_panel/trans_symy" to="." method="_on_trans_symy_pressed"]
+[connection signal="pressed" from="ui/calib_panel/sym_panel/trans_symz" to="." method="_on_trans_symz_pressed"]
+[connection signal="pressed" from="ui/calib_panel/sym_panel/scale_symx" to="." method="_on_scale_symx_pressed"]
+[connection signal="pressed" from="ui/calib_panel/sym_panel/scale_symy" to="." method="_on_scale_symy_pressed"]
+[connection signal="pressed" from="ui/calib_panel/sym_panel/scale_symz" to="." method="_on_scale_symz_pressed"]

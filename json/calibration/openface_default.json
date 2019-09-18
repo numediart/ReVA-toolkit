@@ -77,7 +77,11 @@
 		{
 			"name": "brows",
 			"display_name": "brows",
-			"symmetry": [-1.0,1.0,1.0],
+			"symmetry": {
+				"rotation": [1.0,-1.0,1.0],
+				"translation": [-1.0,1.0,1.0],
+				"scale": [1.0,1.0,1.0]
+			},
 			"points" : [
 				[[17,21]],
 				[[22,26]]
@@ -93,7 +97,11 @@
 		{
 			"name": "eyes",
 			"display_name": "eyes",
-			"symmetry": [-1.0,1.0,1.0],
+			"symmetry": {
+				"rotation": [1.0,-1.0,1.0],
+				"translation": [-1.0,1.0,1.0],
+				"scale": [1.0,1.0,1.0]
+			},
 			"points" : [
 				[[36,41]],
 				[[42,47]]

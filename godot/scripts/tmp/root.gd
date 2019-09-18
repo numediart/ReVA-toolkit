@@ -58,19 +58,20 @@ func _ready():
 	ReVA.apply_calibration( calibration, animation )
 	
 	# apply colors on points
-	for g in calibration.content.groups:
-		if 'symmetry' in g:
-			for subg in g.points:
-				for i in subg:
+	if calibration.success:
+		for g in calibration.content.groups:
+			if 'symmetry' in g:
+				for subg in g.points:
+					for i in subg:
+						mask.get_child(i).material_override.albedo_color = g.color
+			else:
+				for i in g.points:
 					mask.get_child(i).material_override.albedo_color = g.color
-		else:
-			for i in g.points:
-				mask.get_child(i).material_override.albedo_color = g.color
-	
-	$ui/groups.add_item( 'select' )
-	$ui/groups.add_separator()
-	for g in calibration.content.groups:
-		$ui/groups.add_item( group_fullname( g ) )
+		
+		$ui/calib_panel/groups.add_item( 'select' )
+		$ui/calib_panel/groups.add_separator()
+		for g in calibration.content.groups:
+			$ui/calib_panel/groups.add_item( group_fullname( g ) )
 
 func _process(delta):
 	
@@ -112,26 +113,48 @@ func _process(delta):
 	else:
 		$group_viz.visible = false
 
+func group_sub_visibility( b ):
+	$ui/calib_panel/rot_panel.visible = b
+	$ui/calib_panel/trans_panel.visible = b
+	$ui/calib_panel/scale_panel.visible = b
+	$ui/calib_panel/sym_panel.visible = b
+
 func group_config_visibility( b ):
-	$ui/gname.visible = b
-	$ui/ginfo.visible = b
-	$ui/rot_panel.visible = b
-	$ui/trans_panel.visible = b
-	$ui/scale_panel.visible = b
+	$ui/calib_panel/gname.visible = b
+	$ui/calib_panel/ginfo.visible = b
+	$ui/calib_panel/b_rot.visible = b
+	$ui/calib_panel/b_trans.visible = b
+	$ui/calib_panel/b_scale.visible = b
+	if b and sel_group != -1 and 'symmetry' in calibration.content.groups[sel_group]:
+		$ui/calib_panel/b_sym.visible = b
+	else:
+		$ui/calib_panel/b_sym.visible = false
+	group_sub_visibility( false )
 
 func group_config_load( g ):
 	# disabling on_value_changed callbacks
 	var sg = sel_group
 	sel_group = -1
-	$ui/rot_panel/rotx.value = g.correction.rotation.x
-	$ui/rot_panel/roty.value = g.correction.rotation.y
-	$ui/rot_panel/rotz.value = g.correction.rotation.z
-	$ui/trans_panel/transx.value = g.correction.translation.x
-	$ui/trans_panel/transy.value = g.correction.translation.y
-	$ui/trans_panel/transz.value = g.correction.translation.z
-	$ui/scale_panel/scalex.value = g.correction.scale.x
-	$ui/scale_panel/scaley.value = g.correction.scale.y
-	$ui/scale_panel/scalez.value = g.correction.scale.z
+	$ui/calib_panel/rot_panel/rotx.value = g.correction.rotation.x * 180 / PI
+	$ui/calib_panel/rot_panel/roty.value = g.correction.rotation.y * 180 / PI
+	$ui/calib_panel/rot_panel/rotz.value = g.correction.rotation.z * 180 / PI
+	$ui/calib_panel/trans_panel/transx.value = g.correction.translation.x
+	$ui/calib_panel/trans_panel/transy.value = g.correction.translation.y
+	$ui/calib_panel/trans_panel/transz.value = g.correction.translation.z
+	$ui/calib_panel/scale_panel/scalex.value = g.correction.scale.x
+	$ui/calib_panel/scale_panel/scaley.value = g.correction.scale.y
+	$ui/calib_panel/scale_panel/scalez.value = g.correction.scale.z
+	# if symmetry
+	if 'symmetry' in g:
+		$ui/calib_panel/sym_panel/rot_symx.pressed = g.symmetry.rotation.x == -1
+		$ui/calib_panel/sym_panel/rot_symy.pressed = g.symmetry.rotation.y == -1
+		$ui/calib_panel/sym_panel/rot_symz.pressed = g.symmetry.rotation.z == -1
+		$ui/calib_panel/sym_panel/trans_symx.pressed = g.symmetry.translation.x == -1
+		$ui/calib_panel/sym_panel/trans_symy.pressed = g.symmetry.translation.y == -1
+		$ui/calib_panel/sym_panel/trans_symz.pressed = g.symmetry.translation.z == -1
+		$ui/calib_panel/sym_panel/scale_symx.pressed = g.symmetry.scale.x == -1
+		$ui/calib_panel/sym_panel/scale_symy.pressed = g.symmetry.scale.y == -1
+		$ui/calib_panel/sym_panel/scale_symz.pressed = g.symmetry.scale.z == -1
 	# enabling on_value_changed callbacks
 	sel_group = sg
 
@@ -141,15 +164,19 @@ func _on_groups_item_selected(id):
 		sel_group = -1
 	if sel_group != -1:
 		var g = calibration.content.groups[sel_group]
-		$ui/gname.text = g.name
-		$ui/ginfo.text = 'points ' 
+		$ui/calib_panel/gname.text = g.name
+		$ui/calib_panel/ginfo.text = ''
 		if 'symmetry' in g:
 			print( g.points )
-			$ui/ginfo.text += str( len(g.points[0]) + len(g.points[1]) )
-			$ui/ginfo.text += ' [' + str(len(g.points[0])) + ',' + str(len(g.points[1])) + ']'
-			$ui/ginfo.text += ' [symmetric]'
+			$ui/calib_panel/ginfo.text += str( len(g.points[0]) + len(g.points[1]) )
+			$ui/calib_panel/ginfo.text += ' points'
+			$ui/calib_panel/ginfo.text += ' [' + str(len(g.points[0])) + ',' + str(len(g.points[1])) + ']'
+			$ui/calib_panel/ginfo.text += ' [symmetric]'
 		else:
-			$ui/ginfo.text += str( len(g.points) )
+			$ui/calib_panel/ginfo.text += str( len(g.points) )
+			$ui/calib_panel/ginfo.text += ' point'
+			if len(g.points) > 1:
+				$ui/calib_panel/ginfo.text += 's'
 		group_config_load( g )
 		group_config_visibility(true)
 	else:
@@ -157,17 +184,17 @@ func _on_groups_item_selected(id):
 
 func _on_rotx_value_changed(value):
 	if sel_group != -1:
-		calibration.content.groups[sel_group].correction.rotation.x = value
+		calibration.content.groups[sel_group].correction.rotation.x = value / 180 * PI
 		ReVA.apply_calibration( calibration, animation )
 
 func _on_roty_value_changed(value):
 	if sel_group != -1:
-		calibration.content.groups[sel_group].correction.rotation.y = value
+		calibration.content.groups[sel_group].correction.rotation.y = value / 180 * PI
 		ReVA.apply_calibration( calibration, animation )
 
 func _on_rotz_value_changed(value):
 	if sel_group != -1:
-		calibration.content.groups[sel_group].correction.rotation.z = value
+		calibration.content.groups[sel_group].correction.rotation.z = value / 180 * PI
 		ReVA.apply_calibration( calibration, animation )
 
 func _on_transx_value_changed(value):
@@ -199,3 +226,64 @@ func _on_scalez_value_changed(value):
 	if sel_group != -1:
 		calibration.content.groups[sel_group].correction.scale.z = value
 		ReVA.apply_calibration( calibration, animation )
+
+func _on_rot_symx_pressed():
+	if sel_group != -1:
+		calibration.content.groups[sel_group].symmetry.rotation.x = -1 if $ui/calib_panel/sym_panel/rot_symx.pressed else 1
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_rot_symy_pressed():
+	if sel_group != -1:
+		calibration.content.groups[sel_group].symmetry.rotation.y = -1 if $ui/calib_panel/sym_panel/rot_symy.pressed else 1
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_rot_symz_pressed():
+	if sel_group != -1:
+		calibration.content.groups[sel_group].symmetry.rotation.z = -1 if $ui/calib_panel/sym_panel/rot_symz.pressed else 1
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_trans_symx_pressed():
+	if sel_group != -1:
+		calibration.content.groups[sel_group].symmetry.translation.x = -1 if $ui/calib_panel/sym_panel/trans_symx.pressed else 1
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_trans_symy_pressed():
+	if sel_group != -1:
+		calibration.content.groups[sel_group].symmetry.translation.y = -1 if $ui/calib_panel/sym_panel/trans_symy.pressed else 1
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_trans_symz_pressed():
+	if sel_group != -1:
+		calibration.content.groups[sel_group].symmetry.translation.z = -1 if $ui/calib_panel/sym_panel/trans_symz.pressed else 1
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_scale_symx_pressed():
+	if sel_group != -1:
+		calibration.content.groups[sel_group].symmetry.scale.x = -1 if $ui/calib_panel/sym_panel/scale_symx.pressed else 1
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_scale_symy_pressed():
+	if sel_group != -1:
+		calibration.content.groups[sel_group].symmetry.scale.y = -1 if $ui/calib_panel/sym_panel/scale_symy.pressed else 1
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_scale_symz_pressed():
+	if sel_group != -1:
+		calibration.content.groups[sel_group].symmetry.scale.z = -1 if $ui/calib_panel/sym_panel/scale_symz.pressed else 1
+		ReVA.apply_calibration( calibration, animation )
+
+func _on_rot_pressed():
+	group_sub_visibility( false )
+	$ui/calib_panel/rot_panel.visible = true
+
+func _on_trans_pressed():
+	group_sub_visibility( false )
+	$ui/calib_panel/trans_panel.visible = true
+
+func _on_scale_pressed():
+	group_sub_visibility( false )
+	$ui/calib_panel/scale_panel.visible = true
+
+func _on_sym_pressed():
+	group_sub_visibility( false )
+	$ui/calib_panel/sym_panel.visible = true
