@@ -48,6 +48,18 @@ static func clone_dict( d ):
 			clone[k] = i
 	return clone
 
+static func vec2_to_list( v2 ):
+	return [v2.x,v2.y]
+
+static func vec3_to_list( v3 ):
+	return [v3.x,v3.y,v3.z]
+
+static func quat_to_list( q ):
+	return [q.x,q.y,q.z,q.w]
+
+static func rgb_to_list( c ):
+	return [c.r,c.g,c.b]
+
 static func blank_jdata():
 	return {
 		'path': null,
@@ -131,6 +143,18 @@ static func load_json( p ):
 		jlog( jdata, ReVA_ERROR, result_json.error )
 		jlog( jdata, ReVA_ERROR,  "line: " + result_json.error_line )
 		jlog( jdata, ReVA_ERROR,  "string: " + result_json.error_string )
+	return jdata
+
+static func save_json( jdata ):
+	
+	if not file_exists( jdata.path ):
+		jlog( jdata, ReVA_ERROR, "invalid path " + jdata.path )
+		return jdata
+	
+	var file = File.new()
+	file.open( jdata.path, file.WRITE )
+	file.store_string( JSON.print(jdata.content) )
+	file.close()
 	return jdata
 
 static func cancel_json( jdata ):
@@ -407,6 +431,20 @@ static func search_in_hierarchy( level, gname ):
 			return o
 	return null
 
+static func generate_group_hierarchy( calibration ):
+	
+	# generation of a group hierarchy
+	calibration.content.hierarchy = []
+	var gid = 0
+	for g in calibration.content.groups:
+		if g.parent == null:
+			calibration.content.hierarchy.append( { 'id': gid, 'group': g.name, 'children': [] } )
+		else:
+			var p = search_in_hierarchy( calibration.content.hierarchy, g.parent )
+			if p != null:
+				p.children.append( {'id': gid, 'group': g.name, 'children': [] } )
+		gid += 1
+
 static func validate_calibration( jdata ):
 	
 	# basic stuff
@@ -511,17 +549,7 @@ static func validate_calibration( jdata ):
 			jlog( jdata, ReVA_WARNING, "calibration group invalid display_name" )
 			g.display_name = g.name
 	
-	# generation of a group hierarchy
-	jdata.content.hierarchy = []
-	var gid = 0
-	for g in jdata.content.groups:
-		if g.parent == null:
-			jdata.content.hierarchy.append( { 'id': gid, 'group': g.name, 'children': [] } )
-		else:
-			var p = search_in_hierarchy( jdata.content.hierarchy, g.parent )
-			if p != null:
-				p.children.append( {'id': gid, 'group': g.name, 'children': [] } )
-		gid += 1
+	generate_group_hierarchy( jdata )
 	
 	var a = blank_calibration()
 	a.path = jdata.path
@@ -600,4 +628,39 @@ static func apply_calibration( calibration, animation ):
 	reset( animation )
 	for g in calibration.content.hierarchy:
 		apply_calibration_group( g, calibration, animation )
+
+static func save_calibration( calibration ):
 	
+	if not calibration.success:
+		return
+	
+	var jdata = blank_jdata()
+	jdata.path = calibration.path
+	jdata.content = clone_dict( calibration.content )
+	jdata.content.erase( 'hierarchy' )
+	
+	for g in jdata.content.groups:
+		g.correction.rotation = vec3_to_list(g.correction.rotation)
+		g.correction.translation = vec3_to_list(g.correction.translation)
+		g.correction.scale = vec3_to_list(g.correction.scale)
+		if 'symmetry' in g:
+			g.symmetry.rotation = vec3_to_list(g.symmetry.rotation)
+			g.symmetry.translation = vec3_to_list(g.symmetry.translation)
+			g.symmetry.scale = vec3_to_list(g.symmetry.scale)
+		g.color = rgb_to_list(g.color)
+		if g.parent  == null:
+			g.erase( 'parent' )
+	
+	return save_json( jdata )
+
+static func reset_calibration_group( gid, calibration ):
+	
+	if not calibration.success:
+		return
+	
+	if not len( calibration.content.groups ) == len( calibration.original.groups ):
+		jlog( calibration, ReVA_WARNING, "number of groups in current calibration and original is not similar, group reset can not be performed" )
+		return
+	
+	calibration.content.groups[gid] = clone_dict( calibration.original.groups )
+	generate_group_hierarchy( calibration )
