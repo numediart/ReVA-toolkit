@@ -96,8 +96,10 @@ static func blank_frame( animation ):
 		'pose_translation': Vector3(),
 		'timestamp': 0
 	}
+# warning-ignore:unused_variable
 	for i in range( animation.content.gaze_count ):
 		frame.gazes.append( Vector3() )
+# warning-ignore:unused_variable
 	for i in range( animation.content.point_count ):
 		frame.points.append( Vector3() )
 	return frame

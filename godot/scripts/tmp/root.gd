@@ -35,6 +35,7 @@ func _ready():
 		mask.visible = true
 		add_child( mask )
 		
+# warning-ignore:unused_variable
 		for i in range( animation.content.point_count ):
 			var p = $pt.duplicate()
 			p.visible = true
