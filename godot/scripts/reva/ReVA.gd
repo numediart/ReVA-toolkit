@@ -2,6 +2,7 @@ const version = 1
 const prefix = 'ReVA'
 const animation_type = prefix + '_animation'
 const calibration_type = prefix + '_calibration'
+const mapping_type = prefix + '_mapping'
 const error_prefix = "ReVA Error: "
 const warning_prefix = "ReVA Warning: "
 const info_prefix = "ReVA Info: "
@@ -78,6 +79,15 @@ static func blank_animation():
 	}
 
 static func blank_calibration():
+	return {
+		'path': null,
+		'original': null,
+		'content': null,
+		'success': false,
+		'errors': []
+	}
+
+static func blank_mapping():
 	return {
 		'path': null,
 		'original': null,
@@ -666,3 +676,102 @@ static func reset_calibration_group( gid, calibration ):
 	
 	calibration.content.groups[gid] = clone_dict( calibration.original.groups[gid] )
 	generate_group_hierarchy( calibration )
+
+### MAPPINGS ###
+
+static func validate_mapping( jdata ):
+	
+	# basic stuff
+	if not jdata.success:
+		return cancel_json( jdata )
+	if not jdata.content is Dictionary:
+		jlog( jdata, ReVA_ERROR, "mapping must be a dictionary" )
+		return cancel_json( jdata )
+	
+	# type & version
+	if not 'type' in jdata.content or jdata.content.type != mapping_type:
+		jlog( jdata, ReVA_ERROR, "mapping type must be " + mapping_type )
+		return cancel_json( jdata )
+	if not 'version' in jdata.content or jdata.content.version != version:
+		jlog( jdata, ReVA_ERROR, "mapping version must be " + str(version) )
+		return cancel_json( jdata )
+	
+	if not 'maps' in jdata.content or not jdata.content.maps is Array:
+		jlog( jdata, ReVA_ERROR, "mapping must have a maps key" )
+		return cancel_json( jdata )
+	
+	# validation of maps
+	var valid_ms = []
+	for m in jdata.content.maps:
+		
+		if not 'bone' in m or m.bone == null or len(m.bone) == 0:
+			jlog( jdata, ReVA_ERROR, "map must have a bone key" )
+			continue
+			
+		var missing_field = 0	
+		if not 'point_weights' in m or not m.point_weights is Array:
+			missing_field += 1
+		if not 'pose_euler' in m or not m.pose_euler is Dictionary:
+			missing_field += 1
+		if not 'gaze' in m or not m.gaze is Dictionary:
+			missing_field += 1
+		if missing_field == 3:
+			jlog( jdata, ReVA_ERROR, "map must have at least one of these keys: 'point_weights', 'pose_euler' or 'gaze'" )
+			continue
+		
+		if 'gaze' in m:
+			if not 'id' in m.gaze:
+				jlog( jdata, ReVA_ERROR, "map gaze must have an id field" )
+				continue
+			if not 'damping' in m.gaze:
+				jlog( jdata, ReVA_ERROR, "map gaze must have a damping field" )
+				continue
+			if not 'weight' in m.gaze:
+				jlog( jdata, ReVA_ERROR, "map gaze must have a weight field" )
+				continue
+			var newm = clone_dict(m)
+			if 'point_weights' in newm:
+				newm.erase( 'point_weights' )
+			if 'pose_euler' in newm:
+				newm.erase( 'pose_euler' )
+			valid_ms.append(newm)
+			continue
+		
+		if 'pose_euler' in m:
+			if not 'damping' in m.pose_euler:
+				jlog( jdata, ReVA_ERROR, "map pose_euler must have a damping field" )
+				continue
+			if not 'weight' in m.pose_euler:
+				jlog( jdata, ReVA_ERROR, "map pose_euler must have a weight field" )
+				continue
+			var newm = clone_dict(m)
+			if 'point_weights' in newm:
+				newm.erase( 'point_weights' )
+			valid_ms.append(newm)
+			continue
+		
+		var valid_pws = []
+		for pw in m.point_weights:
+			if not 'id' in pw:
+				jlog( jdata, ReVA_ERROR, "map point_weight must have an id field" )
+				continue
+			if not 'weight' in pw:
+				jlog( jdata, ReVA_ERROR, "map point_weight must have a weight field" )
+				continue
+			valid_pws.append( clone_dict(pw) )
+		var newm = clone_dict(m)
+		newm.point_weights = valid_pws
+		valid_ms.append(newm)
+	
+	jdata.content.maps = valid_ms
+	
+	var a = blank_mapping()
+	a.path = jdata.path
+	a.original = clone_dict( jdata.content )
+	a.content = jdata.content
+	a.success = jdata.success
+	a.errors = jdata.errors
+	return a
+
+static func load_mapping( p ):
+	return validate_mapping( load_json( p ) )

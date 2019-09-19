@@ -7,6 +7,7 @@ export(bool) var apply_pose_translation = true
 
 var animation = null
 var calibration = null
+var mapping = null
 var mask = null
 var axis = null
 var elapsed_time = 0
@@ -54,7 +55,7 @@ func _ready():
 		for i in range( animation.content.point_count ):
 			mask.get_child(i).translation = frame.points[i]
 
-	calibration = ReVA.load_calibration( "../json/calibration/openface_default.json" )
+	calibration = ReVA.load_calibration( "../json/calibration/openface_calib.json" )
 	ReVA.check_calibration( calibration, animation )
 	ReVA.apply_calibration( calibration, animation )
 	
@@ -72,7 +73,10 @@ func _ready():
 		$ui/calib_panel/cname.cursor_set_column(0)
 		$ui/calib_panel/l_path.text = calibration.path.get_file()
 		group_dropdown()
-
+	
+	mapping = ReVA.load_mapping( "../json/mapping/openface_mapping.json" )
+	print( mapping )
+	
 func _process(delta):
 	
 	#print( elapsed_time )
