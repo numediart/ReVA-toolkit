@@ -707,6 +707,36 @@ static func validate_mapping( jdata ):
 		if not 'bone' in m or m.bone == null or len(m.bone) == 0:
 			jlog( jdata, ReVA_ERROR, "map must have a bone key" )
 			continue
+		
+		if not 'constraint' in m or not m.constraint is Dictionary:
+			jlog( jdata, ReVA_ERROR, "map must have a constraint key" )
+			continue
+		if not 'lookat_enabled' in m.constraint:
+			jlog( jdata, ReVA_ERROR, "map constraint must have a lookat_enabled key" )
+			continue
+		if not 'rot_enabled' in m.constraint:
+			jlog( jdata, ReVA_ERROR, "map constraint must have a rot_enabled key" )
+			continue
+		if not 'trans_enabled' in m.constraint:
+			jlog( jdata, ReVA_ERROR, "map constraint must have a trans_enabled key" )
+			continue
+		if not 'rot_lock' in m.constraint or not m.constraint.rot_lock is Array:
+			jlog( jdata, ReVA_ERROR, "map constraint must have a rot_lock list" )
+			continue
+		if not 'rot_mult' in m.constraint or not m.constraint.rot_mult is Array:
+			jlog( jdata, ReVA_ERROR, "map constraint must have a rot_mult list" )
+			continue
+		if not 'trans_lock' in m.constraint or not m.constraint.trans_lock is Array:
+			jlog( jdata, ReVA_ERROR, "map constraint must have a trans_lock list" )
+			continue
+		if not 'trans_mult' in m.constraint or not m.constraint.trans_mult is Array:
+			jlog( jdata, ReVA_ERROR, "map constraint must have a trans_mult list" )
+			continue
+		
+		var arr = m.constraint.rot_mult
+		m.constraint.rot_mult = Vector3( arr[0],arr[1],arr[2] )
+		arr = m.constraint.trans_mult
+		m.constraint.trans_mult = Vector3( arr[0],arr[1],arr[2] )
 			
 		var missing_field = 0	
 		if not 'point_weights' in m or not m.point_weights is Array:
