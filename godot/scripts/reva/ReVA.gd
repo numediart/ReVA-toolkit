@@ -1,16 +1,20 @@
-const version = 1
-const prefix = 'ReVA'
-const animation_type = prefix + '_animation'
-const calibration_type = prefix + '_calibration'
-const mapping_type = prefix + '_mapping'
-const error_prefix = "ReVA Error: "
-const warning_prefix = "ReVA Warning: "
-const info_prefix = "ReVA Info: "
+const ReVA_VERSION = 1
+const ReVA_PREFIX = 'ReVA'
+const ReVA_TYPE_NONE = ReVA_PREFIX + '_none'
+const ReVA_TYPE_MODEL = ReVA_PREFIX + '_model'
+const ReVA_TYPE_ANIM = ReVA_PREFIX + '_animation'
+const ReVA_TYPE_CALIB = ReVA_PREFIX + '_calibration'
+const ReVA_TYPE_MAPP = ReVA_PREFIX + '_mapping'
+const ReVA_ERR_PREFIX = "ReVA Error: "
+const ReVA_WARN_PREFIX = "ReVA Warning: "
+const ReVA_INFO_PREFIX = "ReVA Info: "
 
 const ReVA_DEBUG = true
 const ReVA_ERROR = 		1
 const ReVA_WARNING = 	10
 const ReVA_INFO = 		20
+
+const ReVA_PATH_CONSTRAINT = "res://scripts/reva/ReVA_constraint.gd"
 
 #static func 
 
@@ -63,14 +67,26 @@ static func rgb_to_list( c ):
 
 static func blank_jdata():
 	return {
+		'type': ReVA_TYPE_NONE,
 		'path': null,
 		'content': null,
 		'success': false,
 		'errors': []
 	}
 
+static func blank_model():
+	return {
+		'type': ReVA_TYPE_MODEL,
+		'path': null,
+		'node': null,
+		'attachments': null,
+		'success': false,
+		'errors': []
+	}
+
 static func blank_animation():
 	return {
+		'type': ReVA_TYPE_ANIM,
 		'path': null,
 		'original': null,
 		'content': null,
@@ -80,6 +96,7 @@ static func blank_animation():
 
 static func blank_calibration():
 	return {
+		'type': ReVA_TYPE_CALIB,
 		'path': null,
 		'original': null,
 		'content': null,
@@ -89,6 +106,7 @@ static func blank_calibration():
 
 static func blank_mapping():
 	return {
+		'type': ReVA_TYPE_MAPP,
 		'path': null,
 		'original': null,
 		'content': null,
@@ -123,16 +141,16 @@ static func file_exists( p ):
 		return false
 	return true
 
-static func jlog( jdata, lvl, txt ):
-	jdata.errors.append( [lvl, txt] )
+static func rlog( data, lvl, txt ):
+	data.errors.append( [lvl, txt] )
 	if ReVA_DEBUG:
 		match lvl:
 			ReVA_ERROR:
-				print( error_prefix, txt )
+				print( ReVA_ERR_PREFIX, txt )
 			ReVA_WARNING:
-				print( warning_prefix, txt )
+				print( ReVA_WARN_PREFIX, txt )
 			ReVA_INFO:
-				print( info_prefix, txt )
+				print( ReVA_INFO_PREFIX, txt )
 			_:
 				print( txt )
 
@@ -142,7 +160,7 @@ static func load_json( p ):
 	jdata.path = p
 	
 	if not file_exists( p ):
-		jlog( jdata, ReVA_ERROR, "invalid path " + p )
+		rlog( jdata, ReVA_ERROR, "invalid path " + p )
 		return jdata
 	var file = File.new()
 	file.open( p, file.READ )
@@ -152,15 +170,15 @@ static func load_json( p ):
 		jdata.content = result_json.result
 		jdata.success = true
 	else:  # If parse has errors
-		jlog( jdata, ReVA_ERROR, result_json.error )
-		jlog( jdata, ReVA_ERROR,  "line: " + result_json.error_line )
-		jlog( jdata, ReVA_ERROR,  "string: " + result_json.error_string )
+		rlog( jdata, ReVA_ERROR, result_json.error )
+		rlog( jdata, ReVA_ERROR,  "line: " + result_json.error_line )
+		rlog( jdata, ReVA_ERROR,  "string: " + result_json.error_string )
 	return jdata
 
 static func save_json( jdata ):
 	
 	if not file_exists( jdata.path ):
-		jlog( jdata, ReVA_ERROR, "invalid path " + jdata.path )
+		rlog( jdata, ReVA_ERROR, "invalid path " + jdata.path )
 		return jdata
 	
 	var file = File.new()
@@ -171,11 +189,56 @@ static func save_json( jdata ):
 
 static func cancel_json( jdata ):
 	return {
+		'type': jdata.type,
 		'path': jdata.path,
 		'content': null,
 		'success': false,
 		'errors': jdata.errors
 	}
+
+static func cancel_model( mdata ):
+	var out = blank_model()
+	out.type = mdata.type
+	out.path = mdata.path
+	out.errors = mdata.errors
+
+### MODELS ###
+
+static func load_model( path ):
+	
+	var mdata = blank_model()
+	
+	mdata.path = path
+	if not file_exists( mdata.path ):
+		rlog( mdata, ReVA_ERROR, "invalid path " + mdata.path )
+		return mdata
+	
+	mdata.node = load( path ).instance()
+	if not mdata.node is Skeleton:
+		rlog( mdata, ReVA_ERROR, "first node in model must be a Skeleton" )
+		return cancel_model( mdata )
+	
+	if mdata.node.get_node( 'face_cam' ) == null or not mdata.node.get_node( 'face_cam' ) is BoneAttachment:
+		rlog( mdata, ReVA_WARNING, "model must have a BoneAttachment called 'face_cam' for calibration views" )
+	
+	# generation of bone attachements:
+	mdata.attachments = {
+		'list':[],
+		'dict':{}
+	}
+	var cscript = load( ReVA_PATH_CONSTRAINT )
+	for i in range( mdata.node.get_bone_count() ):
+		var bname = mdata.node.get_bone_name(i)
+		var ba = BoneAttachment.new()
+		ba.set_script( cscript )
+		mdata.node.add_child( ba )
+		ba.name = "ba_" + bname
+		ba.bone_name = bname
+		mdata.attachments.list.append( ba )
+		mdata.attachments.dict[bname] = ba
+	
+	mdata.success = true
+	return mdata
 
 ### ANIMATIONS ###
 
@@ -185,52 +248,52 @@ static func validate_animation( jdata ):
 	if not jdata.success:
 		return cancel_json( jdata )
 	if not jdata.content is Dictionary:
-		jlog( jdata, ReVA_ERROR, "animation must be a dictionary" )
+		rlog( jdata, ReVA_ERROR, "animation must be a dictionary" )
 		return cancel_json( jdata )
 	
 	# type & version
-	if not 'type' in jdata.content or jdata.content.type != animation_type:
-		jlog( jdata, ReVA_ERROR, "animation type must be " + animation_type )
+	if not 'type' in jdata.content or jdata.content.type != ReVA_TYPE_ANIM:
+		rlog( jdata, ReVA_ERROR, "animation type must be " + ReVA_TYPE_ANIM )
 		return cancel_json( jdata )
-	if not 'version' in jdata.content or jdata.content.version != version:
-		jlog( jdata, ReVA_ERROR, "animation version must be " + str(version) )
+	if not 'version' in jdata.content or jdata.content.version != ReVA_VERSION:
+		rlog( jdata, ReVA_ERROR, "animation version must be " + str(ReVA_VERSION) )
 		return cancel_json( jdata )
 	
 	# missing data
 	if not 'frames' in jdata.content or not jdata.content.frames is Array:
-		jlog( jdata, ReVA_ERROR, "animation must have a frames key" )
+		rlog( jdata, ReVA_ERROR, "animation must have a frames key" )
 		return cancel_json( jdata )
 	if not 'duration' in jdata.content or not jdata.content.duration is float:
-		jlog( jdata, ReVA_ERROR, "animation must have a duration key" )
+		rlog( jdata, ReVA_ERROR, "animation must have a duration key" )
 		return cancel_json( jdata )
 	
 	if not 'gaze_count' in jdata.content or not jdata.content.gaze_count is float:
-		jlog( jdata, ReVA_ERROR, "animation must have a gaze_count key" )
+		rlog( jdata, ReVA_ERROR, "animation must have a gaze_count key" )
 		return cancel_json( jdata )
 	else:
 		jdata.content.gaze_count = int(jdata.content.gaze_count)
 	if not 'point_count' in jdata.content or not jdata.content.point_count is float:
-		jlog( jdata, ReVA_ERROR, "animation must have a point_count key" )
+		rlog( jdata, ReVA_ERROR, "animation must have a point_count key" )
 		return cancel_json( jdata )
 	else:
 		jdata.content.point_count = int(jdata.content.point_count)
 	
 	# aabb validation and transtyping
 	if not 'aabb' in jdata.content or not jdata.content.aabb is Dictionary:
-		jlog( jdata, ReVA_ERROR, "animation must have a aabb key" )
+		rlog( jdata, ReVA_ERROR, "animation must have a aabb key" )
 		return cancel_json( jdata )
 	
 	if not 'center' in jdata.content.aabb or not jdata.content.aabb.center is Array:
-		jlog( jdata, ReVA_ERROR, "animation aabb must have a center key" )
+		rlog( jdata, ReVA_ERROR, "animation aabb must have a center key" )
 		return cancel_json( jdata )
 	if not 'min' in jdata.content.aabb or not jdata.content.aabb.min is Array:
-		jlog( jdata, ReVA_ERROR, "animation aabb must have a min key" )
+		rlog( jdata, ReVA_ERROR, "animation aabb must have a min key" )
 		return cancel_json( jdata )
 	if not 'max' in jdata.content.aabb or not jdata.content.aabb.max is Array:
-		jlog( jdata, ReVA_ERROR, "animation aabb must have a max key" )
+		rlog( jdata, ReVA_ERROR, "animation aabb must have a max key" )
 		return cancel_json( jdata )
 	if not 'size' in jdata.content.aabb or not jdata.content.aabb.size is Array:
-		jlog( jdata, ReVA_ERROR, "animation aabb must have a size key" )
+		rlog( jdata, ReVA_ERROR, "animation aabb must have a size key" )
 		return cancel_json( jdata )
 	
 	var arr = jdata.content.aabb.center
@@ -245,27 +308,27 @@ static func validate_animation( jdata ):
 	# frames validation and transtyping
 	for f in jdata.content.frames:
 		if not f is Dictionary:
-			jlog( jdata, ReVA_ERROR, "animation frame must be a dictionary" )
+			rlog( jdata, ReVA_ERROR, "animation frame must be a dictionary" )
 			return cancel_json( jdata )
 		if not 'gazes' in f or not f.gazes is Array:
-			jlog( jdata, ReVA_ERROR, "animation frame must have a gazes key" )
+			rlog( jdata, ReVA_ERROR, "animation frame must have a gazes key" )
 			return cancel_json( jdata )
 		if not 'points' in f or not f.points is Array:
-			jlog( jdata, ReVA_ERROR, "animation frame must have a points key" )
+			rlog( jdata, ReVA_ERROR, "animation frame must have a points key" )
 			return cancel_json( jdata )
 		if not 'pose_euler' in f or not f.pose_euler is Array:
-			jlog( jdata, ReVA_ERROR, "animation frame must have a pose_euler key" )
+			rlog( jdata, ReVA_ERROR, "animation frame must have a pose_euler key" )
 			return cancel_json( jdata )
 		if not 'pose_translation' in f or not f.pose_translation is Array:
-			jlog( jdata, ReVA_ERROR, "animation frame must have a pose_translation key" )
+			rlog( jdata, ReVA_ERROR, "animation frame must have a pose_translation key" )
 			return cancel_json( jdata )
 		if not 'timestamp' in f or not f.timestamp is float:
-			jlog( jdata, ReVA_ERROR, "animation frame must have a timestamp key" )
+			rlog( jdata, ReVA_ERROR, "animation frame must have a timestamp key" )
 		if len(f.gazes) != jdata.content.gaze_count:
-			jlog( jdata, ReVA_ERROR, "animation frame, inconsistent gaze count in frame" )
+			rlog( jdata, ReVA_ERROR, "animation frame, inconsistent gaze count in frame" )
 			return cancel_json( jdata )
 		if len(f.points) != jdata.content.point_count:
-			jlog( jdata, ReVA_ERROR, "animation frame, inconsistent point count in frame" )
+			rlog( jdata, ReVA_ERROR, "animation frame, inconsistent point count in frame" )
 			return cancel_json( jdata )
 		# swapping to vector3
 		f.pose_euler = Vector3( f.pose_euler[0], f.pose_euler[1], f.pose_euler[2] )
@@ -289,23 +352,23 @@ static func validate_animation( jdata ):
 	if 'sound' in jdata.content:
 		var keepon = true
 		if not jdata.content.sound is Dictionary:
-			jlog( jdata, ReVA_WARNING, "animation sound field must be a dictionary" )
+			rlog( jdata, ReVA_WARNING, "animation sound field must be a dictionary" )
 			jdata.content.erase('sound')
 			keepon = false
 		if keepon and not 'bits_per_sample' in jdata.content.sound:
-			jlog( jdata, ReVA_WARNING, "animation sound field must have a bits_per_sample field" )
+			rlog( jdata, ReVA_WARNING, "animation sound field must have a bits_per_sample field" )
 			jdata.content.erase('sound')
 			keepon = false
 		if keepon and not 'channels' in jdata.content.sound:
-			jlog( jdata, ReVA_WARNING, "animation sound field must have a channels field" )
+			rlog( jdata, ReVA_WARNING, "animation sound field must have a channels field" )
 			jdata.content.erase('sound')
 			keepon = false
 		if keepon and not 'sample_rate' in jdata.content.sound:
-			jlog( jdata, ReVA_WARNING, "animation sound field must have a sample_rate field" )
+			rlog( jdata, ReVA_WARNING, "animation sound field must have a sample_rate field" )
 			jdata.content.erase('sound')
 			keepon = false
 		if keepon and not 'path' in jdata.content.sound:
-			jlog( jdata, ReVA_WARNING, "animation sound field must have a path field" )
+			rlog( jdata, ReVA_WARNING, "animation sound field must have a path field" )
 			jdata.content.erase('sound')
 			keepon = false
 		if keepon and ( jdata.content.sound.path.find('/') == -1 or jdata.content.sound.path.find('\\') == -1 ):
@@ -317,7 +380,7 @@ static func validate_animation( jdata ):
 				jdata.content.sound.path += '/'
 			jdata.content.sound.path += sp
 		if  keepon and not file_exists( jdata.content.sound.path ):
-			jlog( jdata, ReVA_WARNING, "animation sound invalid path " + jdata.content.sound.path )
+			rlog( jdata, ReVA_WARNING, "animation sound invalid path " + jdata.content.sound.path )
 			jdata.content.erase('sound')
 			keepon = false
 	
@@ -325,19 +388,19 @@ static func validate_animation( jdata ):
 	if 'video' in jdata.content:
 		var keepon = true
 		if not jdata.content.video is Dictionary:
-			jlog( jdata, ReVA_WARNING, "animation video field must be a dictionary" )
+			rlog( jdata, ReVA_WARNING, "animation video field must be a dictionary" )
 			jdata.content.erase('video')
 			keepon = false
 		if keepon and not 'width' in jdata.content.video:
-			jlog( jdata, ReVA_WARNING, "animation video must have a width field" )
+			rlog( jdata, ReVA_WARNING, "animation video must have a width field" )
 			jdata.content.erase('video')
 			keepon = false
 		if keepon and not 'height' in jdata.content.video:
-			jlog( jdata, ReVA_WARNING, "animation video must have a height field" )
+			rlog( jdata, ReVA_WARNING, "animation video must have a height field" )
 			jdata.content.erase('video')
 			keepon = false
 		if keepon and not 'path' in jdata.content.video:
-			jlog( jdata, ReVA_WARNING, "animation video must have a path field" )
+			rlog( jdata, ReVA_WARNING, "animation video must have a path field" )
 			jdata.content.erase('video')
 			keepon = false
 		if keepon and ( jdata.content.video.path.find('/') == -1 or jdata.content.video.path.find('\\') == -1 ):
@@ -349,7 +412,7 @@ static func validate_animation( jdata ):
 				jdata.content.video.path += '/'
 			jdata.content.video.path += vp
 		if keepon and not file_exists( jdata.content.video.path ):
-			jlog( jdata, ReVA_WARNING, "animation video, invalid path " + jdata.content.video.path )
+			rlog( jdata, ReVA_WARNING, "animation video, invalid path " + jdata.content.video.path )
 			jdata.content.erase('video')
 			keepon = false
 	
@@ -463,22 +526,22 @@ static func validate_calibration( jdata ):
 	if not jdata.success:
 		return cancel_json( jdata )
 	if not jdata.content is Dictionary:
-		jlog( jdata, ReVA_ERROR, "calibration must be a dictionary" )
+		rlog( jdata, ReVA_ERROR, "calibration must be a dictionary" )
 		return cancel_json( jdata )
 	
 	# type & version
-	if not 'type' in jdata.content or jdata.content.type != calibration_type:
-		jlog( jdata, ReVA_ERROR, "calibration type must be " + calibration_type )
+	if not 'type' in jdata.content or jdata.content.type != ReVA_TYPE_CALIB:
+		rlog( jdata, ReVA_ERROR, "calibration type must be " + ReVA_TYPE_CALIB )
 		return cancel_json( jdata )
-	if not 'version' in jdata.content or jdata.content.version != version:
-		jlog( jdata, ReVA_ERROR, "calibration version must be " + str(version) )
+	if not 'version' in jdata.content or jdata.content.version != ReVA_VERSION:
+		rlog( jdata, ReVA_ERROR, "calibration version must be " + str(ReVA_VERSION) )
 		return cancel_json( jdata )
 	
 	if not 'groups' in jdata.content or not jdata.content.groups is Array:
-		jlog( jdata, ReVA_ERROR, "calibration must have a groups key" )
+		rlog( jdata, ReVA_ERROR, "calibration must have a groups key" )
 		return cancel_json( jdata )
 	if not 'display_name' in jdata.content or len(jdata.content.display_name) == 0:
-		jlog( jdata, ReVA_ERROR, "calibration must have a display_name key" )
+		rlog( jdata, ReVA_ERROR, "calibration must have a display_name key" )
 		return cancel_json( jdata )
 	
 	var seen_names = []
@@ -487,44 +550,44 @@ static func validate_calibration( jdata ):
 	for g in jdata.content.groups:
 		# errors
 		if not g is Dictionary:
-			jlog( jdata, ReVA_ERROR, "calibration group must be a dictionary" )
+			rlog( jdata, ReVA_ERROR, "calibration group must be a dictionary" )
 			return cancel_json( jdata )
 		if not 'name' in g or len(g.name) == 0:
-			jlog( jdata, ReVA_ERROR, "calibration group must have a name field" )
+			rlog( jdata, ReVA_ERROR, "calibration group must have a name field" )
 			return cancel_json( jdata )
 		if g.name in seen_names:
-			jlog( jdata, ReVA_ERROR, "calibration group must have a UNIQUE name" )
+			rlog( jdata, ReVA_ERROR, "calibration group must have a UNIQUE name" )
 			return cancel_json( jdata )
 		seen_names.append( g.name )
 		if not 'points' in g or not g.points is Array:
-			jlog( jdata, ReVA_ERROR, "calibration group must have a points array" )
+			rlog( jdata, ReVA_ERROR, "calibration group must have a points array" )
 			return cancel_json( jdata )
 		if not 'correction' in g or not g.correction is Dictionary:
-			jlog( jdata, ReVA_ERROR, "calibration group must have a correction dictionary" )
+			rlog( jdata, ReVA_ERROR, "calibration group must have a correction dictionary" )
 			return cancel_json( jdata )
 		if not 'rotation' in g.correction or not g.correction.rotation is Array:
-			jlog( jdata, ReVA_ERROR, "calibration group correction must have a rotation key" )
+			rlog( jdata, ReVA_ERROR, "calibration group correction must have a rotation key" )
 			return cancel_json( jdata )
 		if not 'translation' in g.correction or not g.correction.translation is Array:
-			jlog( jdata, ReVA_ERROR, "calibration group correction must have a translation key" )
+			rlog( jdata, ReVA_ERROR, "calibration group correction must have a translation key" )
 			return cancel_json( jdata )
 		if not 'scale' in g.correction or not g.correction.scale is Array:
-			jlog( jdata, ReVA_ERROR, "calibration group correction must have a scale key" )
+			rlog( jdata, ReVA_ERROR, "calibration group correction must have a scale key" )
 			return cancel_json( jdata )
 		if 'symmetry' in g and not g.symmetry is Dictionary:
-			jlog( jdata, ReVA_ERROR, "calibration group symmetry must have be a dictionary" )
+			rlog( jdata, ReVA_ERROR, "calibration group symmetry must have be a dictionary" )
 			return cancel_json( jdata )
 		if 'symmetry' in g and (not 'rotation' in g.symmetry or not g.symmetry.rotation is Array):
-			jlog( jdata, ReVA_ERROR, "calibration group symmetry must have a rotation key" )
+			rlog( jdata, ReVA_ERROR, "calibration group symmetry must have a rotation key" )
 			return cancel_json( jdata )
 		if 'symmetry' in g and (not 'translation' in g.symmetry or not g.symmetry.translation is Array):
-			jlog( jdata, ReVA_ERROR, "calibration group symmetry must have a translation key" )
+			rlog( jdata, ReVA_ERROR, "calibration group symmetry must have a translation key" )
 			return cancel_json( jdata )
 		if 'symmetry' in g and (not 'scale' in g.symmetry or not g.symmetry.scale is Array):
-			jlog( jdata, ReVA_ERROR, "calibration group symmetry must have a scale key" )
+			rlog( jdata, ReVA_ERROR, "calibration group symmetry must have a scale key" )
 			return cancel_json( jdata )
 		if 'symmetry' in g and len( g.points ) != 2:
-			jlog( jdata, ReVA_ERROR, "calibration group symmetry requires 2 list of points" )
+			rlog( jdata, ReVA_ERROR, "calibration group symmetry requires 2 list of points" )
 			return cancel_json( jdata )
 		
 		var arr = g.correction.rotation
@@ -553,12 +616,12 @@ static func validate_calibration( jdata ):
 		if not 'parent' in g or len(g.parent) == 0:
 			g.parent = null
 		if not 'color' in g or not g.color is Array:
-			jlog( jdata, ReVA_WARNING, "calibration group invalid color" )
+			rlog( jdata, ReVA_WARNING, "calibration group invalid color" )
 			g.color = Color(1.0,1.0,1.0)
 		else:
 			g.color = Color(g.color[0],g.color[1],g.color[2])
 		if not 'display_name' in g or len(g.display_name) == 0:
-			jlog( jdata, ReVA_WARNING, "calibration group invalid display_name" )
+			rlog( jdata, ReVA_WARNING, "calibration group invalid display_name" )
 			g.display_name = g.name
 	
 	generate_group_hierarchy( jdata )
@@ -576,8 +639,21 @@ static func load_calibration( p ):
 
 static func check_calibration( calibration, animation ):
 	
-	if not calibration.success or not animation.success:
-		return cancel_json( calibration )
+	if not calibration.success:
+		rlog( animation, ReVA_INFO, "calibration is not successfully loaded" )
+		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return
+	
+	if not animation.success:
+		rlog( animation, ReVA_INFO, "animation is not successfully loaded" )
+		return
+	
+	if not animation.type == ReVA_TYPE_ANIM:
+		rlog( animation, ReVA_INFO, "mapping must be of type " + ReVA_TYPE_ANIM )
+		return
 	
 	# looping over all groups to validate there is no off-range numbers
 	var gs = []
@@ -591,14 +667,14 @@ static func check_calibration( calibration, animation ):
 					if i >= 0 and i < animation.content.point_count:
 						subg.append( i )
 					else:
-						jlog( calibration, ReVA_WARNING, "invalid point index [" + str(i) + "] in group " + g.name )
+						rlog( calibration, ReVA_WARNING, "invalid point index [" + str(i) + "] in group " + g.name )
 				newg.points.append( subg )
 		else:
 			for i in g.points:
 				if i >= 0 and i < animation.content.point_count:
 					newg.points.append( i )
 				else:
-					jlog( calibration, ReVA_WARNING, "invalid point index [" + str(i) + "] in group " + g.name )
+					rlog( calibration, ReVA_WARNING, "invalid point index [" + str(i) + "] in group " + g.name )
 		gs.append( newg )
 	calibration.content.groups = gs
 
@@ -671,7 +747,7 @@ static func reset_calibration_group( gid, calibration ):
 		return
 	
 	if not len( calibration.content.groups ) == len( calibration.original.groups ):
-		jlog( calibration, ReVA_WARNING, "number of groups in current calibration and original is not similar, group reset can not be performed" )
+		rlog( calibration, ReVA_WARNING, "number of groups in current calibration and original is not similar, group reset can not be performed" )
 		return
 	
 	calibration.content.groups[gid] = clone_dict( calibration.original.groups[gid] )
@@ -685,19 +761,19 @@ static func validate_mapping( jdata ):
 	if not jdata.success:
 		return cancel_json( jdata )
 	if not jdata.content is Dictionary:
-		jlog( jdata, ReVA_ERROR, "mapping must be a dictionary" )
+		rlog( jdata, ReVA_ERROR, "mapping must be a dictionary" )
 		return cancel_json( jdata )
 	
 	# type & version
-	if not 'type' in jdata.content or jdata.content.type != mapping_type:
-		jlog( jdata, ReVA_ERROR, "mapping type must be " + mapping_type )
+	if not 'type' in jdata.content or jdata.content.type != ReVA_TYPE_MAPP:
+		rlog( jdata, ReVA_ERROR, "mapping type must be " + ReVA_TYPE_MAPP )
 		return cancel_json( jdata )
-	if not 'version' in jdata.content or jdata.content.version != version:
-		jlog( jdata, ReVA_ERROR, "mapping version must be " + str(version) )
+	if not 'version' in jdata.content or jdata.content.version != ReVA_VERSION:
+		rlog( jdata, ReVA_ERROR, "mapping version must be " + str(ReVA_VERSION) )
 		return cancel_json( jdata )
 	
 	if not 'maps' in jdata.content or not jdata.content.maps is Array:
-		jlog( jdata, ReVA_ERROR, "mapping must have a maps key" )
+		rlog( jdata, ReVA_ERROR, "mapping must have a maps key" )
 		return cancel_json( jdata )
 	
 	# validation of maps
@@ -705,32 +781,32 @@ static func validate_mapping( jdata ):
 	for m in jdata.content.maps:
 		
 		if not 'bone' in m or m.bone == null or len(m.bone) == 0:
-			jlog( jdata, ReVA_ERROR, "map must have a bone key" )
+			rlog( jdata, ReVA_WARNING, "map must have a bone key" )
 			continue
 		
 		if not 'constraint' in m or not m.constraint is Dictionary:
-			jlog( jdata, ReVA_ERROR, "map must have a constraint key" )
+			rlog( jdata, ReVA_WARNING, "map must have a constraint key" )
 			continue
 		if not 'lookat_enabled' in m.constraint:
-			jlog( jdata, ReVA_ERROR, "map constraint must have a lookat_enabled key" )
+			rlog( jdata, ReVA_WARNING, "map constraint must have a lookat_enabled key" )
 			continue
 		if not 'rot_enabled' in m.constraint:
-			jlog( jdata, ReVA_ERROR, "map constraint must have a rot_enabled key" )
+			rlog( jdata, ReVA_WARNING, "map constraint must have a rot_enabled key" )
 			continue
 		if not 'trans_enabled' in m.constraint:
-			jlog( jdata, ReVA_ERROR, "map constraint must have a trans_enabled key" )
+			rlog( jdata, ReVA_WARNING, "map constraint must have a trans_enabled key" )
 			continue
 		if not 'rot_lock' in m.constraint or not m.constraint.rot_lock is Array:
-			jlog( jdata, ReVA_ERROR, "map constraint must have a rot_lock list" )
+			rlog( jdata, ReVA_WARNING, "map constraint must have a rot_lock list" )
 			continue
 		if not 'rot_mult' in m.constraint or not m.constraint.rot_mult is Array:
-			jlog( jdata, ReVA_ERROR, "map constraint must have a rot_mult list" )
+			rlog( jdata, ReVA_WARNING, "map constraint must have a rot_mult list" )
 			continue
 		if not 'trans_lock' in m.constraint or not m.constraint.trans_lock is Array:
-			jlog( jdata, ReVA_ERROR, "map constraint must have a trans_lock list" )
+			rlog( jdata, ReVA_WARNING, "map constraint must have a trans_lock list" )
 			continue
 		if not 'trans_mult' in m.constraint or not m.constraint.trans_mult is Array:
-			jlog( jdata, ReVA_ERROR, "map constraint must have a trans_mult list" )
+			rlog( jdata, ReVA_WARNING, "map constraint must have a trans_mult list" )
 			continue
 		
 		var arr = m.constraint.rot_mult
@@ -746,18 +822,18 @@ static func validate_mapping( jdata ):
 		if not 'gaze' in m or not m.gaze is Dictionary:
 			missing_field += 1
 		if missing_field == 3:
-			jlog( jdata, ReVA_ERROR, "map must have at least one of these keys: 'point_weights', 'pose_euler' or 'gaze'" )
+			rlog( jdata, ReVA_WARNING, "map must have at least one of these keys: 'point_weights', 'pose_euler' or 'gaze'" )
 			continue
 		
 		if 'gaze' in m:
 			if not 'id' in m.gaze:
-				jlog( jdata, ReVA_ERROR, "map gaze must have an id field" )
+				rlog( jdata, ReVA_WARNING, "map gaze must have an id field" )
 				continue
 			if not 'damping' in m.gaze:
-				jlog( jdata, ReVA_ERROR, "map gaze must have a damping field" )
+				rlog( jdata, ReVA_WARNING, "map gaze must have a damping field" )
 				continue
 			if not 'weight' in m.gaze:
-				jlog( jdata, ReVA_ERROR, "map gaze must have a weight field" )
+				rlog( jdata, ReVA_WARNING, "map gaze must have a weight field" )
 				continue
 			var newm = clone_dict(m)
 			if 'point_weights' in newm:
@@ -769,10 +845,10 @@ static func validate_mapping( jdata ):
 		
 		if 'pose_euler' in m:
 			if not 'damping' in m.pose_euler:
-				jlog( jdata, ReVA_ERROR, "map pose_euler must have a damping field" )
+				rlog( jdata, ReVA_WARNING, "map pose_euler must have a damping field" )
 				continue
 			if not 'weight' in m.pose_euler:
-				jlog( jdata, ReVA_ERROR, "map pose_euler must have a weight field" )
+				rlog( jdata, ReVA_WARNING, "map pose_euler must have a weight field" )
 				continue
 			var newm = clone_dict(m)
 			if 'point_weights' in newm:
@@ -783,10 +859,10 @@ static func validate_mapping( jdata ):
 		var valid_pws = []
 		for pw in m.point_weights:
 			if not 'id' in pw:
-				jlog( jdata, ReVA_ERROR, "map point_weight must have an id field" )
+				rlog( jdata, ReVA_WARNING, "map point_weight must have an id field" )
 				continue
 			if not 'weight' in pw:
-				jlog( jdata, ReVA_ERROR, "map point_weight must have a weight field" )
+				rlog( jdata, ReVA_WARNING, "map point_weight must have a weight field" )
 				continue
 			valid_pws.append( clone_dict(pw) )
 		var newm = clone_dict(m)
@@ -802,6 +878,56 @@ static func validate_mapping( jdata ):
 	a.success = jdata.success
 	a.errors = jdata.errors
 	return a
+
+static func check_mapping( mapping, data ):
+	
+	if not mapping.success:
+		rlog( mapping, ReVA_INFO, "mapping is not successfully loaded" )
+		return
+	
+	if not mapping.type == ReVA_TYPE_MAPP:
+		rlog( mapping, ReVA_INFO, "mapping must be of type " + ReVA_TYPE_MAPP )
+		return
+	
+	if not data.success:
+		rlog( mapping, ReVA_INFO, "data is not successfully loaded" )
+		return
+	
+	if not data.type == ReVA_TYPE_ANIM and not data.type == ReVA_TYPE_MODEL:
+		rlog( mapping, ReVA_INFO, "data must be of type " + ReVA_TYPE_ANIM + " or " + ReVA_TYPE_MODEL )
+		return
+	
+	if data.type == ReVA_TYPE_ANIM:
+		
+		var valid_ms = []
+		for m in mapping.content.maps:
+			if 'gaze' in m:
+				if m.gaze.id < 0 or m.gaze.id >= data.content.gaze_count:
+					rlog( mapping, ReVA_WARNING, "map ''" + m.bone + "', gaze id " + str(m.gaze.id) + " is out of range" )
+					continue
+				valid_ms.append( m )
+			if 'point_weights' in m:
+				var newm = clone_dict( m )
+				newm.point_weights = []
+				for pw in m.point_weights:
+					if pw.id < 0 or pw.id >= data.content.point_count:
+						rlog( mapping, ReVA_WARNING, "map '" + m.bone + "',  point id " + str(pw.id) + " is out of range" )
+						continue
+					newm.point_weights.append( pw )
+				valid_ms.append( newm )
+		# storage of valid maps
+		mapping.content.maps = valid_ms
+	
+	elif data.type == ReVA_TYPE_MODEL:
+		
+		var valid_ms = []
+		for m in mapping.content.maps:
+			if not m.bone in data.attachments.dict:
+				rlog( mapping, ReVA_WARNING, "no bone " + m.bone + " in " + data.node.name )
+				continue
+			valid_ms.append( m )
+		# storage of valid maps
+		mapping.content.maps = valid_ms
 
 static func load_mapping( p ):
 	return validate_mapping( load_json( p ) )

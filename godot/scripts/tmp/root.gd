@@ -1,10 +1,16 @@
 extends Spatial
 const ReVA = preload( "res://scripts/reva/ReVA.gd" )
+const mod_path = "res://models/joan.tscn"
+#const apath = "../json/anim/smile.json"
+const ani_path = "../json/anim/laugh.json"
+const cal_path = "../json/calibration/openface_calib.json"
+const map_path = "../json/mapping/openface_mapping.json"
 
 export(float, 0, 20) var anim_speed = 1
 export(bool) var apply_pose_euler = true
 export(bool) var apply_pose_translation = true
 
+var model = null
 var animation = null
 var calibration = null
 var mapping = null
@@ -25,8 +31,12 @@ func _ready():
 	
 	group_config_visibility(false)
 	
-#	animation = ReVA.load_animation( "../json/anim/smile.json" )
-	animation = ReVA.load_animation( "../json/anim/laugh.json" )
+	# loading 
+	model = ReVA.load_model( mod_path )
+	if model.success:
+		add_child( model.node )
+	
+	animation = ReVA.load_animation( ani_path )
 	
 	if animation.success:
 		
@@ -55,7 +65,7 @@ func _ready():
 		for i in range( animation.content.point_count ):
 			mask.get_child(i).translation = frame.points[i]
 
-	calibration = ReVA.load_calibration( "../json/calibration/openface_calib.json" )
+	calibration = ReVA.load_calibration( cal_path )
 	ReVA.check_calibration( calibration, animation )
 	ReVA.apply_calibration( calibration, animation )
 	
@@ -74,8 +84,9 @@ func _ready():
 		$ui/calib_panel/l_path.text = calibration.path.get_file()
 		group_dropdown()
 	
-	mapping = ReVA.load_mapping( "../json/mapping/openface_mapping.json" )
-	print( mapping )
+	mapping = ReVA.load_mapping( map_path )
+	ReVA.check_mapping( mapping, animation )
+	ReVA.check_mapping( mapping, model )
 	
 func _process(delta):
 	

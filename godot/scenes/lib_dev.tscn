@@ -51,7 +51,7 @@ __meta__ = {
 apply_pose_translation = false
 
 [node name="cam" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 159.069 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13.7312 )
 visible = false
 far = 100000.0
 
