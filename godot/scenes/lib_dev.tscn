@@ -91,6 +91,7 @@ mesh = SubResource( 7 )
 material/0 = null
 
 [node name="ui" type="Node2D" parent="."]
+position = Vector2( 0, 10 )
 
 [node name="calib_panel" type="Node2D" parent="ui"]
 
@@ -348,6 +349,7 @@ __meta__ = {
 }
 
 [node name="trans_panel" type="Node2D" parent="ui/calib_panel"]
+visible = false
 position = Vector2( 0, 287 )
 
 [node name="lbl" type="Label" parent="ui/calib_panel/trans_panel"]
@@ -433,6 +435,7 @@ __meta__ = {
 }
 
 [node name="scale_panel" type="Node2D" parent="ui/calib_panel"]
+visible = false
 position = Vector2( 0, 287 )
 
 [node name="scale" type="Label" parent="ui/calib_panel/scale_panel"]
@@ -524,6 +527,7 @@ __meta__ = {
 }
 
 [node name="sym_panel" type="Node2D" parent="ui/calib_panel"]
+visible = false
 position = Vector2( 0, 287 )
 
 [node name="symmetry" type="Label" parent="ui/calib_panel/sym_panel"]

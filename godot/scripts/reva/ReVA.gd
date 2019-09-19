@@ -664,5 +664,5 @@ static func reset_calibration_group( gid, calibration ):
 		jlog( calibration, ReVA_WARNING, "number of groups in current calibration and original is not similar, group reset can not be performed" )
 		return
 	
-	calibration.content.groups[gid] = clone_dict( calibration.original.groups )
+	calibration.content.groups[gid] = clone_dict( calibration.original.groups[gid] )
 	generate_group_hierarchy( calibration )
