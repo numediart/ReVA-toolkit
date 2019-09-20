@@ -11,12 +11,15 @@
 [ext_resource path="res://textures/svg/icon_load.svg" type="Texture" id=9]
 
 [sub_resource type="CubeMesh" id=1]
+size = Vector3( 0.02, 0.02, 0.02 )
 
 [sub_resource type="SpatialMaterial" id=2]
 flags_unshaded = true
 albedo_color = Color( 1, 0, 1, 1 )
 
 [sub_resource type="SphereMesh" id=3]
+radius = 0.006
+height = 0.012
 radial_segments = 12
 rings = 6
 
@@ -51,8 +54,8 @@ __meta__ = {
 apply_pose_translation = false
 
 [node name="cam" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13.7312 )
-visible = false
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.91702, 8.22759 )
+fov = 35.0
 far = 100000.0
 
 [node name="mask" type="MeshInstance" parent="."]
@@ -73,19 +76,19 @@ material_override = SubResource( 5 )
 visible = false
 
 [node name="x" type="MeshInstance" parent="axis"]
-transform = Transform( 50, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 25, 0, 0 )
+transform = Transform( 5, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 2.5, 0, 0 )
 material_override = SubResource( 6 )
 mesh = SubResource( 7 )
 material/0 = null
 
 [node name="y" type="MeshInstance" parent="axis"]
-transform = Transform( 0.3, 0, 0, 0, 50, 0, 0, 0, 0.3, 0, 25, 0 )
+transform = Transform( 0.01, 0, 0, 0, 5, 0, 0, 0, 0.01, 0, 2.5, 0 )
 material_override = SubResource( 8 )
 mesh = SubResource( 7 )
 material/0 = null
 
 [node name="z" type="MeshInstance" parent="axis"]
-transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 50, 0, 0, 25 )
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 5, 0, 0, 2.5 )
 material_override = SubResource( 9 )
 mesh = SubResource( 7 )
 material/0 = null
@@ -457,7 +460,6 @@ theme = ExtResource( 2 )
 min_value = 0.001
 max_value = 5.0
 step = 0.01
-value = 0.001
 allow_greater = true
 allow_lesser = true
 __meta__ = {
@@ -483,7 +485,6 @@ theme = ExtResource( 2 )
 min_value = 0.001
 max_value = 5.0
 step = 0.01
-value = 0.001
 allow_greater = true
 allow_lesser = true
 __meta__ = {
@@ -509,7 +510,6 @@ theme = ExtResource( 2 )
 min_value = 0.001
 max_value = 5.0
 step = 0.01
-value = 0.001
 allow_greater = true
 allow_lesser = true
 __meta__ = {

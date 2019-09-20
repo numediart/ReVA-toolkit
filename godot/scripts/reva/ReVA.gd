@@ -8,6 +8,7 @@ const ReVA_TYPE_MAPP = ReVA_PREFIX + '_mapping'
 const ReVA_ERR_PREFIX = "ReVA Error: "
 const ReVA_WARN_PREFIX = "ReVA Warning: "
 const ReVA_INFO_PREFIX = "ReVA Info: "
+const ReVA_BONEATTACHMENT_PREFIX = "ba_"
 
 const ReVA_DEBUG = true
 const ReVA_ERROR = 		1
@@ -79,7 +80,11 @@ static func blank_model():
 		'type': ReVA_TYPE_MODEL,
 		'path': null,
 		'node': null,
-		'attachments': null,
+		'attachments': {
+			'list':[],
+			'dict':{}
+		},
+		'face_bones': [],
 		'success': false,
 		'errors': []
 	}
@@ -222,20 +227,29 @@ static func load_model( path ):
 		rlog( mdata, ReVA_WARNING, "model must have a BoneAttachment called 'face_cam' for calibration views" )
 	
 	# generation of bone attachements:
-	mdata.attachments = {
-		'list':[],
-		'dict':{}
-	}
 	var cscript = load( ReVA_PATH_CONSTRAINT )
 	for i in range( mdata.node.get_bone_count() ):
 		var bname = mdata.node.get_bone_name(i)
 		var ba = BoneAttachment.new()
 		ba.set_script( cscript )
 		mdata.node.add_child( ba )
-		ba.name = "ba_" + bname
+		ba.name = ReVA_BONEATTACHMENT_PREFIX + bname
 		ba.bone_name = bname
 		mdata.attachments.list.append( ba )
 		mdata.attachments.dict[bname] = ba
+	
+	if not 'face_bones' in mdata.node or not mdata.node.face_bones is Array:
+		rlog( mdata, ReVA_WARNING, "model doesn't have a ReVA_avatar_configuration.gd or equivalent, this will causes errors in automatic calibration" )
+		mdata.face_bones = clone_array( mdata.attachments.list )
+	else:
+		for n in mdata.node.face_bones:
+			var bid = mdata.node.find_bone(n)
+			if bid == -1:
+				rlog( mdata, ReVA_WARNING, "no bone " + n + " in " + mdata.node.name )
+			else:
+				mdata.face_bones.append(  mdata.node.get_node( ReVA_BONEATTACHMENT_PREFIX + n ) )
+	
+	print( mdata.node.get_script() )
 	
 	mdata.success = true
 	return mdata
@@ -473,7 +487,9 @@ static func animation_frame( animation, ts, interpolation = true ):
 		nframe.timestamp = ts
 		
 		var ts_diff = next_frame.timestamp - prev_frame.timestamp
-		var pc = ( ts - prev_frame.timestamp ) / ts_diff
+		var pc = 0
+		if ts_diff != 0:
+			pc = ( ts - prev_frame.timestamp ) / ts_diff
 		
 		nframe.pose_euler = interpolate_euler( prev_frame.pose_euler, next_frame.pose_euler, pc )
 		nframe.pose_translation = lerp_vec3( prev_frame.pose_translation, next_frame.pose_translation, pc )
@@ -772,6 +788,9 @@ static func validate_mapping( jdata ):
 		rlog( jdata, ReVA_ERROR, "mapping version must be " + str(ReVA_VERSION) )
 		return cancel_json( jdata )
 	
+	if not 'attachment_bone' in jdata.content:
+		rlog( jdata, ReVA_ERROR, "mapping must have a attachment_bone key" )
+		return cancel_json( jdata )
 	if not 'maps' in jdata.content or not jdata.content.maps is Array:
 		rlog( jdata, ReVA_ERROR, "mapping must have a maps key" )
 		return cancel_json( jdata )
@@ -920,6 +939,10 @@ static func check_mapping( mapping, data ):
 	
 	elif data.type == ReVA_TYPE_MODEL:
 		
+		if not mapping.content.attachment_bone in data.attachments.dict:
+			rlog( mapping, ReVA_WARNING, "attachment_bone " + data.attachment_bone + " is not available in the model" )
+			data.attachment_bone = null
+		
 		var valid_ms = []
 		for m in mapping.content.maps:
 			if not m.bone in data.attachments.dict:
@@ -931,3 +954,63 @@ static func check_mapping( mapping, data ):
 
 static func load_mapping( p ):
 	return validate_mapping( load_json( p ) )
+
+### MIXED ###
+
+static func attach_node( model, mapping, node ):
+	
+	if not model.success or not mapping.success:
+		return
+	
+	if mapping.content.attachment_bone == null:
+		rlog( mapping, ReVA_WARNING, "no attachment_bone in mapping" )
+		return
+	
+	if node.get_parent() != null:
+		node.get_parent().remove_child( node )
+	model.node.get_node( ReVA_BONEATTACHMENT_PREFIX + mapping.content.attachment_bone ).add_child( node )
+
+static func minmax( bounds, v ):
+	var vmin = bounds[0]
+	var vmax = bounds[1]
+	if vmin == null or vmax == null:
+		vmin = v
+		vmax = v
+	else:
+		if vmin.x > v.x:
+			vmin.x = v.x
+		if vmin.y > v.y:
+			vmin.y = v.y
+		if vmin.z > v.z:
+			vmin.z = v.z
+		if vmax.x < v.x:
+			vmax.x = v.x
+		if vmax.y < v.y:
+			vmax.y = v.y
+		if vmax.z < v.z:
+			vmax.z = v.z
+	return [vmin,vmax]
+
+static func autocalibrate( model, calibration, animation, timestamp = 0 ):
+	
+	if not model.success or not calibration.success or not animation.success:
+		return
+	
+	# getting the first animation frame
+	var reff = animation_frame( animation, timestamp )
+	
+	# computing aabb for model & frame timestamp
+	var aabb = [null,null]
+	for c in model.face_bones:
+		var p = c.global_transform.origin
+		aabb = minmax( aabb, p )
+	var m_aabb = AABB( aabb[0] + (aabb[1] - aabb[0])*0.5, aabb[1] - aabb[0] )
+	
+	aabb = [null,null]
+	for i in range( animation.content.point_count ):
+		var p = reff.points[i]
+		aabb = minmax( aabb, p )
+	var f_aabb = AABB( aabb[0] + (aabb[1] - aabb[0])*0.5, aabb[1] - aabb[0] )
+	
+	print( "model: ", m_aabb )
+	print( "frame: ", f_aabb )

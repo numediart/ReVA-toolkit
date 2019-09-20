@@ -88,10 +88,14 @@ func _ready():
 	ReVA.check_mapping( mapping, animation )
 	ReVA.check_mapping( mapping, model )
 	
+	ReVA.attach_node( model, mapping, mask )
+	mask.translation = Vector3()
+	
+	ReVA.autocalibrate( model, calibration, animation, 0 )
+	
 func _process(delta):
 	
-	#print( elapsed_time )
-	elapsed_time += delta
+	#elapsed_time += delta
 	var frame = ReVA.animation_frame( animation, elapsed_time * anim_speed )
 	if frame != null:
 		if apply_pose_euler:
@@ -173,6 +177,9 @@ func group_config_load( g ):
 	$ui/calib_panel/scale_panel/scalex.value = g.correction.scale.x
 	$ui/calib_panel/scale_panel/scaley.value = g.correction.scale.y
 	$ui/calib_panel/scale_panel/scalez.value = g.correction.scale.z
+	$ui/calib_panel/scale_panel/scalex.step = 0.0001
+	$ui/calib_panel/scale_panel/scaley.step = 0.0001
+	$ui/calib_panel/scale_panel/scalez.step = 0.0001
 	# if symmetry
 	if 'symmetry' in g:
 		$ui/calib_panel/sym_panel/rot_symx.pressed = g.symmetry.rotation.x == -1

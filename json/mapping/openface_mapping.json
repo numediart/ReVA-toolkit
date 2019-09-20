@@ -2,6 +2,7 @@
 	"type" : "ReVA_mapping",
 	"version" : 1,
 	"display_name": "Openface standard mapping",
+	"attachment_bone" : "nose_tip",
 	"maps": [
 		{
 			"bone": "neck01",
