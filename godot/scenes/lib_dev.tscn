@@ -270,6 +270,7 @@ __meta__ = {
 }
 
 [node name="rot_panel" type="Node2D" parent="ui/calib_panel"]
+visible = false
 position = Vector2( 0, 287 )
 
 [node name="lbl" type="Label" parent="ui/calib_panel/rot_panel"]
@@ -438,7 +439,6 @@ __meta__ = {
 }
 
 [node name="scale_panel" type="Node2D" parent="ui/calib_panel"]
-visible = false
 position = Vector2( 0, 287 )
 
 [node name="scale" type="Label" parent="ui/calib_panel/scale_panel"]
@@ -460,6 +460,7 @@ theme = ExtResource( 2 )
 min_value = 0.001
 max_value = 5.0
 step = 0.01
+value = 0.001
 allow_greater = true
 allow_lesser = true
 __meta__ = {
@@ -485,6 +486,7 @@ theme = ExtResource( 2 )
 min_value = 0.001
 max_value = 5.0
 step = 0.01
+value = 0.001
 allow_greater = true
 allow_lesser = true
 __meta__ = {
@@ -510,6 +512,7 @@ theme = ExtResource( 2 )
 min_value = 0.001
 max_value = 5.0
 step = 0.01
+value = 0.001
 allow_greater = true
 allow_lesser = true
 __meta__ = {

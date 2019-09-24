@@ -1,0 +1,1240 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://scripts/ui/calibration_panel.gd" type="Script" id=1]
+[ext_resource path="res://textures/svg/icon_save.svg" type="Texture" id=2]
+[ext_resource path="res://textures/svg/icon_load.svg" type="Texture" id=3]
+[ext_resource path="res://textures/svg/icon_loop.svg" type="Texture" id=4]
+[ext_resource path="res://themes/osi.theme" type="Theme" id=5]
+[ext_resource path="res://textures/svg/icon_new.svg" type="Texture" id=6]
+[ext_resource path="res://textures/svg/icon_save_as.svg" type="Texture" id=7]
+[ext_resource path="res://textures/svg/icon_GUI_tree_arrow_right.svg" type="Texture" id=8]
+[ext_resource path="res://scripts/ui/all_panels.gd" type="Script" id=9]
+[ext_resource path="res://textures/svg/icon_edit.svg" type="Texture" id=10]
+[ext_resource path="res://textures/svg/icon_duplicate.svg" type="Texture" id=11]
+[ext_resource path="res://textures/svg/icon_status_error.svg" type="Texture" id=12]
+[ext_resource path="res://textures/svg/icon_close.svg" type="Texture" id=13]
+
+[sub_resource type="StyleBoxFlat" id=1]
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 0.0
+content_margin_right = 4.0
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 0.7 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 6.0
+content_margin_right = 6.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+draw_center = false
+
+[node name="panels" type="VBoxContainer"]
+margin_right = 335.0
+margin_bottom = 1572.0
+size_flags_horizontal = 3
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="calibration" type="VBoxContainer" parent="."]
+margin_right = 335.0
+margin_bottom = 1023.0
+theme = ExtResource( 5 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title" type="PanelContainer" parent="calibration"]
+margin_right = 335.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+custom_styles/panel = SubResource( 1 )
+
+[node name="bg" type="Panel" parent="calibration/title"]
+margin_right = 335.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+
+[node name="wrapper" type="PanelContainer" parent="calibration/title"]
+margin_right = 335.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+custom_styles/panel = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cols" type="HBoxContainer" parent="calibration/title/wrapper"]
+margin_right = 331.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title" type="Button" parent="calibration/title/wrapper/cols"]
+margin_right = 231.0
+margin_bottom = 31.0
+hint_tooltip = "display calibration panel"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "calibration"
+icon = ExtResource( 8 )
+align = 0
+
+[node name="load" type="TextureButton" parent="calibration/title/wrapper/cols"]
+margin_left = 235.0
+margin_top = 7.0
+margin_right = 251.0
+margin_bottom = 23.0
+hint_tooltip = "load a calibration"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="reset" type="TextureButton" parent="calibration/title/wrapper/cols"]
+margin_left = 255.0
+margin_top = 7.0
+margin_right = 271.0
+margin_bottom = 23.0
+hint_tooltip = "reset current calibration"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="save" type="TextureButton" parent="calibration/title/wrapper/cols"]
+margin_left = 275.0
+margin_top = 7.0
+margin_right = 291.0
+margin_bottom = 23.0
+hint_tooltip = "save current calibration"
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="saveas" type="TextureButton" parent="calibration/title/wrapper/cols"]
+margin_left = 295.0
+margin_top = 7.0
+margin_right = 311.0
+margin_bottom = 23.0
+hint_tooltip = "save current calibration as a new file"
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="new" type="TextureButton" parent="calibration/title/wrapper/cols"]
+margin_left = 315.0
+margin_top = 7.0
+margin_right = 331.0
+margin_bottom = 23.0
+hint_tooltip = "create new group"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="info" type="VBoxContainer" parent="calibration"]
+margin_top = 35.0
+margin_right = 335.0
+margin_bottom = 101.0
+theme = ExtResource( 5 )
+
+[node name="path" type="Label" parent="calibration/info"]
+margin_right = 335.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "calibration.json"
+max_lines_visible = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="info" type="Label" parent="calibration/info"]
+margin_top = 35.0
+margin_right = 335.0
+margin_bottom = 66.0
+theme = ExtResource( 5 )
+text = "info"
+max_lines_visible = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="calib" type="GridContainer" parent="calibration"]
+margin_top = 105.0
+margin_right = 335.0
+margin_bottom = 175.0
+columns = 2
+
+[node name="name" type="Label" parent="calibration/calib"]
+margin_right = 54.0
+margin_bottom = 31.0
+size_flags_vertical = 0
+size_flags_stretch_ratio = 0.0
+text = "name"
+
+[node name="cname" type="TextEdit" parent="calibration/calib"]
+margin_left = 58.0
+margin_right = 335.0
+margin_bottom = 35.0
+rect_min_size = Vector2( 0, 35 )
+hint_tooltip = "name of current calibration"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "calibration display name"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbl" type="Label" parent="calibration/calib"]
+margin_top = 39.0
+margin_right = 54.0
+margin_bottom = 70.0
+size_flags_vertical = 0
+theme = ExtResource( 5 )
+text = "groups"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="wrapper" type="HBoxContainer" parent="calibration/calib"]
+margin_left = 58.0
+margin_top = 39.0
+margin_right = 335.0
+margin_bottom = 70.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+
+[node name="groups" type="OptionButton" parent="calibration/calib/wrapper"]
+margin_right = 197.0
+margin_bottom = 31.0
+hint_tooltip = "select a group"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "groups"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="reset" type="TextureButton" parent="calibration/calib/wrapper"]
+margin_left = 201.0
+margin_top = 7.0
+margin_right = 217.0
+margin_bottom = 23.0
+hint_tooltip = "reset current group"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="edit" type="TextureButton" parent="calibration/calib/wrapper"]
+margin_left = 221.0
+margin_top = 7.0
+margin_right = 237.0
+margin_bottom = 23.0
+hint_tooltip = "edit current group"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="duplicate" type="TextureButton" parent="calibration/calib/wrapper"]
+margin_left = 241.0
+margin_top = 7.0
+margin_right = 257.0
+margin_bottom = 23.0
+hint_tooltip = "duplicate current group"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="new" type="TextureButton" parent="calibration/calib/wrapper"]
+margin_left = 261.0
+margin_top = 7.0
+margin_right = 277.0
+margin_bottom = 23.0
+hint_tooltip = "create new group"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="correction" type="PanelContainer" parent="calibration"]
+margin_top = 179.0
+margin_right = 335.0
+margin_bottom = 766.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 5 )
+custom_styles/panel = SubResource( 3 )
+
+[node name="bg" type="Panel" parent="calibration/correction"]
+margin_right = 335.0
+margin_bottom = 587.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+custom_styles/panel = SubResource( 4 )
+
+[node name="wrapper" type="PanelContainer" parent="calibration/correction"]
+margin_right = 335.0
+margin_bottom = 587.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+custom_styles/panel = SubResource( 5 )
+
+[node name="values" type="VBoxContainer" parent="calibration/correction/wrapper"]
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 329.0
+margin_bottom = 583.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 5 )
+
+[node name="name" type="Label" parent="calibration/correction/wrapper/values"]
+margin_right = 323.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "group name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rot_panel" type="VBoxContainer" parent="calibration/correction/wrapper/values"]
+margin_top = 35.0
+margin_right = 323.0
+margin_bottom = 171.0
+size_flags_horizontal = 3
+
+[node name="title" type="HBoxContainer" parent="calibration/correction/wrapper/values/rot_panel"]
+margin_right = 323.0
+margin_bottom = 31.0
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/rot_panel/title"]
+margin_right = 303.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "rotation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="b_reset" type="TextureButton" parent="calibration/correction/wrapper/values/rot_panel/title"]
+margin_left = 307.0
+margin_top = 7.0
+margin_right = 323.0
+margin_bottom = 23.0
+hint_tooltip = "reset rotation correction"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="xaxis" type="HBoxContainer" parent="calibration/correction/wrapper/values/rot_panel"]
+margin_top = 35.0
+margin_right = 323.0
+margin_bottom = 66.0
+hint_tooltip = "rotation X"
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/rot_panel/xaxis"]
+margin_right = 18.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "X"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="SpinBox" parent="calibration/correction/wrapper/values/rot_panel/xaxis"]
+margin_left = 22.0
+margin_right = 323.0
+margin_bottom = 31.0
+hint_tooltip = "rotation correction on X axis"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+min_value = -180.0
+max_value = 180.0
+step = 0.05
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="yaxis" type="HBoxContainer" parent="calibration/correction/wrapper/values/rot_panel"]
+margin_top = 70.0
+margin_right = 323.0
+margin_bottom = 101.0
+hint_tooltip = "rotation Y"
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/rot_panel/yaxis"]
+margin_right = 18.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "Y"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="SpinBox" parent="calibration/correction/wrapper/values/rot_panel/yaxis"]
+margin_left = 22.0
+margin_right = 323.0
+margin_bottom = 31.0
+rect_pivot_offset = Vector2( 1182, 324 )
+hint_tooltip = "rotation correction on Y axis"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+min_value = -180.0
+max_value = 180.0
+step = 0.05
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="zaxis" type="HBoxContainer" parent="calibration/correction/wrapper/values/rot_panel"]
+margin_top = 105.0
+margin_right = 323.0
+margin_bottom = 136.0
+hint_tooltip = "rotation Z"
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/rot_panel/zaxis"]
+margin_right = 17.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "Z"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="SpinBox" parent="calibration/correction/wrapper/values/rot_panel/zaxis"]
+margin_left = 21.0
+margin_right = 323.0
+margin_bottom = 31.0
+hint_tooltip = "rotation correction on Z axis"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+min_value = -180.0
+max_value = 180.0
+step = 0.05
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="trans_panel" type="VBoxContainer" parent="calibration/correction/wrapper/values"]
+margin_top = 175.0
+margin_right = 323.0
+margin_bottom = 311.0
+size_flags_horizontal = 3
+
+[node name="title" type="HBoxContainer" parent="calibration/correction/wrapper/values/trans_panel"]
+margin_right = 323.0
+margin_bottom = 31.0
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/trans_panel/title"]
+margin_right = 303.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "translation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="b_reset" type="TextureButton" parent="calibration/correction/wrapper/values/trans_panel/title"]
+margin_left = 307.0
+margin_top = 7.0
+margin_right = 323.0
+margin_bottom = 23.0
+hint_tooltip = "reset translation correction"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="xaxis" type="HBoxContainer" parent="calibration/correction/wrapper/values/trans_panel"]
+margin_top = 35.0
+margin_right = 323.0
+margin_bottom = 66.0
+hint_tooltip = "rotation X"
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/trans_panel/xaxis"]
+margin_right = 18.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "X"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="SpinBox" parent="calibration/correction/wrapper/values/trans_panel/xaxis"]
+margin_left = 22.0
+margin_right = 323.0
+margin_bottom = 31.0
+hint_tooltip = "translation correction on X axis"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+min_value = -200.0
+max_value = 200.0
+step = 0.01
+allow_greater = true
+allow_lesser = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="yaxis" type="HBoxContainer" parent="calibration/correction/wrapper/values/trans_panel"]
+margin_top = 70.0
+margin_right = 323.0
+margin_bottom = 101.0
+hint_tooltip = "rotation Y"
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/trans_panel/yaxis"]
+margin_right = 18.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "Y"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="SpinBox" parent="calibration/correction/wrapper/values/trans_panel/yaxis"]
+margin_left = 22.0
+margin_right = 323.0
+margin_bottom = 31.0
+hint_tooltip = "translation correction on Y axis"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+min_value = -200.0
+max_value = 200.0
+step = 0.01
+allow_greater = true
+allow_lesser = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="zaxis" type="HBoxContainer" parent="calibration/correction/wrapper/values/trans_panel"]
+margin_top = 105.0
+margin_right = 323.0
+margin_bottom = 136.0
+hint_tooltip = "rotation Z"
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/trans_panel/zaxis"]
+margin_right = 17.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "Z"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="SpinBox" parent="calibration/correction/wrapper/values/trans_panel/zaxis"]
+margin_left = 21.0
+margin_right = 323.0
+margin_bottom = 31.0
+hint_tooltip = "translation correction on Z axis"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+min_value = -200.0
+max_value = 200.0
+step = 0.01
+allow_greater = true
+allow_lesser = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scale_panel" type="VBoxContainer" parent="calibration/correction/wrapper/values"]
+margin_top = 315.0
+margin_right = 323.0
+margin_bottom = 451.0
+size_flags_horizontal = 3
+
+[node name="title" type="HBoxContainer" parent="calibration/correction/wrapper/values/scale_panel"]
+margin_right = 323.0
+margin_bottom = 31.0
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/scale_panel/title"]
+margin_right = 303.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "scale"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="b_reset" type="TextureButton" parent="calibration/correction/wrapper/values/scale_panel/title"]
+margin_left = 307.0
+margin_top = 7.0
+margin_right = 323.0
+margin_bottom = 23.0
+hint_tooltip = "reset scale correction"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="xaxis" type="HBoxContainer" parent="calibration/correction/wrapper/values/scale_panel"]
+margin_top = 35.0
+margin_right = 323.0
+margin_bottom = 66.0
+hint_tooltip = "rotation X"
+size_flags_horizontal = 3
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/scale_panel/xaxis"]
+margin_right = 18.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "X"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="SpinBox" parent="calibration/correction/wrapper/values/scale_panel/xaxis"]
+margin_left = 22.0
+margin_right = 323.0
+margin_bottom = 31.0
+hint_tooltip = "scale correction on X axis"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+min_value = 0.001
+max_value = 5.0
+step = 0.001
+value = 1.0
+allow_greater = true
+allow_lesser = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="yaxis" type="HBoxContainer" parent="calibration/correction/wrapper/values/scale_panel"]
+margin_top = 70.0
+margin_right = 323.0
+margin_bottom = 101.0
+hint_tooltip = "rotation Y"
+size_flags_horizontal = 3
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/scale_panel/yaxis"]
+margin_right = 18.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "Y"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="SpinBox" parent="calibration/correction/wrapper/values/scale_panel/yaxis"]
+margin_left = 22.0
+margin_right = 323.0
+margin_bottom = 31.0
+hint_tooltip = "scale correction on Y axis"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+min_value = 0.001
+max_value = 5.0
+step = 0.01
+value = 1.0
+allow_greater = true
+allow_lesser = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="zaxis" type="HBoxContainer" parent="calibration/correction/wrapper/values/scale_panel"]
+margin_top = 105.0
+margin_right = 323.0
+margin_bottom = 136.0
+hint_tooltip = "rotation Z"
+size_flags_horizontal = 3
+
+[node name="lbl" type="Label" parent="calibration/correction/wrapper/values/scale_panel/zaxis"]
+margin_right = 17.0
+margin_bottom = 31.0
+theme = ExtResource( 5 )
+text = "Z"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="SpinBox" parent="calibration/correction/wrapper/values/scale_panel/zaxis"]
+margin_left = 21.0
+margin_right = 323.0
+margin_bottom = 31.0
+hint_tooltip = "scale correction on Z axis"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+min_value = 0.001
+max_value = 5.0
+step = 0.001
+value = 1.0
+allow_greater = true
+allow_lesser = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="symetry_panel" type="VBoxContainer" parent="calibration/correction/wrapper/values"]
+margin_top = 455.0
+margin_right = 323.0
+margin_bottom = 579.0
+
+[node name="title" type="HBoxContainer" parent="calibration/correction/wrapper/values/symetry_panel"]
+margin_right = 323.0
+margin_bottom = 31.0
+
+[node name="symmetry" type="Label" parent="calibration/correction/wrapper/values/symetry_panel/title"]
+margin_right = 303.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "symmetry"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="b_reset" type="TextureButton" parent="calibration/correction/wrapper/values/symetry_panel/title"]
+margin_left = 307.0
+margin_top = 7.0
+margin_right = 323.0
+margin_bottom = 23.0
+hint_tooltip = "reset symmetry axis"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="vgrid" type="GridContainer" parent="calibration/correction/wrapper/values/symetry_panel"]
+margin_top = 35.0
+margin_right = 323.0
+margin_bottom = 124.0
+theme = ExtResource( 5 )
+custom_constants/vseparation = -2
+columns = 4
+
+[node name="rl" type="Label" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_right = 198.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "rotation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rx" type="CheckBox" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_left = 202.0
+margin_right = 240.0
+margin_bottom = 31.0
+hint_tooltip = "enable X rotation symmetry"
+focus_mode = 0
+theme = ExtResource( 5 )
+enabled_focus_mode = 0
+text = "X"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ry" type="CheckBox" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_left = 244.0
+margin_right = 282.0
+margin_bottom = 31.0
+hint_tooltip = "enable Y rotation symmetry"
+focus_mode = 0
+theme = ExtResource( 5 )
+enabled_focus_mode = 0
+text = "Y"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rz" type="CheckBox" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_left = 286.0
+margin_right = 323.0
+margin_bottom = 31.0
+hint_tooltip = "enable Z rotation symmetry"
+focus_mode = 0
+theme = ExtResource( 5 )
+enabled_focus_mode = 0
+text = "Z"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="tl" type="Label" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_top = 29.0
+margin_right = 198.0
+margin_bottom = 60.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "translation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="tx" type="CheckBox" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_left = 202.0
+margin_top = 29.0
+margin_right = 240.0
+margin_bottom = 60.0
+hint_tooltip = "enable X translation symmetry"
+focus_mode = 0
+theme = ExtResource( 5 )
+enabled_focus_mode = 0
+text = "X"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ty" type="CheckBox" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_left = 244.0
+margin_top = 29.0
+margin_right = 282.0
+margin_bottom = 60.0
+hint_tooltip = "enable Y translation symmetry"
+focus_mode = 0
+theme = ExtResource( 5 )
+enabled_focus_mode = 0
+text = "Y"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="tz" type="CheckBox" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_left = 286.0
+margin_top = 29.0
+margin_right = 323.0
+margin_bottom = 60.0
+hint_tooltip = "enable Z translation symmetry"
+focus_mode = 0
+theme = ExtResource( 5 )
+enabled_focus_mode = 0
+text = "Z"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sl" type="Label" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_top = 58.0
+margin_right = 198.0
+margin_bottom = 89.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "scale"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sx" type="CheckBox" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_left = 202.0
+margin_top = 58.0
+margin_right = 240.0
+margin_bottom = 89.0
+hint_tooltip = "enable X scale symmetry"
+focus_mode = 0
+theme = ExtResource( 5 )
+enabled_focus_mode = 0
+text = "X"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sy" type="CheckBox" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_left = 244.0
+margin_top = 58.0
+margin_right = 282.0
+margin_bottom = 89.0
+hint_tooltip = "enable Y scale symmetry"
+focus_mode = 0
+theme = ExtResource( 5 )
+enabled_focus_mode = 0
+text = "Y"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sz" type="CheckBox" parent="calibration/correction/wrapper/values/symetry_panel/vgrid"]
+margin_left = 286.0
+margin_top = 58.0
+margin_right = 323.0
+margin_bottom = 89.0
+hint_tooltip = "enable Z scale symmetry"
+focus_mode = 0
+theme = ExtResource( 5 )
+enabled_focus_mode = 0
+text = "Z"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="edit" type="PanelContainer" parent="calibration"]
+margin_top = 770.0
+margin_right = 335.0
+margin_bottom = 1023.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 5 )
+custom_styles/panel = SubResource( 3 )
+
+[node name="bg" type="Panel" parent="calibration/edit"]
+margin_right = 335.0
+margin_bottom = 253.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+custom_styles/panel = SubResource( 4 )
+
+[node name="wrapper" type="PanelContainer" parent="calibration/edit"]
+margin_right = 335.0
+margin_bottom = 253.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+custom_styles/panel = SubResource( 5 )
+
+[node name="values" type="VBoxContainer" parent="calibration/edit/wrapper"]
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 329.0
+margin_bottom = 249.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 5 )
+
+[node name="buttons" type="HBoxContainer" parent="calibration/edit/wrapper/values"]
+margin_right = 323.0
+margin_bottom = 31.0
+
+[node name="pusher" type="Label" parent="calibration/edit/wrapper/values/buttons"]
+margin_right = 283.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="delete" type="TextureButton" parent="calibration/edit/wrapper/values/buttons"]
+margin_left = 287.0
+margin_top = 7.0
+margin_right = 303.0
+margin_bottom = 23.0
+hint_tooltip = "reset current group"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="close" type="TextureButton" parent="calibration/edit/wrapper/values/buttons"]
+margin_left = 307.0
+margin_top = 7.0
+margin_right = 323.0
+margin_bottom = 23.0
+hint_tooltip = "reset current group"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="vgrid" type="GridContainer" parent="calibration/edit/wrapper/values"]
+margin_top = 35.0
+margin_right = 323.0
+margin_bottom = 245.0
+columns = 2
+
+[node name="l_name" type="Label" parent="calibration/edit/wrapper/values/vgrid"]
+margin_top = 2.0
+margin_right = 55.0
+margin_bottom = 33.0
+theme = ExtResource( 5 )
+text = "name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="name" type="TextEdit" parent="calibration/edit/wrapper/values/vgrid"]
+margin_left = 59.0
+margin_right = 323.0
+margin_bottom = 35.0
+rect_min_size = Vector2( 0, 35 )
+hint_tooltip = "name of current calibration"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "group display name"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="l_parent" type="Label" parent="calibration/edit/wrapper/values/vgrid"]
+margin_top = 39.0
+margin_right = 55.0
+margin_bottom = 70.0
+theme = ExtResource( 5 )
+text = "parent"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="parent" type="OptionButton" parent="calibration/edit/wrapper/values/vgrid"]
+margin_left = 59.0
+margin_top = 39.0
+margin_right = 323.0
+margin_bottom = 70.0
+hint_tooltip = "select a group"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "parent"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="l_type" type="Label" parent="calibration/edit/wrapper/values/vgrid"]
+margin_top = 74.0
+margin_right = 55.0
+margin_bottom = 105.0
+theme = ExtResource( 5 )
+text = "type"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="type" type="OptionButton" parent="calibration/edit/wrapper/values/vgrid"]
+margin_left = 59.0
+margin_top = 74.0
+margin_right = 323.0
+margin_bottom = 105.0
+hint_tooltip = "select a group"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "type"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="l_simple" type="Label" parent="calibration/edit/wrapper/values/vgrid"]
+margin_top = 109.0
+margin_right = 55.0
+margin_bottom = 140.0
+theme = ExtResource( 5 )
+text = "points"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="simple" type="HBoxContainer" parent="calibration/edit/wrapper/values/vgrid"]
+margin_left = 59.0
+margin_top = 109.0
+margin_right = 323.0
+margin_bottom = 140.0
+
+[node name="info" type="Label" parent="calibration/edit/wrapper/values/vgrid/simple"]
+margin_right = 244.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "0 points"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="edit" type="TextureButton" parent="calibration/edit/wrapper/values/vgrid/simple"]
+margin_left = 248.0
+margin_top = 7.0
+margin_right = 264.0
+margin_bottom = 23.0
+hint_tooltip = "edit current group"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="l_sym0" type="Label" parent="calibration/edit/wrapper/values/vgrid"]
+margin_top = 144.0
+margin_right = 55.0
+margin_bottom = 175.0
+theme = ExtResource( 5 )
+text = "sub #1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sym0" type="HBoxContainer" parent="calibration/edit/wrapper/values/vgrid"]
+margin_left = 59.0
+margin_top = 144.0
+margin_right = 323.0
+margin_bottom = 175.0
+
+[node name="info" type="Label" parent="calibration/edit/wrapper/values/vgrid/sym0"]
+margin_right = 244.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "0 points"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="edit" type="TextureButton" parent="calibration/edit/wrapper/values/vgrid/sym0"]
+margin_left = 248.0
+margin_top = 7.0
+margin_right = 264.0
+margin_bottom = 23.0
+hint_tooltip = "edit current group"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="l_sym1" type="Label" parent="calibration/edit/wrapper/values/vgrid"]
+margin_top = 179.0
+margin_right = 55.0
+margin_bottom = 210.0
+theme = ExtResource( 5 )
+text = "sub #2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sym1" type="HBoxContainer" parent="calibration/edit/wrapper/values/vgrid"]
+margin_left = 59.0
+margin_top = 179.0
+margin_right = 323.0
+margin_bottom = 210.0
+
+[node name="info" type="Label" parent="calibration/edit/wrapper/values/vgrid/sym1"]
+margin_right = 244.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "0 points"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="edit" type="TextureButton" parent="calibration/edit/wrapper/values/vgrid/sym1"]
+margin_left = 248.0
+margin_top = 7.0
+margin_right = 264.0
+margin_bottom = 23.0
+hint_tooltip = "edit current group"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="calibration/title/wrapper/cols/title" to="calibration" method="_on_title_pressed"]
+[connection signal="pressed" from="calibration/title/wrapper/cols/load" to="." method="_on_calib_load"]
+[connection signal="pressed" from="calibration/title/wrapper/cols/reset" to="." method="_on_calib_reset"]
+[connection signal="pressed" from="calibration/title/wrapper/cols/save" to="." method="_on_calib_save"]
+[connection signal="pressed" from="calibration/title/wrapper/cols/saveas" to="." method="_on_calib_save_as"]
+[connection signal="pressed" from="calibration/title/wrapper/cols/new" to="." method="_on_calib_new"]
+[connection signal="text_changed" from="calibration/calib/cname" to="." method="_on_calib_name"]
+[connection signal="item_selected" from="calibration/calib/wrapper/groups" to="calibration" method="_on_groups_selected"]
+[connection signal="item_selected" from="calibration/calib/wrapper/groups" to="." method="_on_groups_selected"]
+[connection signal="pressed" from="calibration/calib/wrapper/reset" to="." method="_on_group_reset"]
+[connection signal="pressed" from="calibration/calib/wrapper/edit" to="calibration" method="_on_group_edit"]
+[connection signal="pressed" from="calibration/calib/wrapper/duplicate" to="." method="_on_group_duplicate"]
+[connection signal="pressed" from="calibration/calib/wrapper/new" to="." method="_on_group_new"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/rot_panel/title/b_reset" to="." method="_on_group_rot_reset"]
+[connection signal="value_changed" from="calibration/correction/wrapper/values/rot_panel/xaxis/value" to="." method="_on_group_rotx"]
+[connection signal="value_changed" from="calibration/correction/wrapper/values/rot_panel/yaxis/value" to="." method="_on_group_roty"]
+[connection signal="value_changed" from="calibration/correction/wrapper/values/rot_panel/zaxis/value" to="." method="_on_group_rotz"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/trans_panel/title/b_reset" to="." method="_on_group_trans_reset"]
+[connection signal="value_changed" from="calibration/correction/wrapper/values/trans_panel/xaxis/value" to="." method="_on_group_transx"]
+[connection signal="value_changed" from="calibration/correction/wrapper/values/trans_panel/yaxis/value" to="." method="_on_group_transy"]
+[connection signal="value_changed" from="calibration/correction/wrapper/values/trans_panel/zaxis/value" to="." method="_on_group_transz"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/scale_panel/title/b_reset" to="." method="_on_group_scale_reset"]
+[connection signal="value_changed" from="calibration/correction/wrapper/values/scale_panel/xaxis/value" to="." method="_on_group_scalex"]
+[connection signal="value_changed" from="calibration/correction/wrapper/values/scale_panel/yaxis/value" to="." method="_on_group_scaley"]
+[connection signal="value_changed" from="calibration/correction/wrapper/values/scale_panel/zaxis/value" to="." method="_on_group_scalez"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/title/b_reset" to="." method="_on_group_sym_reset"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/rx" to="." method="_on_group_sym_rx"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/ry" to="." method="_on_group_sym_ry"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/rz" to="." method="_on_group_sym_rz"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/tx" to="." method="_on_group_sym_tx"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/ty" to="." method="_on_group_sym_ty"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/tz" to="." method="_on_group_sym_tz"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sx" to="." method="_on_group_sym_sx"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sy" to="." method="_on_group_sym_sy"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sz" to="." method="_on_group_sym_sz"]
+[connection signal="pressed" from="calibration/edit/wrapper/values/buttons/delete" to="." method="_on_group_reset"]
+[connection signal="pressed" from="calibration/edit/wrapper/values/buttons/close" to="calibration" method="_on_edit_close"]

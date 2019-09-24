@@ -1,0 +1,88 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://panels/leftcol.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/tmp/root_panel.gd" type="Script" id=2]
+
+[sub_resource type="CubeMesh" id=1]
+size = Vector3( 0.02, 0.02, 0.02 )
+
+[sub_resource type="SpatialMaterial" id=2]
+flags_unshaded = true
+albedo_color = Color( 1, 0, 1, 1 )
+
+[sub_resource type="SphereMesh" id=3]
+radius = 0.006
+height = 0.012
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SpatialMaterial" id=4]
+flags_unshaded = true
+albedo_color = Color( 1, 1, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=5]
+flags_unshaded = true
+
+[sub_resource type="SpatialMaterial" id=6]
+flags_unshaded = true
+albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="CubeMesh" id=7]
+size = Vector3( 1, 1, 1 )
+
+[sub_resource type="SpatialMaterial" id=8]
+flags_unshaded = true
+albedo_color = Color( 0, 1, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=9]
+flags_unshaded = true
+albedo_color = Color( 0, 0, 1, 1 )
+
+[node name="root" type="Spatial"]
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 563.381 ],
+"_edit_vertical_guides_": [ 201.0, 20.0 ]
+}
+
+[node name="cam" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.91702, 8.22759 )
+fov = 35.0
+far = 100000.0
+
+[node name="mask" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )
+
+[node name="pt" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
+
+[node name="group_viz" type="ImmediateGeometry" parent="."]
+visible = false
+material_override = SubResource( 5 )
+
+[node name="axis" type="Spatial" parent="."]
+visible = false
+
+[node name="x" type="MeshInstance" parent="axis"]
+transform = Transform( 5, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 2.5, 0, 0 )
+material_override = SubResource( 6 )
+mesh = SubResource( 7 )
+material/0 = null
+
+[node name="y" type="MeshInstance" parent="axis"]
+transform = Transform( 0.01, 0, 0, 0, 5, 0, 0, 0, 0.01, 0, 2.5, 0 )
+material_override = SubResource( 8 )
+mesh = SubResource( 7 )
+material/0 = null
+
+[node name="z" type="MeshInstance" parent="axis"]
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 5, 0, 0, 2.5 )
+material_override = SubResource( 9 )
+mesh = SubResource( 7 )
+material/0 = null
+
+[node name="panels" parent="." instance=ExtResource( 1 )]

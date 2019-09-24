@@ -955,6 +955,40 @@ static func check_mapping( mapping, data ):
 static func load_mapping( p ):
 	return validate_mapping( load_json( p ) )
 
+static func apply_mapping( mapping, data ):
+	
+	if not mapping.success:
+		rlog( mapping, ReVA_INFO, "mapping is not successfully loaded" )
+		return
+	
+	if not mapping.type == ReVA_TYPE_MAPP:
+		rlog( mapping, ReVA_INFO, "mapping must be of type " + ReVA_TYPE_MAPP )
+		return
+	
+	if not 'success' in data or not 'type' in data or not data.success:
+		rlog( mapping, ReVA_INFO, "invalid data" )
+		return
+	
+	if data.type == ReVA_TYPE_MODEL:
+		
+		for map in mapping.content.maps:
+			
+			var ab = data.node.get_node( ReVA_BONEATTACHMENT_PREFIX + map.bone )
+			if ab == null:
+				rlog( mapping, ReVA_INFO, "no AttachmentBone named " + ReVA_BONEATTACHMENT_PREFIX + map.bone + " in " + data.path )
+				continue
+			ab.lookat_enabled = map.constraint.lookat_enabled
+			ab.rot_enabled = map.constraint.rot_enabled
+			ab.rot_lock_x = map.constraint.rot_lock[0]
+			ab.rot_lock_y = map.constraint.rot_lock[1]
+			ab.rot_lock_z = map.constraint.rot_lock[2]
+			ab.rot_mult = map.constraint.rot_mult
+			ab.trans_enabled = map.constraint.trans_enabled
+			ab.trans_lock_x = map.constraint.trans_lock[0]
+			ab.trans_lock_y = map.constraint.trans_lock[1]
+			ab.trans_lock_z = map.constraint.trans_lock[2]
+			ab.trans_mult = map.constraint.trans_mult
+
 ### MIXED ###
 
 static func attach_node( model, mapping, node ):

@@ -771,6 +771,7 @@ transform = Transform( 1, -1.32349e-23, 0, 1.32349e-23, 1, -1.46937e-39, 0, 1.46
 transform = Transform( 0.368389, 2.47841e-15, 0, 5.99325e-14, 0.368389, 0, -7.2099e-15, 0, 0.368389, -0.419569, 2.15193, 0.932879 )
 visible = false
 script = ExtResource( 11 )
+do_extract = false
 
 [node name="sphere" type="MeshInstance" parent="debug"]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
@@ -1015,6 +1016,11 @@ bones/46/rest = Transform( 0.438548, 0.296915, 0.848243, -0.888597, 0.00207534, 
 bones/46/enabled = true
 bones/46/bound_children = [  ]
 script = ExtResource( 4 )
+debug = false
+reload = false
+update_config = false
+lid_rotX = 0.0
+lip_trans = Vector3( 0, 0, 0 )
 
 [node name="eyebrow" type="MeshInstance" parent="joan"]
 mesh = SubResource( 4 )
@@ -2647,16 +2653,32 @@ lavatar_anchor_bone = "nose_tip"
 anchor_rotation = Vector3( 179.1, 0, 0 )
 anchor_translation = Vector3( -0.02, 0.07, 0.12 )
 anchor_scale = Vector3( 1.48, 1, 1 )
+playhead = 0
 center_offset = false
+center_rotation = true
+reset_correction = false
 brow_rotation = Vector3( -0.06, -0.2, -0.18 )
 brow_translation = Vector3( 0, 0.25, 0.1 )
+brow_scale = Vector3( 1, 1, 1 )
+eye_rotation = Vector3( 0, 0, 0 )
 eye_translation = Vector3( -0.03, 0.03, -0.04 )
 eye_scale = Vector3( 1.39, 3.79, 1 )
 mouth_rotation = Vector3( 0.44, 0, 0 )
 mouth_translation = Vector3( 0, -0.07, 0.06 )
 mouth_scale = Vector3( 0.83, 1.27, 0.2 )
+nose_rotation = Vector3( 0, 0, 0 )
+nose_translation = Vector3( 0, 0, 0 )
+nose_scale = Vector3( 1, 1, 1 )
+nostril_rotation = Vector3( 0, 0, 0 )
+nostril_translation = Vector3( 0, 0, 0 )
+nostril_scale = Vector3( 1, 1, 1 )
 lavatar_config_path = "res://assets/configs/default.json"
+save_config = false
+load_config = false
 ANIMATION_enabled = false
+MAPPING_enabled = true
+POSE_EULER_enabled = true
+OSC_enabled = false
 
 [node name="soundplayer" type="AudioStreamPlayer" parent="json"]
 

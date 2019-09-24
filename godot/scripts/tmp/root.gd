@@ -85,12 +85,16 @@ func _ready():
 		group_dropdown()
 	
 	mapping = ReVA.load_mapping( map_path )
+	# validation of mapping against calibration & model (removal of invalid indices)
 	ReVA.check_mapping( mapping, animation )
 	ReVA.check_mapping( mapping, model )
-	
+	# applying constraints on model
+	ReVA.apply_mapping( mapping, model )
+	# attacing mask to mapping.attachment_bone
 	ReVA.attach_node( model, mapping, mask )
 	mask.translation = Vector3()
 	
+	# not functional
 	ReVA.autocalibrate( model, calibration, animation, 0 )
 	
 func _process(delta):
