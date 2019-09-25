@@ -2,6 +2,19 @@ extends VBoxContainer
 
 const ReVA = preload( "res://scripts/reva/ReVA.gd" )
 
+onready var fields = {
+	'rx': $correction/wrapper/values/symetry_panel/vgrid/rx,
+	'ry': $correction/wrapper/values/symetry_panel/vgrid/ry,
+	'rz': $correction/wrapper/values/symetry_panel/vgrid/rz,
+	'tx': $correction/wrapper/values/symetry_panel/vgrid/tx,
+	'ty': $correction/wrapper/values/symetry_panel/vgrid/ty,
+	'tz': $correction/wrapper/values/symetry_panel/vgrid/tz,
+	'sx': $correction/wrapper/values/symetry_panel/vgrid/sx,
+	'sy': $correction/wrapper/values/symetry_panel/vgrid/sy,
+	'sz': $correction/wrapper/values/symetry_panel/vgrid/sz,
+	'group_name': $edit/wrapper/values/vgrid/name
+}
+
 var closed_icon = preload( "res://textures/svg/icon_GUI_tree_arrow_right.svg" )
 var open_icon = preload( "res://textures/svg/icon_GUI_tree_arrow_down.svg" )
 
@@ -13,7 +26,7 @@ onready var all_panels = get_parent()
 
 func prepare_correction(g):
 	
-	$correction/wrapper/values/id.text = groupid_prefix + str(g.id)
+	$correction/wrapper/values/topbts/id.text = groupid_prefix + str(g.id)
 	$correction/wrapper/values/rot_panel/xaxis/value.value = g.correction.rotation.x * 180 / PI
 	$correction/wrapper/values/rot_panel/yaxis/value.value = g.correction.rotation.y * 180 / PI
 	$correction/wrapper/values/rot_panel/zaxis/value.value = g.correction.rotation.z * 180 / PI
@@ -38,6 +51,7 @@ func prepare_correction(g):
 		$correction/wrapper/values/symetry_panel/vgrid/sz.pressed = g.symmetry.scale.z == -1
 		$correction/wrapper/values/symetry_panel.visible = true
 	else:
+		$correction/wrapper/values/symetry_panel.visible = false
 		$correction/wrapper/values/symetry_panel.visible = false
 
 func prepare_edit(g):
@@ -85,6 +99,10 @@ func prepare_edit(g):
 		$edit/wrapper/values/vgrid/simple/info.text = str(pl) + ' point'
 		if pl > 1:
 			$edit/wrapper/values/vgrid/simple/info.text += 's'
+	
+	$edit/wrapper/values/vgrid/color.text = str(g.color.r) + ', ' + str(g.color.g) + ', ' + str(g.color.b)
+	$edit/wrapper/values/vgrid/color.get_stylebox( 'custom_styles/normal' ).bg_color = Color( g.color.r, g.color.g, g.color.b )
+	#custom_styles/normal
 
 func adjust_visibility():
 	
@@ -107,13 +125,10 @@ func adjust_visibility():
 		
 		if all_panels.groupid == -1:
 			
-			group_icons( false )
 			$correction.visible = false
 			$edit.visible = false
 			
 		else:
-			
-			group_icons( true )
 			
 			var g = all_panels.calibration.content.groups[ all_panels.groupid ]
 			# preventing value changed callbacks
@@ -146,11 +161,6 @@ func adjust_visibility():
 func open_subs( b ):
 	opened = b
 	adjust_visibility()
-
-func group_icons( b ):
-	$calib/wrapper/reset.visible = b
-	$calib/wrapper/edit.visible = b
-	$calib/wrapper/duplicate.visible = b
 
 func group_fullname( g, appendid = true ):
 	var out = ""

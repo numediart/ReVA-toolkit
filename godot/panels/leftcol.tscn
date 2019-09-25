@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://scripts/ui/calibration_panel.gd" type="Script" id=1]
 [ext_resource path="res://textures/svg/icon_save.svg" type="Texture" id=2]
@@ -33,6 +33,13 @@ content_margin_top = 4.0
 content_margin_bottom = 4.0
 draw_center = false
 
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 6.0
+content_margin_right = 6.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 1, 1, 1, 1 )
+
 [node name="panels" type="VBoxContainer"]
 margin_right = 335.0
 margin_bottom = 1572.0
@@ -44,7 +51,7 @@ __meta__ = {
 
 [node name="calibration" type="VBoxContainer" parent="."]
 margin_right = 335.0
-margin_bottom = 1058.0
+margin_bottom = 1097.0
 theme = ExtResource( 5 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -232,55 +239,12 @@ size_flags_horizontal = 3
 theme = ExtResource( 5 )
 
 [node name="groups" type="OptionButton" parent="calibration/calib/wrapper"]
-margin_right = 197.0
+margin_right = 257.0
 margin_bottom = 31.0
 hint_tooltip = "select a group"
 size_flags_horizontal = 3
 theme = ExtResource( 5 )
 text = "groups"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="reset" type="TextureButton" parent="calibration/calib/wrapper"]
-margin_left = 201.0
-margin_top = 7.0
-margin_right = 217.0
-margin_bottom = 23.0
-hint_tooltip = "reset current group"
-focus_next = NodePath("../b_save")
-focus_previous = NodePath("../b_load")
-size_flags_vertical = 4
-theme = ExtResource( 5 )
-texture_normal = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="edit" type="TextureButton" parent="calibration/calib/wrapper"]
-margin_left = 221.0
-margin_top = 7.0
-margin_right = 237.0
-margin_bottom = 23.0
-hint_tooltip = "edit current group"
-focus_next = NodePath("../b_reset")
-size_flags_vertical = 4
-theme = ExtResource( 5 )
-texture_normal = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="duplicate" type="TextureButton" parent="calibration/calib/wrapper"]
-margin_left = 241.0
-margin_top = 7.0
-margin_right = 257.0
-margin_bottom = 23.0
-hint_tooltip = "duplicate current group"
-focus_next = NodePath("../b_reset")
-size_flags_vertical = 4
-theme = ExtResource( 5 )
-texture_normal = ExtResource( 11 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -331,11 +295,59 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 5 )
 
-[node name="id" type="Label" parent="calibration/correction/wrapper/values"]
+[node name="topbts" type="HBoxContainer" parent="calibration/correction/wrapper/values"]
 margin_right = 323.0
 margin_bottom = 31.0
+
+[node name="id" type="Label" parent="calibration/correction/wrapper/values/topbts"]
+margin_right = 263.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
 theme = ExtResource( 5 )
 text = "group ID: -1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="reset" type="TextureButton" parent="calibration/correction/wrapper/values/topbts"]
+margin_left = 267.0
+margin_top = 7.0
+margin_right = 283.0
+margin_bottom = 23.0
+hint_tooltip = "reset current group"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="duplicate" type="TextureButton" parent="calibration/correction/wrapper/values/topbts"]
+margin_left = 287.0
+margin_top = 7.0
+margin_right = 303.0
+margin_bottom = 23.0
+hint_tooltip = "duplicate current group"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="edit" type="TextureButton" parent="calibration/correction/wrapper/values/topbts"]
+margin_left = 307.0
+margin_top = 7.0
+margin_right = 323.0
+margin_bottom = 23.0
+hint_tooltip = "edit current group"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -934,7 +946,7 @@ __meta__ = {
 [node name="edit" type="PanelContainer" parent="calibration"]
 margin_top = 770.0
 margin_right = 335.0
-margin_bottom = 1058.0
+margin_bottom = 1097.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 5 )
@@ -942,14 +954,14 @@ custom_styles/panel = SubResource( 3 )
 
 [node name="bg" type="Panel" parent="calibration/edit"]
 margin_right = 335.0
-margin_bottom = 288.0
+margin_bottom = 327.0
 size_flags_horizontal = 3
 theme = ExtResource( 5 )
 custom_styles/panel = SubResource( 4 )
 
 [node name="wrapper" type="PanelContainer" parent="calibration/edit"]
 margin_right = 335.0
-margin_bottom = 288.0
+margin_bottom = 327.0
 size_flags_horizontal = 3
 theme = ExtResource( 5 )
 custom_styles/panel = SubResource( 5 )
@@ -958,7 +970,7 @@ custom_styles/panel = SubResource( 5 )
 margin_left = 6.0
 margin_top = 4.0
 margin_right = 329.0
-margin_bottom = 284.0
+margin_bottom = 323.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 5 )
@@ -995,7 +1007,7 @@ __meta__ = {
 [node name="vgrid" type="GridContainer" parent="calibration/edit/wrapper/values"]
 margin_top = 35.0
 margin_right = 323.0
-margin_bottom = 245.0
+margin_bottom = 284.0
 columns = 2
 
 [node name="l_name" type="Label" parent="calibration/edit/wrapper/values/vgrid"]
@@ -1098,7 +1110,7 @@ margin_left = 248.0
 margin_top = 7.0
 margin_right = 264.0
 margin_bottom = 23.0
-hint_tooltip = "edit current group"
+hint_tooltip = "edit points"
 focus_next = NodePath("../b_reset")
 size_flags_vertical = 4
 theme = ExtResource( 5 )
@@ -1138,7 +1150,7 @@ margin_left = 248.0
 margin_top = 7.0
 margin_right = 264.0
 margin_bottom = 23.0
-hint_tooltip = "edit current group"
+hint_tooltip = "edit points"
 focus_next = NodePath("../b_reset")
 size_flags_vertical = 4
 theme = ExtResource( 5 )
@@ -1178,7 +1190,7 @@ margin_left = 248.0
 margin_top = 7.0
 margin_right = 264.0
 margin_bottom = 23.0
-hint_tooltip = "edit current group"
+hint_tooltip = "edit points"
 focus_next = NodePath("../b_reset")
 size_flags_vertical = 4
 theme = ExtResource( 5 )
@@ -1187,10 +1199,34 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="bottompts" type="HBoxContainer" parent="calibration/edit/wrapper/values"]
-margin_top = 249.0
+[node name="l_color" type="Label" parent="calibration/edit/wrapper/values/vgrid"]
+margin_top = 216.0
+margin_right = 55.0
+margin_bottom = 247.0
+theme = ExtResource( 5 )
+text = "color"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="color" type="Button" parent="calibration/edit/wrapper/values/vgrid"]
+margin_left = 59.0
+margin_top = 214.0
 margin_right = 323.0
-margin_bottom = 280.0
+margin_bottom = 249.0
+rect_min_size = Vector2( 0, 35 )
+hint_tooltip = "name of current calibration"
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+custom_styles/normal = SubResource( 6 )
+custom_colors/font_color = Color( 0.5, 0.5, 0.5, 1 )
+text = "0,0,0"
+align = 0
+
+[node name="bottompts" type="HBoxContainer" parent="calibration/edit/wrapper/values"]
+margin_top = 288.0
+margin_right = 323.0
+margin_bottom = 319.0
 
 [node name="pusher" type="Label" parent="calibration/edit/wrapper/values/bottompts"]
 margin_right = 247.0
@@ -1221,10 +1257,10 @@ icon = ExtResource( 12 )
 [connection signal="text_changed" from="calibration/calib/cname" to="." method="_on_calib_name"]
 [connection signal="item_selected" from="calibration/calib/wrapper/groups" to="." method="_on_groups_selected"]
 [connection signal="item_selected" from="calibration/calib/wrapper/groups" to="calibration" method="_on_groups_selected"]
-[connection signal="pressed" from="calibration/calib/wrapper/reset" to="." method="_on_group_reset"]
-[connection signal="pressed" from="calibration/calib/wrapper/edit" to="calibration" method="_on_group_edit"]
-[connection signal="pressed" from="calibration/calib/wrapper/duplicate" to="." method="_on_group_duplicate"]
 [connection signal="pressed" from="calibration/calib/wrapper/new" to="." method="_on_group_new"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/topbts/reset" to="." method="_on_group_reset"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/topbts/duplicate" to="." method="_on_group_duplicate"]
+[connection signal="pressed" from="calibration/correction/wrapper/values/topbts/edit" to="calibration" method="_on_group_edit"]
 [connection signal="pressed" from="calibration/correction/wrapper/values/rot_panel/title/b_reset" to="." method="_on_group_rot_reset"]
 [connection signal="value_changed" from="calibration/correction/wrapper/values/rot_panel/xaxis/value" to="." method="_on_group_rotx"]
 [connection signal="value_changed" from="calibration/correction/wrapper/values/rot_panel/yaxis/value" to="." method="_on_group_roty"]
@@ -1248,4 +1284,5 @@ icon = ExtResource( 12 )
 [connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sy" to="." method="_on_group_sym_sy"]
 [connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sz" to="." method="_on_group_sym_sz"]
 [connection signal="pressed" from="calibration/edit/wrapper/values/topbts/close" to="calibration" method="_on_edit_close"]
+[connection signal="text_changed" from="calibration/edit/wrapper/values/vgrid/name" to="." method="_on_groupe_name"]
 [connection signal="pressed" from="calibration/edit/wrapper/values/bottompts/delete" to="." method="_on_group_reset"]
