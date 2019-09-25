@@ -44,6 +44,7 @@ func _on_calib_new():
 func _on_calib_name():
 	if not calib_check():
 		return
+	calibration.content.display_name = $calibration.fields.calib_name.text
 
 func _on_groups_selected(id):
 	if not calib_check():
@@ -51,6 +52,7 @@ func _on_groups_selected(id):
 	groupid = id - 2
 	if groupid < 0:
 		groupid = -1
+	
 func _on_group_reset():
 	if not group_check():
 		return
@@ -61,6 +63,10 @@ func _on_group_reset():
 func _on_group_duplicate():
 	if not group_check():
 		return
+	groupid = ReVA.calibration_group_duplicate( calibration, groupid )
+	$calibration.group_menu()
+	$calibration.adjust_visibility()
+	
 func _on_group_new():
 	if not group_check():
 		return

@@ -528,6 +528,12 @@ static func search_in_hierarchy( level, gid ):
 			return o
 	return null
 
+static func generate_group_ids( calibration ):
+	var gid = 0
+	for g in calibration.content.groups:
+		g.id = gid
+		gid += 1
+
 static func generate_group_hierarchy( calibration ):
 	
 	# generation of a group hierarchy
@@ -565,8 +571,6 @@ static func validate_calibration( jdata ):
 		return cancel_json( jdata )
 	
 	var seen_names = []
-	# ids will be generated and used for parenting during this process
-	var gid = 0
 	# groups validation and transtyping
 	for g in jdata.content.groups:
 		# errors
@@ -644,9 +648,8 @@ static func validate_calibration( jdata ):
 		if not 'display_name' in g or len(g.display_name) == 0:
 			rlog( jdata, ReVA_WARNING, "calibration group invalid display_name" )
 			g.display_name = g.name
-		
-		g.id = gid
-		gid += 1
+	
+	generate_group_ids( jdata )
 	
 	# relinking parents with ids
 	var newgs = []
@@ -784,8 +787,14 @@ static func calibration_group_parented( calibration, group, needle ):
 		return calibration_group_parented( calibration, get_group_by_id(calibration, group.parent), needle )
 
 static func calibration_groups_not_in_path( calibration, group ):
+	
 	if not calibration.success:
 		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return
+	
 	var out = []
 	for g in calibration.content.groups:
 		if g == group:
@@ -793,6 +802,63 @@ static func calibration_groups_not_in_path( calibration, group ):
 		if not calibration_group_parented( calibration, g, group ):
 			out.append( clone_dict( g ) )
 	return out
+
+static func group_unique_name( level ):
+	
+	var seen_names = []
+	var to_rename = []
+	for gi in level:
+		group_unique_name( gi.children )
+		if not gi.group.name in seen_names:
+			seen_names.append( gi.group.name )
+		else:
+			to_rename.append( gi.group )
+	
+	for g in to_rename:
+		var iteration = 0
+		var newname = g.name
+		while newname in seen_names:
+			newname = g.name
+			if iteration < 10:
+				newname += '.000'
+			elif iteration < 100:
+				newname += '.00'
+			elif iteration < 1000:
+				newname += '.0'
+			else:
+				newname += '.'
+			newname += str(iteration)
+			if not newname in seen_names:
+				break
+			iteration += 1
+		seen_names.append( newname )
+		g.name = newname
+
+static func calibration_group_duplicate( calibration, groupid ):
+	
+	if not calibration.success:
+		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return
+	
+	var found = false
+	for g in calibration.content.groups:
+		if g.id == groupid:
+			found = true
+	if not found:
+		rlog( calibration, ReVA_INFO, "group not found in this calibration!" )
+		return
+	
+	var newg = clone_dict( get_group_by_id( calibration, groupid ) )
+	newg.id = len( calibration.content.groups )
+	if newg.name.find_last( '.' ) == len(newg.name) - 5:
+		newg.name = newg.name.substr(0, len(newg.name) - 5 )
+	calibration.content.groups.append( newg )
+	generate_group_hierarchy( calibration )
+	group_unique_name( calibration.content.hierarchy )
+	return newg.id
 
 ### MAPPINGS ###
 

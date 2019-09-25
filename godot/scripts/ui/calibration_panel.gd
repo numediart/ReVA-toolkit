@@ -12,6 +12,7 @@ onready var fields = {
 	'sx': $correction/wrapper/values/symetry_panel/vgrid/sx,
 	'sy': $correction/wrapper/values/symetry_panel/vgrid/sy,
 	'sz': $correction/wrapper/values/symetry_panel/vgrid/sz,
+	'calib_name': $calib/cname,
 	'group_name': $edit/wrapper/values/vgrid/name
 }
 
@@ -100,8 +101,9 @@ func prepare_edit(g):
 		if pl > 1:
 			$edit/wrapper/values/vgrid/simple/info.text += 's'
 	
-	$edit/wrapper/values/vgrid/color.text = str(g.color.r) + ', ' + str(g.color.g) + ', ' + str(g.color.b)
-	$edit/wrapper/values/vgrid/color.get_stylebox( 'custom_styles/normal' ).bg_color = Color( g.color.r, g.color.g, g.color.b )
+	$edit/wrapper/values/vgrid/color.text = str(g.color.r) + ',' + str(g.color.g) + ',' + str(g.color.b)
+	$edit/wrapper/values/vgrid/color.get("custom_styles/normal").bg_color = Color( g.color.r, g.color.g, g.color.b )
+	$edit/wrapper/values/vgrid/color.set("custom_colors/font_color", Color( 1-g.color.r, 1-g.color.g, 1-g.color.b ))
 	#custom_styles/normal
 
 func adjust_visibility():
@@ -193,6 +195,7 @@ func set_calibration():
 	if all_panels.calibration != null:
 		# info
 		$info/path.text = all_panels.calibration.path.get_file()
+		$calib/cname.text = all_panels.calibration.content.display_name
 		group_menu()
 	else:
 		$title/wrapper/cols/reset.visible = false
