@@ -1,5 +1,7 @@
 extends VBoxContainer
 
+const ReVA = preload( "res://scripts/reva/ReVA.gd" )
+
 var calibration = null
 var groupid = -1
 

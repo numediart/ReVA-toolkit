@@ -583,8 +583,8 @@ window_title = "save calibration"
 resizable = true
 access = 2
 show_hidden_files = true
-current_dir = "/home/frankiezafe/projects/avatar-numediart/lavatar"
-current_path = "/home/frankiezafe/projects/avatar-numediart/lavatar/"
+current_dir = "/home/frankiezafe/forge.godot/ReVA-toolkit/godot"
+current_path = "/home/frankiezafe/forge.godot/ReVA-toolkit/godot/"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -631,8 +631,8 @@ resizable = true
 mode = 0
 access = 2
 show_hidden_files = true
-current_dir = "/home/frankiezafe/projects/avatar-numediart/lavatar"
-current_path = "/home/frankiezafe/projects/avatar-numediart/lavatar/"
+current_dir = "/home/frankiezafe/forge.godot/ReVA-toolkit/godot"
+current_path = "/home/frankiezafe/forge.godot/ReVA-toolkit/godot/"
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -1,16 +1,19 @@
 extends VBoxContainer
 
+const ReVA = preload( "res://scripts/reva/ReVA.gd" )
+
 var closed_icon = preload( "res://textures/svg/icon_GUI_tree_arrow_right.svg" )
 var open_icon = preload( "res://textures/svg/icon_GUI_tree_arrow_down.svg" )
 
 var opened = false
 var group_edition = false
+var groupid_prefix = 'group ID: '
 
-onready var parent = get_parent()
+onready var all_panels = get_parent()
 
 func prepare_correction(g):
 	
-	$correction/wrapper/values/name.text = g.name
+	$correction/wrapper/values/id.text = groupid_prefix + str(g.id)
 	$correction/wrapper/values/rot_panel/xaxis/value.value = g.correction.rotation.x * 180 / PI
 	$correction/wrapper/values/rot_panel/yaxis/value.value = g.correction.rotation.y * 180 / PI
 	$correction/wrapper/values/rot_panel/zaxis/value.value = g.correction.rotation.z * 180 / PI
@@ -37,15 +40,17 @@ func prepare_correction(g):
 	else:
 		$correction/wrapper/values/symetry_panel.visible = false
 
-func prepare_edit(g, gid):
+func prepare_edit(g):
 
+	$edit/wrapper/values/topbts/id.text = groupid_prefix + str(g.id)
 	$edit/wrapper/values/vgrid/name.text = g.name
 	
 	$edit/wrapper/values/vgrid/parent.clear()
 	$edit/wrapper/values/vgrid/parent.add_item( '[root]' )
-	for pg in parent.calibration.content.groups:
-		if not pg == g:
-			$edit/wrapper/values/vgrid/parent.add_item( group_fullname( pg ) )
+	
+	var potential_parent = ReVA.calibration_groups_not_in_path( all_panels.calibration, g )
+	for pg in potential_parent:
+		$edit/wrapper/values/vgrid/parent.add_item( group_fullname( pg, false ) )
 	
 	if 'symmetry' in g:
 		
@@ -91,7 +96,7 @@ func adjust_visibility():
 	else:
 		$title/wrapper/cols/title.icon = closed_icon
 	
-	if opened and parent.calib_check():
+	if opened and all_panels.calib_check():
 		
 		$title/wrapper/cols/reset.visible = true
 		$title/wrapper/cols/save.visible = true
@@ -100,7 +105,7 @@ func adjust_visibility():
 		$info.visible = opened
 		$calib.visible = opened
 		
-		if parent.groupid == -1:
+		if all_panels.groupid == -1:
 			
 			group_icons( false )
 			$correction.visible = false
@@ -110,15 +115,15 @@ func adjust_visibility():
 			
 			group_icons( true )
 			
-			var g = parent.calibration.content.groups[ parent.groupid ]
+			var g = all_panels.calibration.content.groups[ all_panels.groupid ]
 			# preventing value changed callbacks
-			var prevg = parent.groupid
-			parent.groupid = -1
+			var prevg = all_panels.groupid
+			all_panels.groupid = -1
 			
 			prepare_correction(g)
-			prepare_edit(g, prevg)
+			prepare_edit(g)
 			
-			parent.groupid = prevg
+			all_panels.groupid = prevg
 			
 			if group_edition:
 				$correction.visible = false
@@ -147,34 +152,37 @@ func group_icons( b ):
 	$calib/wrapper/edit.visible = b
 	$calib/wrapper/duplicate.visible = b
 
-func group_fullname( g ):
+func group_fullname( g, appendid = true ):
 	var out = ""
 	if g.parent != null:
-		for gg in parent.calibration.content.groups:
-			if gg.name == g.parent:
-				out += group_fullname( gg ) + "/"
-	return out + g.name
+		for gg in all_panels.calibration.content.groups:
+			if gg.id == g.parent:
+				out += group_fullname( gg, false ) + "/"
+	out += g.name
+	if appendid:
+		out = '[' + str(g.id) + '] ' + out
+	return out
 
 func group_menu():
-	if not parent.calib_check():
+	if not all_panels.calib_check():
 		return
 	# info
-	$info/info.text = "file: " + parent.calibration.path
-	$info/info.text += "\ngroups: " + str(len(parent.calibration.content.groups))
+	$info/info.text = "file: " + all_panels.calibration.path
+	$info/info.text += "\ngroups: " + str(len(all_panels.calibration.content.groups))
 	# groups
 	$calib/wrapper/groups.clear()
 	$calib/wrapper/groups.add_item( 'select' )
 	$calib/wrapper/groups.add_separator()
-	for g in parent.calibration.content.groups:
-		$calib/wrapper/groups.add_item( group_fullname( g ) )
-	if parent.groupid != -1:
-		$calib/wrapper/groups.select( parent.groupid + 2 )
+	for g in all_panels.calibration.content.groups:
+		$calib/wrapper/groups.add_item( group_fullname( g, false ) )
+	if all_panels.groupid != -1:
+		$calib/wrapper/groups.select( all_panels.groupid + 2 )
 
 func set_calibration():
 	group_edition = false
-	if parent.calibration != null:
+	if all_panels.calibration != null:
 		# info
-		$info/path.text = parent.calibration.path.get_file()
+		$info/path.text = all_panels.calibration.path.get_file()
 		group_menu()
 	else:
 		$title/wrapper/cols/reset.visible = false

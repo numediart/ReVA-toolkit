@@ -44,7 +44,7 @@ __meta__ = {
 
 [node name="calibration" type="VBoxContainer" parent="."]
 margin_right = 335.0
-margin_bottom = 1023.0
+margin_bottom = 1058.0
 theme = ExtResource( 5 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -331,11 +331,11 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 5 )
 
-[node name="name" type="Label" parent="calibration/correction/wrapper/values"]
+[node name="id" type="Label" parent="calibration/correction/wrapper/values"]
 margin_right = 323.0
 margin_bottom = 31.0
 theme = ExtResource( 5 )
-text = "group name"
+text = "group ID: -1"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -934,7 +934,7 @@ __meta__ = {
 [node name="edit" type="PanelContainer" parent="calibration"]
 margin_top = 770.0
 margin_right = 335.0
-margin_bottom = 1023.0
+margin_bottom = 1058.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 5 )
@@ -942,14 +942,14 @@ custom_styles/panel = SubResource( 3 )
 
 [node name="bg" type="Panel" parent="calibration/edit"]
 margin_right = 335.0
-margin_bottom = 253.0
+margin_bottom = 288.0
 size_flags_horizontal = 3
 theme = ExtResource( 5 )
 custom_styles/panel = SubResource( 4 )
 
 [node name="wrapper" type="PanelContainer" parent="calibration/edit"]
 margin_right = 335.0
-margin_bottom = 253.0
+margin_bottom = 288.0
 size_flags_horizontal = 3
 theme = ExtResource( 5 )
 custom_styles/panel = SubResource( 5 )
@@ -958,45 +958,31 @@ custom_styles/panel = SubResource( 5 )
 margin_left = 6.0
 margin_top = 4.0
 margin_right = 329.0
-margin_bottom = 249.0
+margin_bottom = 284.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 5 )
 
-[node name="buttons" type="HBoxContainer" parent="calibration/edit/wrapper/values"]
+[node name="topbts" type="HBoxContainer" parent="calibration/edit/wrapper/values"]
 margin_right = 323.0
 margin_bottom = 31.0
 
-[node name="pusher" type="Label" parent="calibration/edit/wrapper/values/buttons"]
-margin_right = 283.0
+[node name="id" type="Label" parent="calibration/edit/wrapper/values/topbts"]
+margin_right = 303.0
 margin_bottom = 31.0
 size_flags_horizontal = 3
 theme = ExtResource( 5 )
+text = "group ID: -1"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="delete" type="TextureButton" parent="calibration/edit/wrapper/values/buttons"]
-margin_left = 287.0
-margin_top = 7.0
-margin_right = 303.0
-margin_bottom = 23.0
-hint_tooltip = "reset current group"
-focus_next = NodePath("../b_save")
-focus_previous = NodePath("../b_load")
-size_flags_vertical = 4
-theme = ExtResource( 5 )
-texture_normal = ExtResource( 12 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="close" type="TextureButton" parent="calibration/edit/wrapper/values/buttons"]
+[node name="close" type="TextureButton" parent="calibration/edit/wrapper/values/topbts"]
 margin_left = 307.0
 margin_top = 7.0
 margin_right = 323.0
 margin_bottom = 23.0
-hint_tooltip = "reset current group"
+hint_tooltip = "close edit panel"
 focus_next = NodePath("../b_save")
 focus_previous = NodePath("../b_load")
 size_flags_vertical = 4
@@ -1087,7 +1073,6 @@ margin_top = 109.0
 margin_right = 55.0
 margin_bottom = 140.0
 theme = ExtResource( 5 )
-text = "points"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1201,6 +1186,32 @@ texture_normal = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="bottompts" type="HBoxContainer" parent="calibration/edit/wrapper/values"]
+margin_top = 249.0
+margin_right = 323.0
+margin_bottom = 280.0
+
+[node name="pusher" type="Label" parent="calibration/edit/wrapper/values/bottompts"]
+margin_right = 247.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="delete" type="Button" parent="calibration/edit/wrapper/values/bottompts"]
+margin_left = 251.0
+margin_right = 323.0
+margin_bottom = 31.0
+hint_tooltip = "delete currrent group"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+text = "delete"
+icon = ExtResource( 12 )
 [connection signal="pressed" from="calibration/title/wrapper/cols/title" to="calibration" method="_on_title_pressed"]
 [connection signal="pressed" from="calibration/title/wrapper/cols/load" to="." method="_on_calib_load"]
 [connection signal="pressed" from="calibration/title/wrapper/cols/reset" to="." method="_on_calib_reset"]
@@ -1208,8 +1219,8 @@ __meta__ = {
 [connection signal="pressed" from="calibration/title/wrapper/cols/saveas" to="." method="_on_calib_save_as"]
 [connection signal="pressed" from="calibration/title/wrapper/cols/new" to="." method="_on_calib_new"]
 [connection signal="text_changed" from="calibration/calib/cname" to="." method="_on_calib_name"]
-[connection signal="item_selected" from="calibration/calib/wrapper/groups" to="calibration" method="_on_groups_selected"]
 [connection signal="item_selected" from="calibration/calib/wrapper/groups" to="." method="_on_groups_selected"]
+[connection signal="item_selected" from="calibration/calib/wrapper/groups" to="calibration" method="_on_groups_selected"]
 [connection signal="pressed" from="calibration/calib/wrapper/reset" to="." method="_on_group_reset"]
 [connection signal="pressed" from="calibration/calib/wrapper/edit" to="calibration" method="_on_group_edit"]
 [connection signal="pressed" from="calibration/calib/wrapper/duplicate" to="." method="_on_group_duplicate"]
@@ -1236,5 +1247,5 @@ __meta__ = {
 [connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sx" to="." method="_on_group_sym_sx"]
 [connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sy" to="." method="_on_group_sym_sy"]
 [connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sz" to="." method="_on_group_sym_sz"]
-[connection signal="pressed" from="calibration/edit/wrapper/values/buttons/delete" to="." method="_on_group_reset"]
-[connection signal="pressed" from="calibration/edit/wrapper/values/buttons/close" to="calibration" method="_on_edit_close"]
+[connection signal="pressed" from="calibration/edit/wrapper/values/topbts/close" to="calibration" method="_on_edit_close"]
+[connection signal="pressed" from="calibration/edit/wrapper/values/bottompts/delete" to="." method="_on_group_reset"]

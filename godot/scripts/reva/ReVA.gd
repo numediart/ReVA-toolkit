@@ -513,11 +513,17 @@ static func decompress_indexlist( l ):
 			out.append( i )
 	return out
 
-static func search_in_hierarchy( level, gname ):
+static func get_group_by_id( calibration, id ):
+	for g in calibration.content.groups:
+		if g.id == id:
+			return g
+	return null
+
+static func search_in_hierarchy( level, gid ):
 	for node in level:
-		if node.group == gname:
+		if node.group.id == gid:
 			return node
-		var o = search_in_hierarchy( node.children, gname )
+		var o = search_in_hierarchy( node.children, gid )
 		if o != null:
 			return o
 	return null
@@ -526,15 +532,13 @@ static func generate_group_hierarchy( calibration ):
 	
 	# generation of a group hierarchy
 	calibration.content.hierarchy = []
-	var gid = 0
 	for g in calibration.content.groups:
 		if g.parent == null:
-			calibration.content.hierarchy.append( { 'id': gid, 'group': g.name, 'children': [] } )
+			calibration.content.hierarchy.append( { 'group': g, 'children': [] } )
 		else:
 			var p = search_in_hierarchy( calibration.content.hierarchy, g.parent )
 			if p != null:
-				p.children.append( {'id': gid, 'group': g.name, 'children': [] } )
-		gid += 1
+				p.children.append( {'group': g, 'children': [] } )
 
 static func validate_calibration( jdata ):
 	
@@ -561,7 +565,8 @@ static func validate_calibration( jdata ):
 		return cancel_json( jdata )
 	
 	var seen_names = []
-	
+	# ids will be generated and used for parenting during this process
+	var gid = 0
 	# groups validation and transtyping
 	for g in jdata.content.groups:
 		# errors
@@ -639,6 +644,20 @@ static func validate_calibration( jdata ):
 		if not 'display_name' in g or len(g.display_name) == 0:
 			rlog( jdata, ReVA_WARNING, "calibration group invalid display_name" )
 			g.display_name = g.name
+		
+		g.id = gid
+		gid += 1
+	
+	# relinking parents with ids
+	var newgs = []
+	for g in jdata.content.groups:
+		var newg = clone_dict(g)
+		if g.parent != null:
+			for pg in jdata.content.groups:
+				if pg.name == g.parent:
+					newg.parent = pg.id
+		newgs.append( newg )
+	jdata.content.groups = newgs
 	
 	generate_group_hierarchy( jdata )
 	
@@ -694,24 +713,11 @@ static func check_calibration( calibration, animation ):
 		gs.append( newg )
 	calibration.content.groups = gs
 
-static func identity_correction( c ):
-	return c.rotation.x == 0 and c.rotation.y == 0 and c.rotation.z == 0 and c.translation.x == 0 and c.translation.y == 0 and c.translation.z == 0 and c.scale.x == 1 and c.scale.y == 1 and c.scale.z == 1
-
-static func apply_correction( transform, indices, animation ):
-	for f in animation.content.frames:
-		# averaging the position of points in the frame
-		var avrg = Vector3()
-		for i in indices:
-			avrg += f.points[i]
-		avrg /= len(indices)
-		for i in indices:
-			f.points[i] = avrg + transform.xform( f.points[i] - avrg )
-
 static func apply_calibration_group( ginfo, calibration, animation ):
 	
 	if not animation.success:
 		return
-	var group = calibration.content.groups[ginfo.id]
+	var group = calibration.content.groups[ginfo.group.id]
 	var corr = group.correction
 	if not identity_correction(corr):
 		var t = Transform( Basis( corr.rotation ), corr.translation ).scaled( corr.scale )
@@ -768,6 +774,25 @@ static func reset_calibration_group( gid, calibration ):
 	
 	calibration.content.groups[gid] = clone_dict( calibration.original.groups[gid] )
 	generate_group_hierarchy( calibration )
+
+static func calibration_group_parented( calibration, group, needle ):
+	if group == null or needle == null or group.parent == null:
+		return false
+	elif group.parent == needle.id:
+		return true
+	else:
+		return calibration_group_parented( calibration, get_group_by_id(calibration, group.parent), needle )
+
+static func calibration_groups_not_in_path( calibration, group ):
+	if not calibration.success:
+		return
+	var out = []
+	for g in calibration.content.groups:
+		if g == group:
+			continue
+		if not calibration_group_parented( calibration, g, group ):
+			out.append( clone_dict( g ) )
+	return out
 
 ### MAPPINGS ###
 
@@ -1048,3 +1073,16 @@ static func autocalibrate( model, calibration, animation, timestamp = 0 ):
 	
 	print( "model: ", m_aabb )
 	print( "frame: ", f_aabb )
+
+static func identity_correction( c ):
+	return c.rotation.x == 0 and c.rotation.y == 0 and c.rotation.z == 0 and c.translation.x == 0 and c.translation.y == 0 and c.translation.z == 0 and c.scale.x == 1 and c.scale.y == 1 and c.scale.z == 1
+
+static func apply_correction( transform, indices, animation ):
+	for f in animation.content.frames:
+		# averaging the position of points in the frame
+		var avrg = Vector3()
+		for i in indices:
+			avrg += f.points[i]
+		avrg /= len(indices)
+		for i in indices:
+			f.points[i] = avrg + transform.xform( f.points[i] - avrg )
