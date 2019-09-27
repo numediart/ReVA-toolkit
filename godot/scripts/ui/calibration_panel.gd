@@ -22,6 +22,7 @@ var open_icon = preload( "res://textures/svg/icon_GUI_tree_arrow_down.svg" )
 var opened = false
 var group_edition = false
 var groupid_prefix = 'group ID: '
+var group_potential_parents = []
 
 onready var all_panels = get_parent()
 
@@ -64,8 +65,17 @@ func prepare_edit(g):
 	$edit/wrapper/values/vgrid/parent.add_item( '[root]' )
 	
 	var potential_parent = ReVA.calibration_groups_not_in_path( all_panels.calibration, g )
+	group_potential_parents = []
+	var selp = -1
+	var i = 0
 	for pg in potential_parent:
+		group_potential_parents.append( pg.id )
+		if pg.id == g.parent:
+			selp = i
 		$edit/wrapper/values/vgrid/parent.add_item( group_fullname( pg, false ) )
+		i += 1
+	if selp != -1:
+		$edit/wrapper/values/vgrid/parent.select( selp + 1 )
 	
 	if 'symmetry' in g:
 		

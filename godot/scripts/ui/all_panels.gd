@@ -30,18 +30,34 @@ func sym_check():
 func _on_calib_load():
 	if not calib_check():
 		return
+	group_index = -1
+	group_UID = -1
+	$calibration.group_menu()
+	$calibration.adjust_visibility()
+
 func _on_calib_reset():
 	if not calib_check():
-		return
+		return	
+	ReVA.reset( calibration )
+	$calibration.group_menu()
+	$calibration.adjust_visibility()
+
 func _on_calib_save():
 	if not calib_check():
 		return
+
 func _on_calib_save_as():
 	if not calib_check():
 		return
+
 func _on_calib_new():
 	if not calib_check():
 		return
+	group_index = -1
+	group_UID = -1
+	$calibration.group_menu()
+	$calibration.adjust_visibility()
+
 func _on_calib_name():
 	if not calib_check():
 		return
@@ -109,6 +125,13 @@ func _on_groupe_name():
 		$calibration.fields.group_name.text = calibration.content.groups[group_index].name
 		group_index = prevgi
 		$calibration.group_menu()
+
+func _on_group_parent_selected(id):
+	if not group_check():
+		return
+	calibration.content.groups[group_index].parent = $calibration.group_potential_parents[id]
+	$calibration.group_menu()
+	$calibration.adjust_visibility()
 
 func _on_group_rot_reset():
 	if not group_check():
