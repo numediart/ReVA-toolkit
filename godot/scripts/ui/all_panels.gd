@@ -3,6 +3,7 @@ extends VBoxContainer
 const ReVA = preload( "res://scripts/reva/ReVA.gd" )
 
 var calibration = null
+var filedialog = null
 var group_index = -1
 var group_UID = -1
 
@@ -27,13 +28,50 @@ func sym_check():
 		return false
 	return 'symmetry' in calibration.content.groups[group_index]
 
-func _on_calib_load():
-	if not calib_check():
+func unlink_all_signals():
+	if filedialog == null:
 		return
+	if filedialog.is_connected( "file_selected", self, "_on_calib_loaded" ):
+		filedialog.disconnect( "file_selected", self, "_on_calib_loaded" )
+	if filedialog.is_connected( "file_selected", self, "_on_calib_saveas" ):
+		filedialog.disconnect( "file_selected", self, "_on_calib_saveas" )
+
+func _on_calib_loaded( path ):
+	
+	unlink_all_signals()
+	
+	var tmp = ReVA.load_calibration( path )
+	if tmp.success:
+		print( tmp.path + " successfully loaded!" )
 	group_index = -1
 	group_UID = -1
-	$calibration.group_menu()
-	$calibration.adjust_visibility()
+	set_calibration( tmp )
+
+func _on_calib_saveas( path ):
+	
+	unlink_all_signals()
+	if not calib_check():
+		return
+	
+	if not path.ends_with( '.json' ):
+		path += '.json'
+	
+	calibration.path = path
+	var tmp = ReVA.save_calibration( calibration )
+	if tmp.success:
+		print( tmp.path + " successfully saved!" )
+	
+	$calibration.set_calibration()
+
+func _on_calib_load():
+	
+	if filedialog == null:
+		return
+	filedialog.mode = FileDialog.MODE_OPEN_FILE
+	filedialog.window_title = 'Open ReVA calibration'
+	unlink_all_signals()
+	filedialog.connect( "file_selected", self, "_on_calib_loaded" )
+	filedialog.popup()
 
 func _on_calib_reset():
 	if not calib_check():
@@ -48,10 +86,21 @@ func _on_calib_reset():
 func _on_calib_save():
 	if not calib_check():
 		return
+	
+	var tmp = ReVA.save_calibration( calibration )
+	if tmp.success:
+		print( tmp.path + " successfully saved!" )
 
 func _on_calib_save_as():
 	if not calib_check():
 		return
+	if filedialog == null:
+		return
+	filedialog.mode = FileDialog.MODE_SAVE_FILE
+	filedialog.window_title = 'Save ReVA calibration'
+	unlink_all_signals()
+	filedialog.connect( "file_selected", self, "_on_calib_saveas" )
+	filedialog.popup()
 
 func _on_calib_new():
 	if not calib_check():

@@ -232,10 +232,6 @@ static func load_json( p ):
 ## returns a ReVA jdata structure (generic)
 static func save_json( jdata ):
 	
-	if not file_exists( jdata.path ):
-		rlog( jdata, ReVA_ERROR, "invalid path " + jdata.path )
-		return jdata
-	
 	var file = File.new()
 	file.open( jdata.path, file.WRITE )
 	file.store_string( JSON.print(jdata.content) )
@@ -762,7 +758,7 @@ static func validate_calibration( jdata ):
 			g.points = decompress_indexlist( g.points )
 		
 		# warnings
-		if not 'parent' in g or len(g.parent) == 0:
+		if not 'parent' in g or (g.parent is String and len(g.parent) == 0):
 			g.parent = null
 		if not 'color' in g or not g.color is Array:
 			rlog( jdata, ReVA_WARNING, "calibration group invalid color" )
@@ -779,7 +775,7 @@ static func validate_calibration( jdata ):
 	var newgs = []
 	for g in jdata.content.groups:
 		var newg = clone_dict(g)
-		if g.parent != null:
+		if g.parent != null and g.parent is String:
 			for pg in jdata.content.groups:
 				if pg.name == g.parent:
 					newg.parent = pg.id
@@ -877,11 +873,15 @@ static func apply_calibration( calibration, animation ):
 		apply_calibration_group( g, calibration, animation )
 
 # json serialisation of a ReVA calibration
-## no return
+## returns a ReVA jdata structure
 static func save_calibration( calibration ):
 	
 	if not calibration.success:
 		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return -1
 	
 	var jdata = blank_jdata()
 	jdata.path = calibration.path

@@ -187,7 +187,8 @@ margin_right = 335.0
 margin_bottom = 66.0
 theme = ExtResource( 5 )
 text = "info"
-max_lines_visible = 1
+autowrap = true
+max_lines_visible = 5
 __meta__ = {
 "_edit_use_anchors_": false
 }

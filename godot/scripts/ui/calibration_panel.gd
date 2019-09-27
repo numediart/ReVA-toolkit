@@ -187,11 +187,18 @@ func group_fullname( g, appendid = true ):
 	return out
 
 func group_menu():
+	
 	if not all_panels.calib_check():
 		return
+	
 	# info
-	$info/info.text = "file: " + all_panels.calibration.path
+	$info/info.text = ''
+	var dp = all_panels.calibration.path
+	if len(dp) > 45:
+		dp = '...' + dp.substr( len(dp) - 42, len(dp) )
+	$info/info.text += "file: " + dp
 	$info/info.text += "\ngroups: " + str(len(all_panels.calibration.content.groups))
+	
 	# groups
 	$calib/wrapper/groups.clear()
 	$calib/wrapper/groups.add_item( 'select' )
@@ -202,6 +209,7 @@ func group_menu():
 		$calib/wrapper/groups.select( all_panels.group_index + 2 )
 
 func set_calibration():
+	
 	group_edition = false
 	if all_panels.calibration != null:
 		# info
