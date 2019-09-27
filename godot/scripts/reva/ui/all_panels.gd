@@ -2,6 +2,9 @@ extends VBoxContainer
 
 const ReVA = preload( "res://scripts/reva/ReVA.gd" )
 
+signal calibration_loaded
+signal calibration_updated
+
 var calibration = null
 var filedialog = null
 var group_index = -1
@@ -46,6 +49,9 @@ func _on_calib_loaded( path ):
 	group_index = -1
 	group_UID = -1
 	set_calibration( tmp )
+	$calibration.group_menu()
+	$calibration.adjust_visibility()
+	emit_signal( 'calibration_loaded', calibration )
 
 func _on_calib_saveas( path ):
 	
@@ -71,7 +77,7 @@ func _on_calib_load():
 	filedialog.window_title = 'Open ReVA calibration'
 	unlink_all_signals()
 	filedialog.connect( "file_selected", self, "_on_calib_loaded" )
-	filedialog.popup()
+	filedialog.popup_centered()
 
 func _on_calib_reset():
 	if not calib_check():
@@ -100,7 +106,7 @@ func _on_calib_save_as():
 	filedialog.window_title = 'Save ReVA calibration'
 	unlink_all_signals()
 	filedialog.connect( "file_selected", self, "_on_calib_saveas" )
-	filedialog.popup()
+	filedialog.popup_centered()
 
 func _on_calib_new():
 	if not calib_check():
@@ -109,6 +115,7 @@ func _on_calib_new():
 	group_UID = -1
 	$calibration.group_menu()
 	$calibration.adjust_visibility()
+	emit_signal( 'calibration_loaded', calibration )
 
 func _on_calib_name():
 	if not calib_check():
@@ -162,6 +169,7 @@ func _on_group_delete():
 		group_UID = calibration.content.groups[ group_index ].id
 	$calibration.group_menu()
 	$calibration.adjust_visibility()
+	emit_signal( 'calibration_updated' )
 
 func _on_groupe_name():
 	if not group_check():
@@ -189,100 +197,123 @@ func _on_group_parent_selected(id):
 	ReVA.calibration_group_parent( calibration, group_UID, $calibration.group_potential_parents[id] )
 	$calibration.group_menu()
 	$calibration.adjust_visibility()
+	emit_signal( 'calibration_updated' )
 
 func _on_group_rot_reset():
 	if not group_check():
 		return
+	emit_signal( 'calibration_updated' )
 func _on_group_rotx(value):
 	if not group_check():
 		return
 	calibration.content.groups[group_index].correction.rotation.x = value / 180 * PI
+	emit_signal( 'calibration_updated' )
 func _on_group_roty(value):
 	if not group_check():
 		return
 	calibration.content.groups[group_index].correction.rotation.y = value / 180 * PI
+	emit_signal( 'calibration_updated' )
 func _on_group_rotz(value):
 	if not group_check():
 		return
 	calibration.content.groups[group_index].correction.rotation.z = value / 180 * PI
+	emit_signal( 'calibration_updated' )
 
 func _on_group_trans_reset():
 	if not group_check():
 		return
+	emit_signal( 'calibration_updated' )
 func _on_group_transx(value):
 	if not group_check():
 		return
 	calibration.content.groups[group_index].correction.translation.x = value
+	emit_signal( 'calibration_updated' )
 func _on_group_transy(value):
 	if not group_check():
 		return
 	calibration.content.groups[group_index].correction.translation.y = value
+	emit_signal( 'calibration_updated' )
 func _on_group_transz(value):
 	if not group_check():
 		return
 	calibration.content.groups[group_index].correction.translation.z = value
+	emit_signal( 'calibration_updated' )
 
 func _on_group_scale_reset():
 	if not group_check():
 		return
+	emit_signal( 'calibration_updated' )
 func _on_group_scalex(value):
 	if not group_check():
 		return
 	calibration.content.groups[group_index].correction.scale.x = value
+	emit_signal( 'calibration_updated' )
 func _on_group_scaley(value):
 	if not group_check():
 		return
 	calibration.content.groups[group_index].correction.scale.y = value
+	emit_signal( 'calibration_updated' )
 func _on_group_scalez(value):
 	if not group_check():
 		return
 	calibration.content.groups[group_index].correction.scale.z = value
+	emit_signal( 'calibration_updated' )
 
 func _on_group_sym_reset():
 	if not group_check():
 		return
+	emit_signal( 'calibration_updated' )
 func _on_group_sym_rx():
 	if not sym_check():
 		return
 	var c = $calibration.fields.rx.pressed
 	calibration.content.groups[group_index].symmetry.rotation.x = -1 if c else 1
+	emit_signal( 'calibration_updated' )
 func _on_group_sym_ry():
 	if not sym_check():
 		return
 	var c = $calibration.fields.ry.pressed
 	calibration.content.groups[group_index].symmetry.rotation.y = -1 if c else 1
+	emit_signal( 'calibration_updated' )
 func _on_group_sym_rz():
 	if not sym_check():
 		return
 	var c = $calibration.fields.rz.pressed
 	calibration.content.groups[group_index].symmetry.rotation.z = -1 if c else 1
+	emit_signal( 'calibration_updated' )
 func _on_group_sym_tx():
 	if not sym_check():
 		return
 	var c = $calibration.fields.tx.pressed
 	calibration.content.groups[group_index].symmetry.translation.x = -1 if c else 1
+	emit_signal( 'calibration_updated' )
 func _on_group_sym_ty():
 	if not sym_check():
 		return
 	var c = $calibration.fields.ty.pressed
 	calibration.content.groups[group_index].symmetry.translation.y = -1 if c else 1
+	emit_signal( 'calibration_updated' )
 func _on_group_sym_tz():
 	if not sym_check():
 		return
 	var c = $calibration.fields.tz.pressed
 	calibration.content.groups[group_index].symmetry.translation.z = -1 if c else 1
+	emit_signal( 'calibration_updated' )
 func _on_group_sym_sx():
 	if not sym_check():
 		return
 	var c = $calibration.fields.sx.pressed
 	calibration.content.groups[group_index].symmetry.scale.x = -1 if c else 1
+	emit_signal( 'calibration_updated' )
 func _on_group_sym_sy():
 	if not sym_check():
 		return
 	var c = $calibration.fields.sy.pressed
 	calibration.content.groups[group_index].symmetry.scale.y = -1 if c else 1
+	emit_signal( 'calibration_updated' )
 func _on_group_sym_sz():
 	if not sym_check():
 		return
 	var c = $calibration.fields.sz.pressed
 	calibration.content.groups[group_index].symmetry.scale.z = -1 if c else 1
+	emit_signal( 'calibration_updated' )

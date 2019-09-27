@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=2]
 
-[ext_resource path="res://scripts/ui/calibration_panel.gd" type="Script" id=1]
+[ext_resource path="res://scripts/reva/ui/calibration_panel.gd" type="Script" id=1]
 [ext_resource path="res://textures/svg/icon_save.svg" type="Texture" id=2]
 [ext_resource path="res://textures/svg/icon_load.svg" type="Texture" id=3]
 [ext_resource path="res://textures/svg/icon_reload.svg" type="Texture" id=4]
@@ -8,7 +8,7 @@
 [ext_resource path="res://textures/svg/icon_new.svg" type="Texture" id=6]
 [ext_resource path="res://textures/svg/icon_save_as.svg" type="Texture" id=7]
 [ext_resource path="res://textures/svg/icon_GUI_tree_arrow_right.svg" type="Texture" id=8]
-[ext_resource path="res://scripts/ui/all_panels.gd" type="Script" id=9]
+[ext_resource path="res://scripts/reva/ui/all_panels.gd" type="Script" id=9]
 [ext_resource path="res://textures/svg/icon_edit.svg" type="Texture" id=10]
 [ext_resource path="res://textures/svg/icon_duplicate.svg" type="Texture" id=11]
 [ext_resource path="res://textures/svg/icon_status_error.svg" type="Texture" id=12]
@@ -24,7 +24,7 @@ bg_color = Color( 0.6, 0.6, 0.6, 0 )
 [sub_resource type="StyleBoxFlat" id=3]
 
 [sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0, 0, 0, 0.7 )
+bg_color = Color( 0, 0, 0, 0.701961 )
 
 [sub_resource type="StyleBoxFlat" id=5]
 content_margin_left = 6.0
@@ -1258,8 +1258,8 @@ icon = ExtResource( 12 )
 [connection signal="pressed" from="calibration/title/wrapper/cols/saveas" to="." method="_on_calib_save_as"]
 [connection signal="pressed" from="calibration/title/wrapper/cols/new" to="." method="_on_calib_new"]
 [connection signal="text_changed" from="calibration/calib/cname" to="." method="_on_calib_name"]
-[connection signal="item_selected" from="calibration/calib/wrapper/groups" to="calibration" method="_on_groups_selected"]
 [connection signal="item_selected" from="calibration/calib/wrapper/groups" to="." method="_on_groups_selected"]
+[connection signal="item_selected" from="calibration/calib/wrapper/groups" to="calibration" method="_on_groups_selected"]
 [connection signal="pressed" from="calibration/calib/wrapper/new" to="." method="_on_group_new"]
 [connection signal="pressed" from="calibration/correction/wrapper/values/topbts/edit" to="calibration" method="_on_group_edit"]
 [connection signal="pressed" from="calibration/correction/wrapper/values/rot_panel/title/b_reset" to="." method="_on_group_rot_reset"]
