@@ -39,6 +39,9 @@ func _on_calib_reset():
 	if not calib_check():
 		return
 	ReVA.reset( calibration )
+	if ReVA.get_group_by_id( calibration, group_UID ) == null:
+		group_UID = -1
+		group_index = -1
 	$calibration.group_menu()
 	$calibration.adjust_visibility()
 

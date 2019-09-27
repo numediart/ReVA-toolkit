@@ -114,6 +114,8 @@ func prepare_edit(g):
 	$edit/wrapper/values/vgrid/color.text = str(g.color.r) + ',' + str(g.color.g) + ',' + str(g.color.b)
 	$edit/wrapper/values/vgrid/color.get("custom_styles/normal").bg_color = Color( g.color.r, g.color.g, g.color.b )
 	$edit/wrapper/values/vgrid/color.set("custom_colors/font_color", Color( 1-g.color.r, 1-g.color.g, 1-g.color.b ))
+	
+	$edit/wrapper/values/topbts/reset.visible = ReVA.calibration_group_has_original( all_panels.calibration, all_panels.group_UID )
 
 func adjust_visibility():
 	

@@ -560,6 +560,17 @@ static func get_group_index( src, id ):
 		gi += 1
 	return -1
 
+static func get_group_next_id( calibration ):
+	
+	var id = 0
+	for g in calibration.content.groups:
+		if id <= g.id:
+			id = g.id + 1
+	for g in calibration.original.groups:
+		if id <= g.id:
+			id = g.id + 1
+	return id
+
 static func search_in_hierarchy( level, gid ):
 	for node in level:
 		if node.group.id == gid:
@@ -903,10 +914,7 @@ static func calibration_group_duplicate( calibration, groupid ):
 		return -1
 	
 	var newg = clone_dict( src )
-	var newid = 0
-	while get_group_by_id( calibration, newid ) != null:
-		newid += 1
-	newg.id = newid
+	newg.id = get_group_next_id( calibration )
 	if newg.name.find_last( '.' ) == len(newg.name) - 5:
 		newg.name = newg.name.substr(0, len(newg.name) - 5 )
 	calibration.content.groups.append( newg )
@@ -942,10 +950,7 @@ static func calibration_group_new( calibration ):
 		return -1
 	
 	var newg = blank_group()
-	var newid = 0
-	while get_group_by_id( calibration, newid ) != null:
-		newid += 1
-	newg.id = newid
+	newg.id = get_group_next_id( calibration )
 	calibration.content.groups.append(newg)
 	generate_group_hierarchy( calibration )
 	group_unique_name( calibration.content.hierarchy )
@@ -974,7 +979,17 @@ static func calibration_group_parent( calibration, groupid, parentid ):
 	
 	generate_group_hierarchy( calibration )
 	group_unique_name( calibration.content.hierarchy )
+
+static func calibration_group_has_original( calibration, groupid ):
 	
+	if not calibration.success:
+		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return
+	
+	return get_group_by_id( calibration.original, groupid ) != null
 
 ### MAPPINGS ###
 
