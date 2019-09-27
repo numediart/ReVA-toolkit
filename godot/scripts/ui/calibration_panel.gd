@@ -125,22 +125,22 @@ func adjust_visibility():
 		$info.visible = opened
 		$calib.visible = opened
 		
-		if all_panels.groupid == -1:
+		if all_panels.group_index == -1:
 			
 			$correction.visible = false
 			$edit.visible = false
 			
 		else:
 			
-			var g = all_panels.calibration.content.groups[ all_panels.groupid ]
+			var g = all_panels.calibration.content.groups[ all_panels.group_index ]
 			# preventing value changed callbacks
-			var prevg = all_panels.groupid
-			all_panels.groupid = -1
+			var prevgi = all_panels.group_index
+			all_panels.group_index = -1
 			
 			prepare_correction(g)
 			prepare_edit(g)
 			
-			all_panels.groupid = prevg
+			all_panels.group_index = prevgi
 			
 			if group_edition:
 				$correction.visible = false
@@ -187,8 +187,8 @@ func group_menu():
 	$calib/wrapper/groups.add_separator()
 	for g in all_panels.calibration.content.groups:
 		$calib/wrapper/groups.add_item( group_fullname( g, false ) )
-	if all_panels.groupid != -1:
-		$calib/wrapper/groups.select( all_panels.groupid + 2 )
+	if all_panels.group_index != -1:
+		$calib/wrapper/groups.select( all_panels.group_index + 2 )
 
 func set_calibration():
 	group_edition = false
