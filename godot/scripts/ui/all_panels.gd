@@ -37,7 +37,7 @@ func _on_calib_load():
 
 func _on_calib_reset():
 	if not calib_check():
-		return	
+		return
 	ReVA.reset( calibration )
 	$calibration.group_menu()
 	$calibration.adjust_visibility()
@@ -90,8 +90,13 @@ func _on_group_duplicate():
 	$calibration.adjust_visibility()
 	
 func _on_group_new():
-	if not group_check():
+	if not calib_check():
 		return
+	group_UID = ReVA.calibration_group_new( calibration )
+	group_index = ReVA.get_group_index( calibration, group_UID )
+	$calibration.group_edition = true
+	$calibration.group_menu()
+	$calibration.adjust_visibility()
 
 func _on_group_delete():
 	if not group_check():
@@ -122,14 +127,14 @@ func _on_groupe_name():
 		ReVA.group_unique_name( calibration )
 		var prevgi = group_index
 		group_index = -1
-		$calibration.fields.group_name.text = calibration.content.groups[group_index].name
+		$calibration.fields.group_name.text = calibration.content.groups[prevgi].name
 		group_index = prevgi
 		$calibration.group_menu()
 
 func _on_group_parent_selected(id):
 	if not group_check():
 		return
-	calibration.content.groups[group_index].parent = $calibration.group_potential_parents[id]
+	ReVA.calibration_group_parent( calibration, group_UID, $calibration.group_potential_parents[id] )
 	$calibration.group_menu()
 	$calibration.adjust_visibility()
 

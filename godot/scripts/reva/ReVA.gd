@@ -137,6 +137,20 @@ static func blank_frame( animation ):
 		frame.points.append( Vector3() )
 	return frame
 
+static func blank_group():
+	return {
+		'name': 'new group',
+		'display_name': 'new group',
+		'points': [],
+		'correction': {
+			'rotation': Vector3(0,0,0),
+			'translation': Vector3(0,0,0),
+			'scale': Vector3(1,1,1),
+		},
+		'parent': null,
+		'color': Color( randf(),randf(),randf() )
+	}
+
 static func get_directory( p ):
 	return p.get_base_dir()
 
@@ -877,21 +891,18 @@ static func group_unique_name( src ):
 static func calibration_group_duplicate( calibration, groupid ):
 	
 	if not calibration.success:
-		return
+		return -1
 	
 	if not calibration.type == ReVA_TYPE_CALIB:
 		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
-		return
+		return -1
 	
-	var found = false
-	for g in calibration.content.groups:
-		if g.id == groupid:
-			found = true
-	if not found:
-		rlog( calibration, ReVA_INFO, "group not found in this calibration!" )
-		return
+	var src = get_group_by_id( calibration, groupid )
+	if src == null:
+		rlog( calibration, ReVA_INFO, "group " + str(groupid) + " not found in this calibration!" )
+		return -1
 	
-	var newg = clone_dict( get_group_by_id( calibration, groupid ) )
+	var newg = clone_dict( src )
 	var newid = 0
 	while get_group_by_id( calibration, newid ) != null:
 		newid += 1
@@ -901,6 +912,7 @@ static func calibration_group_duplicate( calibration, groupid ):
 	calibration.content.groups.append( newg )
 	generate_group_hierarchy( calibration )
 	group_unique_name( calibration.content.hierarchy )
+	
 	return newg.id
 
 static func calibration_group_delete( calibration, groupid ):
@@ -919,6 +931,49 @@ static func calibration_group_delete( calibration, groupid ):
 			newgs.append( g )
 	calibration.content.groups = newgs
 	generate_group_hierarchy( calibration )
+
+static func calibration_group_new( calibration ):
+	
+	if not calibration.success:
+		return -1
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return -1
+	
+	var newg = blank_group()
+	var newid = 0
+	while get_group_by_id( calibration, newid ) != null:
+		newid += 1
+	newg.id = newid
+	calibration.content.groups.append(newg)
+	generate_group_hierarchy( calibration )
+	group_unique_name( calibration.content.hierarchy )
+	
+	return newg.id
+
+static func calibration_group_parent( calibration, groupid, parentid ):
+	
+	if not calibration.success:
+		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return
+	
+	var src = get_group_by_id( calibration, groupid )
+	var parent = get_group_by_id( calibration, parentid )
+	if src == null:
+		rlog( calibration, ReVA_INFO, "group " + str(groupid) + " not found in this calibration!" )
+		return -1
+	
+	if parent == null:
+		src.parent = null
+	else:
+		src.parent = parentid
+	
+	generate_group_hierarchy( calibration )
+	group_unique_name( calibration.content.hierarchy )
 	
 
 ### MAPPINGS ###

@@ -65,7 +65,7 @@ func prepare_edit(g):
 	$edit/wrapper/values/vgrid/parent.add_item( '[root]' )
 	
 	var potential_parent = ReVA.calibration_groups_not_in_path( all_panels.calibration, g )
-	group_potential_parents = []
+	group_potential_parents = [null]
 	var selp = -1
 	var i = 0
 	for pg in potential_parent:
@@ -114,7 +114,6 @@ func prepare_edit(g):
 	$edit/wrapper/values/vgrid/color.text = str(g.color.r) + ',' + str(g.color.g) + ',' + str(g.color.b)
 	$edit/wrapper/values/vgrid/color.get("custom_styles/normal").bg_color = Color( g.color.r, g.color.g, g.color.b )
 	$edit/wrapper/values/vgrid/color.set("custom_colors/font_color", Color( 1-g.color.r, 1-g.color.g, 1-g.color.b ))
-	#custom_styles/normal
 
 func adjust_visibility():
 	
