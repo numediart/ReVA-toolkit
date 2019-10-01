@@ -12,6 +12,7 @@ onready var fields = {
 	'sx': $correction/wrapper/values/symetry_panel/vgrid/sx,
 	'sy': $correction/wrapper/values/symetry_panel/vgrid/sy,
 	'sz': $correction/wrapper/values/symetry_panel/vgrid/sz,
+	'calib_name': $calib/cname,
 	'group_name': $edit/wrapper/values/vgrid/name
 }
 
@@ -21,6 +22,7 @@ var open_icon = preload( "res://textures/svg/icon_GUI_tree_arrow_down.svg" )
 var opened = false
 var group_edition = false
 var groupid_prefix = 'group ID: '
+var group_potential_parents = []
 
 onready var all_panels = get_parent()
 
@@ -63,8 +65,17 @@ func prepare_edit(g):
 	$edit/wrapper/values/vgrid/parent.add_item( '[root]' )
 	
 	var potential_parent = ReVA.calibration_groups_not_in_path( all_panels.calibration, g )
+	group_potential_parents = [null]
+	var selp = -1
+	var i = 0
 	for pg in potential_parent:
+		group_potential_parents.append( pg.id )
+		if pg.id == g.parent:
+			selp = i
 		$edit/wrapper/values/vgrid/parent.add_item( group_fullname( pg, false ) )
+		i += 1
+	if selp != -1:
+		$edit/wrapper/values/vgrid/parent.select( selp + 1 )
 	
 	if 'symmetry' in g:
 		
@@ -100,9 +111,11 @@ func prepare_edit(g):
 		if pl > 1:
 			$edit/wrapper/values/vgrid/simple/info.text += 's'
 	
-	$edit/wrapper/values/vgrid/color.text = str(g.color.r) + ', ' + str(g.color.g) + ', ' + str(g.color.b)
-	$edit/wrapper/values/vgrid/color.get_stylebox( 'custom_styles/normal' ).bg_color = Color( g.color.r, g.color.g, g.color.b )
-	#custom_styles/normal
+	$edit/wrapper/values/vgrid/color.text = str(g.color.r) + ',' + str(g.color.g) + ',' + str(g.color.b)
+	$edit/wrapper/values/vgrid/color.get("custom_styles/normal").bg_color = Color( g.color.r, g.color.g, g.color.b )
+	$edit/wrapper/values/vgrid/color.set("custom_colors/font_color", Color( 1-g.color.r, 1-g.color.g, 1-g.color.b ))
+	
+	$edit/wrapper/values/topbts/reset.visible = ReVA.calibration_group_has_original( all_panels.calibration, all_panels.group_UID )
 
 func adjust_visibility():
 	
@@ -123,22 +136,22 @@ func adjust_visibility():
 		$info.visible = opened
 		$calib.visible = opened
 		
-		if all_panels.groupid == -1:
+		if all_panels.group_index == -1:
 			
 			$correction.visible = false
 			$edit.visible = false
 			
 		else:
 			
-			var g = all_panels.calibration.content.groups[ all_panels.groupid ]
+			var g = all_panels.calibration.content.groups[ all_panels.group_index ]
 			# preventing value changed callbacks
-			var prevg = all_panels.groupid
-			all_panels.groupid = -1
+			var prevgi = all_panels.group_index
+			all_panels.group_index = -1
 			
 			prepare_correction(g)
 			prepare_edit(g)
 			
-			all_panels.groupid = prevg
+			all_panels.group_index = prevgi
 			
 			if group_edition:
 				$correction.visible = false
@@ -174,25 +187,34 @@ func group_fullname( g, appendid = true ):
 	return out
 
 func group_menu():
+	
 	if not all_panels.calib_check():
 		return
+	
 	# info
-	$info/info.text = "file: " + all_panels.calibration.path
+	$info/info.text = ''
+	var dp = all_panels.calibration.path
+	if len(dp) > 45:
+		dp = '...' + dp.substr( len(dp) - 42, len(dp) )
+	$info/info.text += "file: " + dp
 	$info/info.text += "\ngroups: " + str(len(all_panels.calibration.content.groups))
+	
 	# groups
 	$calib/wrapper/groups.clear()
 	$calib/wrapper/groups.add_item( 'select' )
 	$calib/wrapper/groups.add_separator()
 	for g in all_panels.calibration.content.groups:
 		$calib/wrapper/groups.add_item( group_fullname( g, false ) )
-	if all_panels.groupid != -1:
-		$calib/wrapper/groups.select( all_panels.groupid + 2 )
+	if all_panels.group_index != -1:
+		$calib/wrapper/groups.select( all_panels.group_index + 2 )
 
 func set_calibration():
+	
 	group_edition = false
 	if all_panels.calibration != null:
 		# info
 		$info/path.text = all_panels.calibration.path.get_file()
+		$calib/cname.text = all_panels.calibration.content.display_name
 		group_menu()
 	else:
 		$title/wrapper/cols/reset.visible = false

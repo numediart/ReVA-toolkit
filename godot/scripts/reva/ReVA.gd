@@ -19,6 +19,8 @@ const ReVA_PATH_CONSTRAINT = "res://scripts/reva/ReVA_constraint.gd"
 
 #static func 
 
+# util to make a deep copy of an array
+## returns an Array
 static func clone_array( l ):
 	var clone = []
 	for i in l:
@@ -36,6 +38,8 @@ static func clone_array( l ):
 			clone.append( i )
 	return clone
 
+# util to make a deep copy of a dictionary
+## returns a Dictionary
 static func clone_dict( d ):
 	var clone = {}
 	for k in d:
@@ -54,18 +58,28 @@ static func clone_dict( d ):
 			clone[k] = i
 	return clone
 
+# util to convert a Vector2 to a list (used for json serialisation)
+## returns an Array of floats
 static func vec2_to_list( v2 ):
 	return [v2.x,v2.y]
 
+# util to convert a Vector3 to a list (used for json serialisation)
+## returns an Array of floats
 static func vec3_to_list( v3 ):
 	return [v3.x,v3.y,v3.z]
 
+# util to convert a Quat to a list (used for json serialisation)
+## returns an Array of floats
 static func quat_to_list( q ):
 	return [q.x,q.y,q.z,q.w]
 
+# util to convert a Color RGB to a list (used for json serialisation)
+## returns an Array of floats
 static func rgb_to_list( c ):
 	return [c.r,c.g,c.b]
 
+# util to generate a ReVA valid jdata structure
+## returns a ReVA jdata structure (generic)
 static func blank_jdata():
 	return {
 		'type': ReVA_TYPE_NONE,
@@ -75,6 +89,8 @@ static func blank_jdata():
 		'errors': []
 	}
 
+# util to generate a ReVA valid model structure
+## returns a ReVA model structure
 static func blank_model():
 	return {
 		'type': ReVA_TYPE_MODEL,
@@ -89,6 +105,8 @@ static func blank_model():
 		'errors': []
 	}
 
+# util to generate a ReVA valid animation structure
+## returns a ReVA animation structure
 static func blank_animation():
 	return {
 		'type': ReVA_TYPE_ANIM,
@@ -99,26 +117,8 @@ static func blank_animation():
 		'errors': []
 	}
 
-static func blank_calibration():
-	return {
-		'type': ReVA_TYPE_CALIB,
-		'path': null,
-		'original': null,
-		'content': null,
-		'success': false,
-		'errors': []
-	}
-
-static func blank_mapping():
-	return {
-		'type': ReVA_TYPE_MAPP,
-		'path': null,
-		'original': null,
-		'content': null,
-		'success': false,
-		'errors': []
-	}
-
+# util to generate a ReVA valid animation frame structure
+## returns a ReVA animation frame structure
 static func blank_frame( animation ):
 	if not animation.success:
 		return null
@@ -137,15 +137,61 @@ static func blank_frame( animation ):
 		frame.points.append( Vector3() )
 	return frame
 
+# util to generate a ReVA valid calibration structure
+## returns a ReVA calibration structure
+static func blank_calibration():
+	return {
+		'type': ReVA_TYPE_CALIB,
+		'path': null,
+		'original': null,
+		'content': null,
+		'success': false,
+		'errors': []
+	}
+
+# util to generate a ReVA valid calibration group structure
+## returns a ReVA calibration group structure
+static func blank_group():
+	return {
+		'name': 'new group',
+		'display_name': 'new group',
+		'points': [],
+		'correction': {
+			'rotation': Vector3(0,0,0),
+			'translation': Vector3(0,0,0),
+			'scale': Vector3(1,1,1),
+		},
+		'parent': null,
+		'color': Color( randf(),randf(),randf() )
+	}
+
+# util to generate a ReVA valid mapping structure
+## returns a ReVA mapping structure
+static func blank_mapping():
+	return {
+		'type': ReVA_TYPE_MAPP,
+		'path': null,
+		'original': null,
+		'content': null,
+		'success': false,
+		'errors': []
+	}
+
+# util to get the path of a file path
+## returns a String
 static func get_directory( p ):
 	return p.get_base_dir()
 
+# util to test if a file exists on the drive
+## returns a boolean
 static func file_exists( p ):
 	var f = File.new()
 	if not f.file_exists( p ):
 		return false
 	return true
 
+# custom logger for parsing and implementation errors
+## no return
 static func rlog( data, lvl, txt ):
 	data.errors.append( [lvl, txt] )
 	if ReVA_DEBUG:
@@ -159,6 +205,8 @@ static func rlog( data, lvl, txt ):
 			_:
 				print( txt )
 
+# generic function to load ReVA jsons
+## returns a ReVA jdata structure (generic) with 'content' field loaded with json content
 static func load_json( p ):
 	
 	var jdata = blank_jdata()
@@ -180,11 +228,9 @@ static func load_json( p ):
 		rlog( jdata, ReVA_ERROR,  "string: " + result_json.error_string )
 	return jdata
 
+# generic function to save ReVA jsons
+## returns a ReVA jdata structure (generic)
 static func save_json( jdata ):
-	
-	if not file_exists( jdata.path ):
-		rlog( jdata, ReVA_ERROR, "invalid path " + jdata.path )
-		return jdata
 	
 	var file = File.new()
 	file.open( jdata.path, file.WRITE )
@@ -192,6 +238,8 @@ static func save_json( jdata ):
 	file.close()
 	return jdata
 
+# generic function to remove content from a ReVA animation, calibration or mapping, returns a jdata
+## returns a ReVA jdata structure (generic)
 static func cancel_json( jdata ):
 	return {
 		'type': jdata.type,
@@ -201,14 +249,39 @@ static func cancel_json( jdata ):
 		'errors': jdata.errors
 	}
 
+# generic function to remove content from a ReVA model
+## returns a ReVA model structure
 static func cancel_model( mdata ):
 	var out = blank_model()
 	out.type = mdata.type
 	out.path = mdata.path
 	out.errors = mdata.errors
 
+# generic function to reset content from a ReVA animation, calibration or mapping
+# clone the 'original' field into 'content'
+## no return
+static func reset( data ):
+	if 'original' in data and 'content' in data:
+		data.content = clone_dict( data.original )
+
+# generic function to lerp euler rotations
+## returns a euler rotation (Vector3)
+static func interpolate_euler( src, dst, alpha ):
+	var srcq = Quat()
+	srcq.set_euler( src )
+	var dstq = Quat()
+	dstq.set_euler( dst )
+	return srcq.slerp( dstq, alpha ).get_euler()
+
+# generic function to lerp positions
+## returns a position (Vector3)
+static func lerp_vec3( src, dst, alpha ):
+	return src * (1-alpha) + dst * alpha
+
 ### MODELS ###
 
+# specialised function to load and validate a ReVA model
+## returns a ReVA model structure
 static func load_model( path ):
 	
 	var mdata = blank_model()
@@ -256,6 +329,8 @@ static func load_model( path ):
 
 ### ANIMATIONS ###
 
+# validation of a ReVA animation structure (after loading)
+## returns a ReVA animation structure
 static func validate_animation( jdata ):
 	
 	# basic stuff
@@ -438,23 +513,14 @@ static func validate_animation( jdata ):
 	a.errors = jdata.errors
 	return a
 
+# specialised function to load and validate a ReVA animation
+## returns a ReVA animation structure
 static func load_animation( p ):
 	return validate_animation( load_json( p ) )
 
-static func reset( data ):
-	if 'original' in data and 'content' in data:
-		data.content = clone_dict( data.original )
-
-static func interpolate_euler( src, dst, alpha ):
-	var srcq = Quat()
-	srcq.set_euler( src )
-	var dstq = Quat()
-	dstq.set_euler( dst )
-	return srcq.slerp( dstq, alpha ).get_euler()
-
-static func lerp_vec3( src, dst, alpha ):
-	return src * (1-alpha) + dst * alpha
-
+# renders a valid ReVA animatio frame based on a timestamp
+# if interpolation is set to true, linear interpolation will be used for all fields
+## returns a ReVA animation frame or 'null' if an error occurs
 static func animation_frame( animation, ts, interpolation = true ):
 	
 	if not animation.success:
@@ -502,8 +568,9 @@ static func animation_frame( animation, ts, interpolation = true ):
 
 ### CALIBRATIONS ###
 
+# convert list containing ranges into a flat indices list
+## returns a Array of ids
 static func decompress_indexlist( l ):
-	
 	var out = []
 	for i in l:
 		if i is Array and len(i) == 2:
@@ -513,12 +580,58 @@ static func decompress_indexlist( l ):
 			out.append( i )
 	return out
 
-static func get_group_by_id( calibration, id ):
-	for g in calibration.content.groups:
+# util for calibration to get a group by ID
+## return a ReVA calibration group or 'null' if not found
+static func get_group_by_id( src, id ):
+	
+	var gs = null
+	if 'content' in src:
+		# full calibration
+		gs = src.content.groups
+	elif 'groups' in src:
+		# subpart
+		gs = src.groups
+	else:
+		return null
+	for g in gs:
 		if g.id == id:
 			return g
 	return null
 
+# util for calibration to get a group index in groups list
+## return an index or '-1' if not found
+static func get_group_index( src, id ):
+	var gs = null
+	if 'content' in src:
+		# full calibration
+		gs = src.content.groups
+	elif 'groups' in src:
+		# subpart
+		gs = src.groups
+	else:
+		return -1
+	var gi = 0
+	for g in gs:
+		if g.id == id:
+			return gi
+		gi += 1
+	return -1
+
+# util for calibration to get a new ID for group
+## return a group UID
+static func get_group_next_id( calibration ):
+	
+	var id = 0
+	for g in calibration.content.groups:
+		if id <= g.id:
+			id = g.id + 1
+	for g in calibration.original.groups:
+		if id <= g.id:
+			id = g.id + 1
+	return id
+
+# util for calibration to search group ID in hierarchy, root to leaves (recursive)
+## return a group definition { 'group': group, 'children': [] } or 'null' if not found
 static func search_in_hierarchy( level, gid ):
 	for node in level:
 		if node.group.id == gid:
@@ -528,6 +641,17 @@ static func search_in_hierarchy( level, gid ):
 			return o
 	return null
 
+# util for calibration to generate UID for all groups
+## no return
+static func generate_group_ids( calibration ):
+	var gid = 0
+	for g in calibration.content.groups:
+		g.id = gid
+		gid += 1
+
+# util for calibration to generate a group hierarchy in calibration
+# contains group definition { 'group': group, 'children': [] }
+## no return
 static func generate_group_hierarchy( calibration ):
 	
 	# generation of a group hierarchy
@@ -540,6 +664,8 @@ static func generate_group_hierarchy( calibration ):
 			if p != null:
 				p.children.append( {'group': g, 'children': [] } )
 
+# validation of a ReVA calibration structure (after loading)
+## returns a ReVA calibration structure
 static func validate_calibration( jdata ):
 	
 	# basic stuff
@@ -565,8 +691,6 @@ static func validate_calibration( jdata ):
 		return cancel_json( jdata )
 	
 	var seen_names = []
-	# ids will be generated and used for parenting during this process
-	var gid = 0
 	# groups validation and transtyping
 	for g in jdata.content.groups:
 		# errors
@@ -634,7 +758,7 @@ static func validate_calibration( jdata ):
 			g.points = decompress_indexlist( g.points )
 		
 		# warnings
-		if not 'parent' in g or len(g.parent) == 0:
+		if not 'parent' in g or (g.parent is String and len(g.parent) == 0):
 			g.parent = null
 		if not 'color' in g or not g.color is Array:
 			rlog( jdata, ReVA_WARNING, "calibration group invalid color" )
@@ -644,15 +768,14 @@ static func validate_calibration( jdata ):
 		if not 'display_name' in g or len(g.display_name) == 0:
 			rlog( jdata, ReVA_WARNING, "calibration group invalid display_name" )
 			g.display_name = g.name
-		
-		g.id = gid
-		gid += 1
+	
+	generate_group_ids( jdata )
 	
 	# relinking parents with ids
 	var newgs = []
 	for g in jdata.content.groups:
 		var newg = clone_dict(g)
-		if g.parent != null:
+		if g.parent != null and g.parent is String:
 			for pg in jdata.content.groups:
 				if pg.name == g.parent:
 					newg.parent = pg.id
@@ -669,9 +792,14 @@ static func validate_calibration( jdata ):
 	a.errors = jdata.errors
 	return a
 
+# specialised function to load and validate a ReVA calibration
+## returns a ReVA calibration structure
 static func load_calibration( p ):
 	return validate_calibration( load_json( p ) )
 
+# validate that calibration is fitting animation on point level
+# invalid point indices are removed from groups
+## no retrun
 static func check_calibration( calibration, animation ):
 	
 	if not calibration.success:
@@ -713,11 +841,14 @@ static func check_calibration( calibration, animation ):
 		gs.append( newg )
 	calibration.content.groups = gs
 
+# apply a specific calibration group correction on each animation frames (recursive)
+# ginfo must be a  group definition
+## no retrun
 static func apply_calibration_group( ginfo, calibration, animation ):
 	
 	if not animation.success:
 		return
-	var group = calibration.content.groups[ginfo.group.id]
+	var group = get_group_by_id( calibration, ginfo.group.id )
 	var corr = group.correction
 	if not identity_correction(corr):
 		var t = Transform( Basis( corr.rotation ), corr.translation ).scaled( corr.scale )
@@ -731,6 +862,8 @@ static func apply_calibration_group( ginfo, calibration, animation ):
 	for g in ginfo.children:
 		apply_calibration_group( g, calibration, animation )
 
+# apply calibration corrections on each animation frames, following the hierarchy of groups
+## no retrun
 static func apply_calibration( calibration, animation ):
 	
 	if not calibration.success or not animation.success:
@@ -739,10 +872,16 @@ static func apply_calibration( calibration, animation ):
 	for g in calibration.content.hierarchy:
 		apply_calibration_group( g, calibration, animation )
 
+# json serialisation of a ReVA calibration
+## returns a ReVA jdata structure
 static func save_calibration( calibration ):
 	
 	if not calibration.success:
 		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return -1
 	
 	var jdata = blank_jdata()
 	jdata.path = calibration.path
@@ -763,18 +902,27 @@ static func save_calibration( calibration ):
 	
 	return save_json( jdata )
 
-static func reset_calibration_group( gid, calibration ):
+# reset of a specific calibration group
+## no return
+static func reset_calibration_group( calibration, gid ):
 	
 	if not calibration.success:
 		return
 	
-	if not len( calibration.content.groups ) == len( calibration.original.groups ):
-		rlog( calibration, ReVA_WARNING, "number of groups in current calibration and original is not similar, group reset can not be performed" )
+	var g = get_group_by_id( calibration, gid )
+	var original = get_group_by_id( calibration.original, gid )
+	if g == null or original == null:
+		rlog( calibration, ReVA_WARNING, "no group with ID " + str(gid) + " in this calibration" )
 		return
 	
-	calibration.content.groups[gid] = clone_dict( calibration.original.groups[gid] )
+	for i in range( 0, len( calibration.content.groups ) ):
+		if calibration.content.groups[i].id == gid:
+			calibration.content.groups[i] = clone_dict( original )
+			break
 	generate_group_hierarchy( calibration )
 
+# util for calibration to check if a group is parented to another (recursive)
+## returns a boolean if the needle is found in parent hierarchy
 static func calibration_group_parented( calibration, group, needle ):
 	if group == null or needle == null or group.parent == null:
 		return false
@@ -783,9 +931,17 @@ static func calibration_group_parented( calibration, group, needle ):
 	else:
 		return calibration_group_parented( calibration, get_group_by_id(calibration, group.parent), needle )
 
+# util for calibration to retrieve a list of groups not parented to a specific group 
+## returns an Array of calibration groups
 static func calibration_groups_not_in_path( calibration, group ):
+	
 	if not calibration.success:
 		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return
+	
 	var out = []
 	for g in calibration.content.groups:
 		if g == group:
@@ -793,6 +949,149 @@ static func calibration_groups_not_in_path( calibration, group ):
 		if not calibration_group_parented( calibration, g, group ):
 			out.append( clone_dict( g ) )
 	return out
+
+# util for calibration to make group names unique in hierarchy  (recursive)
+## no return
+static func group_unique_name( src ):
+	
+	if 'content' in src:
+		# it's the calibration structure!
+		group_unique_name( src.content.hierarchy )
+		return
+	
+	if not src is Array:
+		return
+	
+	var seen_names = []
+	var to_rename = []
+	for gi in src:
+		group_unique_name( gi.children )
+		if not gi.group.name in seen_names:
+			seen_names.append( gi.group.name )
+		else:
+			to_rename.append( gi.group )
+	
+	for g in to_rename:
+		var iteration = 0
+		var newname = g.name
+		while newname in seen_names:
+			newname = g.name
+			if iteration < 10:
+				newname += '.000'
+			elif iteration < 100:
+				newname += '.00'
+			elif iteration < 1000:
+				newname += '.0'
+			else:
+				newname += '.'
+			newname += str(iteration)
+			if not newname in seen_names:
+				break
+			iteration += 1
+		seen_names.append( newname )
+		g.name = newname
+
+# util for calibration to duplicate a group, hierarchy will be regenerated
+## returns new calibration group UID
+static func calibration_group_duplicate( calibration, groupid ):
+	
+	if not calibration.success:
+		return -1
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return -1
+	
+	var src = get_group_by_id( calibration, groupid )
+	if src == null:
+		rlog( calibration, ReVA_INFO, "group " + str(groupid) + " not found in this calibration!" )
+		return -1
+	
+	var newg = clone_dict( src )
+	newg.id = get_group_next_id( calibration )
+	if newg.name.find_last( '.' ) == len(newg.name) - 5:
+		newg.name = newg.name.substr(0, len(newg.name) - 5 )
+	calibration.content.groups.append( newg )
+	generate_group_hierarchy( calibration )
+	group_unique_name( calibration.content.hierarchy )
+	
+	return newg.id
+
+# util for calibration to delete a group and all its children
+## no return
+static func calibration_group_delete( calibration, groupid ):
+	
+	if not calibration.success:
+		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return
+	
+	var del = get_group_by_id( calibration, groupid )
+	var newgs = []
+	for g in calibration.content.groups:
+		if g.id != groupid and not calibration_group_parented( calibration, g, del ):
+			newgs.append( g )
+	calibration.content.groups = newgs
+	generate_group_hierarchy( calibration )
+
+# util for calibration to create a blank group, hierarchy will be regenerated
+## returns new calibration group UID
+static func calibration_group_new( calibration ):
+	
+	if not calibration.success:
+		return -1
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return -1
+	
+	var newg = blank_group()
+	newg.id = get_group_next_id( calibration )
+	calibration.content.groups.append(newg)
+	generate_group_hierarchy( calibration )
+	group_unique_name( calibration.content.hierarchy )
+	
+	return newg.id
+
+# util for calibration to modify group parenting, hierarchy will be regenerated
+## no return
+static func calibration_group_parent( calibration, groupid, parentid ):
+	
+	if not calibration.success:
+		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return
+	
+	var src = get_group_by_id( calibration, groupid )
+	var parent = get_group_by_id( calibration, parentid )
+	if src == null:
+		rlog( calibration, ReVA_INFO, "group " + str(groupid) + " not found in this calibration!" )
+		return -1
+	
+	if parent == null:
+		src.parent = null
+	else:
+		src.parent = parentid
+	
+	generate_group_hierarchy( calibration )
+	group_unique_name( calibration.content.hierarchy )
+
+# util for calibration to check if a group is present in calibration.original
+## returns boolean
+static func calibration_group_has_original( calibration, groupid ):
+	
+	if not calibration.success:
+		return
+	
+	if not calibration.type == ReVA_TYPE_CALIB:
+		rlog( calibration, ReVA_INFO, "calibration must be of type " + ReVA_TYPE_CALIB )
+		return
+	
+	return get_group_by_id( calibration.original, groupid ) != null
 
 ### MAPPINGS ###
 

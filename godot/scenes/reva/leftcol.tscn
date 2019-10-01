@@ -1,14 +1,14 @@
 [gd_scene load_steps=20 format=2]
 
-[ext_resource path="res://scripts/ui/calibration_panel.gd" type="Script" id=1]
+[ext_resource path="res://scripts/reva/ui/calibration_panel.gd" type="Script" id=1]
 [ext_resource path="res://textures/svg/icon_save.svg" type="Texture" id=2]
 [ext_resource path="res://textures/svg/icon_load.svg" type="Texture" id=3]
-[ext_resource path="res://textures/svg/icon_loop.svg" type="Texture" id=4]
+[ext_resource path="res://textures/svg/icon_reload.svg" type="Texture" id=4]
 [ext_resource path="res://themes/osi.theme" type="Theme" id=5]
 [ext_resource path="res://textures/svg/icon_new.svg" type="Texture" id=6]
 [ext_resource path="res://textures/svg/icon_save_as.svg" type="Texture" id=7]
 [ext_resource path="res://textures/svg/icon_GUI_tree_arrow_right.svg" type="Texture" id=8]
-[ext_resource path="res://scripts/ui/all_panels.gd" type="Script" id=9]
+[ext_resource path="res://scripts/reva/ui/all_panels.gd" type="Script" id=9]
 [ext_resource path="res://textures/svg/icon_edit.svg" type="Texture" id=10]
 [ext_resource path="res://textures/svg/icon_duplicate.svg" type="Texture" id=11]
 [ext_resource path="res://textures/svg/icon_status_error.svg" type="Texture" id=12]
@@ -24,7 +24,7 @@ bg_color = Color( 0.6, 0.6, 0.6, 0 )
 [sub_resource type="StyleBoxFlat" id=3]
 
 [sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0, 0, 0, 0.7 )
+bg_color = Color( 0, 0, 0, 0.701961 )
 
 [sub_resource type="StyleBoxFlat" id=5]
 content_margin_left = 6.0
@@ -187,7 +187,8 @@ margin_right = 335.0
 margin_bottom = 66.0
 theme = ExtResource( 5 )
 text = "info"
-max_lines_visible = 1
+autowrap = true
+max_lines_visible = 5
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -300,40 +301,11 @@ margin_right = 323.0
 margin_bottom = 31.0
 
 [node name="id" type="Label" parent="calibration/correction/wrapper/values/topbts"]
-margin_right = 263.0
+margin_right = 303.0
 margin_bottom = 31.0
 size_flags_horizontal = 3
 theme = ExtResource( 5 )
 text = "group ID: -1"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="reset" type="TextureButton" parent="calibration/correction/wrapper/values/topbts"]
-margin_left = 267.0
-margin_top = 7.0
-margin_right = 283.0
-margin_bottom = 23.0
-hint_tooltip = "reset current group"
-focus_next = NodePath("../b_save")
-focus_previous = NodePath("../b_load")
-size_flags_vertical = 4
-theme = ExtResource( 5 )
-texture_normal = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="duplicate" type="TextureButton" parent="calibration/correction/wrapper/values/topbts"]
-margin_left = 287.0
-margin_top = 7.0
-margin_right = 303.0
-margin_bottom = 23.0
-hint_tooltip = "duplicate current group"
-focus_next = NodePath("../b_reset")
-size_flags_vertical = 4
-theme = ExtResource( 5 )
-texture_normal = ExtResource( 11 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -980,11 +952,40 @@ margin_right = 323.0
 margin_bottom = 31.0
 
 [node name="id" type="Label" parent="calibration/edit/wrapper/values/topbts"]
-margin_right = 303.0
+margin_right = 263.0
 margin_bottom = 31.0
 size_flags_horizontal = 3
 theme = ExtResource( 5 )
 text = "group ID: -1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="reset" type="TextureButton" parent="calibration/edit/wrapper/values/topbts"]
+margin_left = 267.0
+margin_top = 7.0
+margin_right = 283.0
+margin_bottom = 23.0
+hint_tooltip = "reset current group"
+focus_next = NodePath("../b_save")
+focus_previous = NodePath("../b_load")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="duplicate" type="TextureButton" parent="calibration/edit/wrapper/values/topbts"]
+margin_left = 287.0
+margin_top = 7.0
+margin_right = 303.0
+margin_bottom = 23.0
+hint_tooltip = "duplicate current group"
+focus_next = NodePath("../b_reset")
+size_flags_vertical = 4
+theme = ExtResource( 5 )
+texture_normal = ExtResource( 11 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1025,7 +1026,7 @@ margin_left = 59.0
 margin_right = 323.0
 margin_bottom = 35.0
 rect_min_size = Vector2( 0, 35 )
-hint_tooltip = "name of current calibration"
+hint_tooltip = "name of current group (enter to apply)"
 size_flags_horizontal = 3
 theme = ExtResource( 5 )
 text = "group display name"
@@ -1216,10 +1217,12 @@ margin_right = 323.0
 margin_bottom = 249.0
 rect_min_size = Vector2( 0, 35 )
 hint_tooltip = "name of current calibration"
+focus_mode = 0
 size_flags_horizontal = 3
 theme = ExtResource( 5 )
 custom_styles/normal = SubResource( 6 )
 custom_colors/font_color = Color( 0.5, 0.5, 0.5, 1 )
+enabled_focus_mode = 0
 text = "0,0,0"
 align = 0
 
@@ -1258,8 +1261,6 @@ icon = ExtResource( 12 )
 [connection signal="item_selected" from="calibration/calib/wrapper/groups" to="." method="_on_groups_selected"]
 [connection signal="item_selected" from="calibration/calib/wrapper/groups" to="calibration" method="_on_groups_selected"]
 [connection signal="pressed" from="calibration/calib/wrapper/new" to="." method="_on_group_new"]
-[connection signal="pressed" from="calibration/correction/wrapper/values/topbts/reset" to="." method="_on_group_reset"]
-[connection signal="pressed" from="calibration/correction/wrapper/values/topbts/duplicate" to="." method="_on_group_duplicate"]
 [connection signal="pressed" from="calibration/correction/wrapper/values/topbts/edit" to="calibration" method="_on_group_edit"]
 [connection signal="pressed" from="calibration/correction/wrapper/values/rot_panel/title/b_reset" to="." method="_on_group_rot_reset"]
 [connection signal="value_changed" from="calibration/correction/wrapper/values/rot_panel/xaxis/value" to="." method="_on_group_rotx"]
@@ -1283,6 +1284,9 @@ icon = ExtResource( 12 )
 [connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sx" to="." method="_on_group_sym_sx"]
 [connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sy" to="." method="_on_group_sym_sy"]
 [connection signal="pressed" from="calibration/correction/wrapper/values/symetry_panel/vgrid/sz" to="." method="_on_group_sym_sz"]
+[connection signal="pressed" from="calibration/edit/wrapper/values/topbts/reset" to="." method="_on_group_reset"]
+[connection signal="pressed" from="calibration/edit/wrapper/values/topbts/duplicate" to="." method="_on_group_duplicate"]
 [connection signal="pressed" from="calibration/edit/wrapper/values/topbts/close" to="calibration" method="_on_edit_close"]
 [connection signal="text_changed" from="calibration/edit/wrapper/values/vgrid/name" to="." method="_on_groupe_name"]
-[connection signal="pressed" from="calibration/edit/wrapper/values/bottompts/delete" to="." method="_on_group_reset"]
+[connection signal="item_selected" from="calibration/edit/wrapper/values/vgrid/parent" to="." method="_on_group_parent_selected"]
+[connection signal="pressed" from="calibration/edit/wrapper/values/bottompts/delete" to="." method="_on_group_delete"]

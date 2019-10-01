@@ -1,11 +1,11 @@
 [gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://materials/joan_mouth.material" type="Material" id=1]
-[ext_resource path="res://materials/joan_skin.material" type="Material" id=2]
+[ext_resource path="res://scripts/reva/ReVA_avatar_configuration.gd" type="Script" id=1]
+[ext_resource path="res://materials/joan_teeth_bottom.material" type="Material" id=2]
 [ext_resource path="res://materials/eyes.material" type="Material" id=3]
-[ext_resource path="res://materials/joan_teeth_bottom.material" type="Material" id=4]
-[ext_resource path="res://materials/joan_teeth_top.material" type="Material" id=5]
-[ext_resource path="res://scripts/reva/ReVA_avatar_configuration.gd" type="Script" id=6]
+[ext_resource path="res://materials/joan_mouth.material" type="Material" id=4]
+[ext_resource path="res://materials/joan_skin.material" type="Material" id=5]
+[ext_resource path="res://materials/joan_teeth_top.material" type="Material" id=6]
 
 [sub_resource type="SpatialMaterial" id=1]
 resource_name = "Material"
@@ -344,7 +344,7 @@ bones/46/parent = 0
 bones/46/rest = Transform( 0.438548, 0.296915, 0.848243, -0.888597, 0.00207534, 0.458685, 0.13443, -0.954902, 0.264748, -0.103579, 0.862075, -0.301176 )
 bones/46/enabled = true
 bones/46/bound_children = [  ]
-script = ExtResource( 6 )
+script = ExtResource( 1 )
 face_bones = [ "forehead", "nose_tip", "upper_lip", "lower_lip", "chin", "foreheadL", "foreheadR", "eyebrow01L", "eyebrow02L", "eyebrow03L", "eyebrow01R", "eyebrow02R", "eyebrow03R", "upper_lidL", "upper_lidR", "lid_externalL", "lid_externalR", "eyeL", "eyeR", "nostrilL", "nostrilR", "muscle_lip01L", "muscle_lip02L", "muscle_lip01R", "muscle_lip02R", "cheekL", "cheekR", "upper_lipL", "upper_lipR", "commissureL", "commissureR", "lower_lipL", "lower_lipR" ]
 
 [node name="eyebrow" type="MeshInstance" parent="."]
@@ -357,16 +357,16 @@ material/0 = ExtResource( 3 )
 
 [node name="head" type="MeshInstance" parent="."]
 mesh = SubResource( 7 )
-material/0 = ExtResource( 2 )
-material/1 = ExtResource( 1 )
+material/0 = ExtResource( 5 )
+material/1 = ExtResource( 4 )
 
 [node name="teeth_top" type="MeshInstance" parent="."]
 mesh = SubResource( 8 )
-material/0 = ExtResource( 5 )
+material/0 = ExtResource( 6 )
 
 [node name="teeth_bottom" type="MeshInstance" parent="."]
 mesh = SubResource( 10 )
-material/0 = ExtResource( 4 )
+material/0 = ExtResource( 2 )
 
 [node name="face_cam" type="BoneAttachment" parent="."]
 transform = Transform( 1, 2.38419e-07, 3.38618e-13, 3.19091e-10, -0.00133839, -0.999999, -2.38418e-07, 0.999999, -0.00133851, -4.31014e-09, 2.05851, 0.1378 )
