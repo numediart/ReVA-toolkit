@@ -3,7 +3,7 @@ const ReVA = preload( "res://scripts/reva/ReVA.gd" )
 const mod_path = "res://scenes/reva/joan.tscn"
 #const apath = "../json/anim/smile.json"
 const ani_path = "../json/anim/laugh.json"
-const cal_path = "/home/frankiezafe/projects/avatar-numediart/reva-toolkit/json/calibration/openface_calib.json"
+const cal_path = "../json/calibration/openface_calib.json"
 const map_path = "../json/mapping/openface_mapping.json"
 
 export(float, 0, 20) var anim_speed = 1
@@ -54,10 +54,18 @@ func _ready():
 	ReVA.attach_node( model, mapping, $data_viz.mask )
 	
 	$panels.connect( 'calibration_updated', self, 'apply_calibration' )
+	$panels.connect( 'autocalibration', self, 'apply_autocalibration' )
 
 func apply_calibration():
 	print( 'apply_calibration' )
 	ReVA.apply_calibration( calibration, animation )
+
+func apply_autocalibration():
+	print( 'apply_autocalibration' )
+	var pts = []
+	for i in animation.content.point_count:
+		pts.append( $data_viz.mask.get_child(i).global_transform.origin )
+	ReVA.autocalibrate( model, calibration, pts, $panels.autogroup_UID )
 
 func _process(delta):
 	
