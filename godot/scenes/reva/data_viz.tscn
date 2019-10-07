@@ -13,8 +13,8 @@ albedo_color = Color( 1, 0, 1, 1 )
 radius = 0.1
 
 [sub_resource type="SphereMesh" id=4]
-radius = 0.006
-height = 0.012
+radius = 0.005
+height = 0.01
 radial_segments = 12
 rings = 6
 
@@ -54,6 +54,7 @@ mode = 1
 shape = SubResource( 3 )
 
 [node name="mesh" type="MeshInstance" parent="pt"]
+transform = Transform( 3.99755, 0, 0, 0, 3.99755, 0, 0, 0, 3.99755, 0, 0, 0 )
 mesh = SubResource( 4 )
 material/0 = SubResource( 5 )
 

@@ -54,6 +54,8 @@ func _ready():
 	ReVA.attach_node( model, mapping, $data_viz.mask )
 	
 	$panels.connect( 'calibration_updated', self, 'apply_calibration' )
+	
+	$cam_pivot.configure( model )
 
 func apply_calibration():
 	print( 'apply_calibration' )

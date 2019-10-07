@@ -380,3 +380,19 @@ transform = Transform( 1.0147, 3.77698e-13, 6.58725e-08, -6.58729e-08, -1.31782e
 
 [node name="side_pivot" type="Spatial" parent="face_cam/piv"]
 transform = Transform( 0.314301, -0.00129135, -0.964797, 0.964797, -0.000937507, 0.314302, -0.00129128, -1.0147, 0.000937488, -9.90499, 3.74838, -0.00518537 )
+
+[node name="spot" type="SpotLight" parent="."]
+transform = Transform( 0.439771, -0.759485, 0.479358, 0.64186, 0.639109, 0.423739, -0.628186, 0.121333, 0.768545, 4.21234, 5.23131, 6.51216 )
+light_energy = 0.75
+shadow_enabled = true
+shadow_bias = 0.1
+spot_range = 16.1347
+spot_attenuation = 1.13412e-06
+spot_angle = 28.683
+
+[node name="spot_back" type="SpotLight" parent="."]
+transform = Transform( 0.727204, 0.101417, -0.700364, 0.00811529, 1.00297, 0.153662, 0.707622, -0.115726, 0.717983, -7.89836, 2.33017, 7.31258 )
+light_energy = 0.5
+shadow_bias = 0.1
+spot_range = 18.2413
+spot_angle = 37.4082

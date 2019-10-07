@@ -59,6 +59,7 @@ func _ready():
 func visualise( frame, sel_group ):
 	
 	if mask != null:
+		mask.translation = Vector3()
 		axis.rotation = frame.pose_euler
 		for i in range( animation.content.point_count ):
 			mask.get_child(i).translation = frame.points[i]
@@ -83,4 +84,11 @@ func visualise( frame, sel_group ):
 		$group_viz.end()
 		$group_viz.visible = true
 	else:
-		$group_viz.visible = false
+		var mo = mask.global_transform.origin
+		$group_viz.clear()
+		$group_viz.begin( Mesh.PRIMITIVE_LINES )
+		for c in mask.get_children():
+			$group_viz.add_vertex( mo )
+			$group_viz.add_vertex( c.global_transform.origin )
+		$group_viz.end()
+		$group_viz.visible = true
