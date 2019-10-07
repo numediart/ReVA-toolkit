@@ -1,0 +1,112 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://scripts/tmp/cam_pivot.gd" type="Script" id=1]
+[ext_resource path="res://scripts/tmp/3d2dpicker.gd" type="Script" id=2]
+[ext_resource path="res://textures/svg/icon_status_error.svg" type="Texture" id=3]
+[ext_resource path="res://scripts/picker3d_button.gd" type="Script" id=4]
+
+[sub_resource type="SphereShape" id=3]
+radius = 0.674509
+
+[sub_resource type="SpatialMaterial" id=1]
+
+[sub_resource type="SphereMesh" id=2]
+
+[sub_resource type="SphereShape" id=4]
+radius = 0.890549
+
+[sub_resource type="SphereShape" id=6]
+radius = 1.14136
+
+[sub_resource type="SphereShape" id=5]
+radius = 0.543601
+
+[node name="root" type="Spatial"]
+
+[node name="ui" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="tmpl" type="TextureButton" parent="ui"]
+margin_right = 16.0
+margin_bottom = 16.0
+rect_pivot_offset = Vector2( 8, 8 )
+texture_normal = ExtResource( 3 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ray" type="RayCast" parent="ui/tmpl"]
+
+[node name="pickers" type="Node2D" parent="ui"]
+
+[node name="cam_pivot" type="Spatial" parent="."]
+script = ExtResource( 1 )
+min_rotx = -70.0
+max_rotx = 50.0
+max_speed = 3.0
+accumulation_speed = 5.0
+bouncing_speed = 0.9
+
+[node name="lookat" type="Spatial" parent="cam_pivot"]
+
+[node name="cam" type="Camera" parent="cam_pivot"]
+transform = Transform( 1, 0, 0, 0, 0.918512, 0.395393, 0, -0.395393, 0.918512, 0, 3.98772, 10.1436 )
+fov = 50.0
+
+[node name="spot" type="SpotLight" parent="."]
+transform = Transform( 0.767166, 0.327813, -0.551358, -0.043244, 0.884026, 0.465433, 0.639989, -0.333221, 0.692371, -6.81528, 6.78362, 10.1993 )
+spot_range = 45.4676
+
+[node name="rb01" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.96188, 0, 0 )
+
+[node name="coll" type="CollisionShape" parent="rb01"]
+shape = SubResource( 3 )
+
+[node name="obj0" type="MeshInstance" parent="rb01"]
+transform = Transform( 0.660016, 0, 0, 0, 0.660016, 0, 0, 0, 0.660016, 0, 0, 0 )
+layers = 4097
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="rb02" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45176, 0, -2.34887 )
+
+[node name="coll" type="CollisionShape" parent="rb02"]
+shape = SubResource( 4 )
+
+[node name="obj1" type="MeshInstance" parent="rb02"]
+transform = Transform( 0.868659, 0, 0, 0, 0.868659, 0, 0, 0, 0.868659, 0, 0, 0 )
+layers = 4097
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="rb03" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45176, -2.1632, 0.934647 )
+
+[node name="coll" type="CollisionShape" parent="rb03"]
+shape = SubResource( 6 )
+
+[node name="obj2" type="MeshInstance" parent="rb03"]
+transform = Transform( 1.13482, 0, 0, 0, 1.13482, 0, 0, 0, 1.13482, 0, 0, 0 )
+layers = 4097
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="rb04" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49466, 2.13971, -0.856611 )
+
+[node name="coll" type="CollisionShape" parent="rb04"]
+shape = SubResource( 5 )
+
+[node name="obj3" type="MeshInstance" parent="rb04"]
+transform = Transform( 0.522383, 0, 0, 0, 0.522383, 0, 0, 0, 0.522383, 0, 0, 0 )
+layers = 4097
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+[connection signal="pressed" from="ui/tmpl" to="ui/tmpl" method="_on_pressed"]
